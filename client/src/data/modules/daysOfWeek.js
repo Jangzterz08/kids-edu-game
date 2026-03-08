@@ -15,7 +15,7 @@ export const daysOfWeekModule = {
   sortOrder: 12,
   color: '#FF9F43',
   bgGradient: 'linear-gradient(135deg, #FF9F43 0%, #EE5A24 100%)',
-  games: ['matching', 'quiz'],
+  games: ['matching', 'quiz', 'spelling'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

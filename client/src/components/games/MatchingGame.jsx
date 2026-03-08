@@ -21,11 +21,12 @@ export default function MatchingGame({ lessons, onComplete }) {
     ])
   ), []);
 
-  const [flipped, setFlipped]     = useState([]);  // indices
-  const [matched, setMatched]     = useState([]);  // pairIds
-  const [attempts, setAttempts]   = useState(0);
-  const [locked, setLocked]       = useState(false);
-  const [imgErrors, setImgErrors] = useState({});
+  const [flipped, setFlipped]         = useState([]);  // indices
+  const [matched, setMatched]         = useState([]);  // pairIds
+  const [justMatched, setJustMatched] = useState(null); // pairId briefly set on match
+  const [attempts, setAttempts]       = useState(0);
+  const [locked, setLocked]           = useState(false);
+  const [imgErrors, setImgErrors]     = useState({});
 
   function handleFlip(idx) {
     if (locked) return;
@@ -43,12 +44,14 @@ export default function MatchingGame({ lessons, onComplete }) {
         speakWord(a.label);
         const newMatched = [...matched, a.pairId];
         setMatched(newMatched);
+        setJustMatched(a.pairId);
+        setTimeout(() => setJustMatched(null), 600);
         setFlipped([]);
         setLocked(false);
         if (newMatched.length === subset.length) {
           const extra = Math.max(0, attempts + 1 - subset.length);
           const score = Math.max(0, 100 - extra * 8);
-          setTimeout(() => onComplete(score), 600);
+          setTimeout(() => onComplete(score), 700);
         }
       } else {
         setTimeout(() => { setFlipped([]); setLocked(false); }, 900);
@@ -58,6 +61,7 @@ export default function MatchingGame({ lessons, onComplete }) {
 
   function isFlipped(idx) { return flipped.includes(idx) || matched.includes(cards[idx].pairId); }
   function isMatched(idx) { return matched.includes(cards[idx].pairId); }
+  function isJustMatched(idx) { return justMatched && cards[idx].pairId === justMatched; }
 
   function renderCardContent(card) {
     if (card.type === 'word') {
@@ -91,6 +95,7 @@ export default function MatchingGame({ lessons, onComplete }) {
               ...styles.card,
               ...(isFlipped(i) ? styles.cardFlipped : {}),
               ...(isMatched(i) ? styles.cardMatched : {}),
+              animation: isJustMatched(i) ? 'match-bounce 0.55s ease' : 'none',
             }}
           >
             {isFlipped(i) ? renderCardContent(card) : <span style={styles.cardBack}>?</span>}

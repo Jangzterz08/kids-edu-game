@@ -16,7 +16,7 @@ export const bodyPartsModule = {
   sortOrder: 6,
   color: '#26C6DA',
   bgGradient: 'linear-gradient(135deg, #26C6DA 0%, #80DEEA 100%)',
-  games: ['matching', 'quiz'],
+  games: ['matching', 'quiz', 'spelling'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

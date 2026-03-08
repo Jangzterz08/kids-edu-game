@@ -16,7 +16,7 @@ export const emotionsModule = {
   sortOrder: 10,
   color: '#FF6B9D',
   bgGradient: 'linear-gradient(135deg, #FF6B9D 0%, #FECA57 100%)',
-  games: ['matching', 'quiz'],
+  games: ['matching', 'quiz', 'spelling'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

@@ -6,6 +6,7 @@ import { useProgress } from '../hooks/useProgress';
 import QuizGame from '../components/games/QuizGame';
 import MatchingGame from '../components/games/MatchingGame';
 import TracingGame from '../components/games/TracingGame';
+import SpellingGame from '../components/games/SpellingGame';
 
 export default function MiniGame() {
   const { moduleSlug }          = useParams();
@@ -33,9 +34,10 @@ export default function MiniGame() {
         attempts: 1,
         completedAt: new Date().toISOString(),
       };
-      if (gameType === 'matching') update.matchScore = score;
-      if (gameType === 'tracing')  update.traceScore = score;
-      if (gameType === 'quiz')     update.quizScore  = score;
+      if (gameType === 'matching') update.matchScore   = score;
+      if (gameType === 'tracing')  update.traceScore   = score;
+      if (gameType === 'quiz')     update.quizScore    = score;
+      if (gameType === 'spelling') update.spellingScore = score;
       await recordLesson(lesson.slug, update).catch(() => {});
     }
 
@@ -51,7 +53,7 @@ export default function MiniGame() {
     if (vals.length === 0) return 1;
     const allGood = vals.every(v => v >= 80);
     if (allGood && vals.length >= 2) return 3;
-    const hasQuiz = s.quiz !== undefined && s.quiz >= 60;
+    const hasQuiz = (s.quiz !== undefined && s.quiz >= 60) || (s.spelling !== undefined && s.spelling >= 60);
     if (hasQuiz) return 2;
     return 1;
   }
@@ -64,7 +66,7 @@ export default function MiniGame() {
         <span style={styles.modEmoji}>{mod.iconEmoji}</span>
         <span style={styles.modTitle}>{mod.title}</span>
         <span style={styles.gameBadge}>
-          {game === 'matching' ? '🃏 Match' : game === 'tracing' ? '✏️ Trace' : '❓ Quiz'}
+          {game === 'matching' ? '🃏 Match' : game === 'tracing' ? '✏️ Trace' : game === 'spelling' ? '🔤 Spell' : '❓ Quiz'}
         </span>
         <span style={styles.gameCounter}>{gameIdx + 1}/{games.length}</span>
       </div>
@@ -77,6 +79,9 @@ export default function MiniGame() {
       )}
       {game === 'tracing' && (
         <TracingGame lessons={mod.lessons} onComplete={handleGameComplete} />
+      )}
+      {game === 'spelling' && (
+        <SpellingGame lessons={mod.lessons} onComplete={handleGameComplete} />
       )}
     </div>
   );

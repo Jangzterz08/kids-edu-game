@@ -7,6 +7,7 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   const [selected, setSelected]   = useState(null);
   const [correct, setCorrect]     = useState(0);
   const [shake, setShake]         = useState(null);
+  const [sparkle, setSparkle]     = useState(false);
   const [imgErrors, setImgErrors] = useState({});
 
   const questions = useMemo(() => lessons.map(l => ({
@@ -31,6 +32,8 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
     if (option.correct) {
       speakWord('Correct!');
       setCorrect(c => c + 1);
+      setSparkle(true);
+      setTimeout(() => setSparkle(false), 700);
       setTimeout(advance, 900);
     } else {
       speakWord('Try again!');
@@ -67,6 +70,25 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   return (
     <div style={styles.container}>
       <div style={styles.progress}>{qIdx + 1} / {questions.length}</div>
+
+      {/* Sparkle burst on correct */}
+      {sparkle && (
+        <div style={styles.sparkleWrap}>
+          {['✨','⭐','🌟','💫'].map((e, i) => (
+            <span
+              key={i}
+              style={{
+                ...styles.sparkleItem,
+                '--tx': `${Math.round(Math.cos(i * Math.PI / 2) * 50)}px`,
+                '--ty': `${Math.round(Math.sin(i * Math.PI / 2) * 50)}px`,
+                '--rot': `${i * 90}deg`,
+                animationDelay: `${i * 50}ms`,
+                fontSize: 32,
+              }}
+            >{e}</span>
+          ))}
+        </div>
+      )}
 
       {/* Question with tap-to-repeat speaker */}
       <div style={styles.questionRow}>
@@ -106,7 +128,9 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto' },
+  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', position: 'relative' },
+  sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
+  sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards' },
   progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 8 },
   questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
   question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0 },
