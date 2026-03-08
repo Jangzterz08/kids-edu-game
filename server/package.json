@@ -2,7 +2,7 @@
   "name": "kids-edu-game-server",
   "version": "1.0.0",
   "type": "commonjs",
-  "engines": { "node": ">=20" },
+  "engines": { "node": ">=22.12" },
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
