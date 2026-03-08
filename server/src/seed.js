@@ -141,6 +141,44 @@ const MODULES = [
       { slug: 'sweets', title: 'Sweets', word: 'Sweets', imageFile: 'food/sweets.webp', audioFile: 'food/sweets.mp3', sortOrder: 7 },
     ],
   },
+  {
+    slug: 'emotions', title: 'Emotions', iconEmoji: '😊', sortOrder: 10,
+    lessons: [
+      { slug: 'happy',     title: 'Happy',     word: 'Happy',     imageFile: 'emotions/happy.webp',     audioFile: 'emotions/happy.mp3',     sortOrder: 1 },
+      { slug: 'sad',       title: 'Sad',       word: 'Sad',       imageFile: 'emotions/sad.webp',       audioFile: 'emotions/sad.mp3',       sortOrder: 2 },
+      { slug: 'angry',     title: 'Angry',     word: 'Angry',     imageFile: 'emotions/angry.webp',     audioFile: 'emotions/angry.mp3',     sortOrder: 3 },
+      { slug: 'scared',    title: 'Scared',    word: 'Scared',    imageFile: 'emotions/scared.webp',    audioFile: 'emotions/scared.mp3',    sortOrder: 4 },
+      { slug: 'surprised', title: 'Surprised', word: 'Surprised', imageFile: 'emotions/surprised.webp', audioFile: 'emotions/surprised.mp3', sortOrder: 5 },
+      { slug: 'excited',   title: 'Excited',   word: 'Excited',   imageFile: 'emotions/excited.webp',   audioFile: 'emotions/excited.mp3',   sortOrder: 6 },
+      { slug: 'tired',     title: 'Tired',     word: 'Tired',     imageFile: 'emotions/tired.webp',     audioFile: 'emotions/tired.mp3',     sortOrder: 7 },
+      { slug: 'silly',     title: 'Silly',     word: 'Silly',     imageFile: 'emotions/silly.webp',     audioFile: 'emotions/silly.mp3',     sortOrder: 8 },
+    ],
+  },
+  {
+    slug: 'weather', title: 'Weather', iconEmoji: '⛅', sortOrder: 11,
+    lessons: [
+      { slug: 'sunny',   title: 'Sunny',   word: 'Sunny',   imageFile: 'weather/sunny.webp',   audioFile: 'weather/sunny.mp3',   sortOrder: 1 },
+      { slug: 'rainy',   title: 'Rainy',   word: 'Rainy',   imageFile: 'weather/rainy.webp',   audioFile: 'weather/rainy.mp3',   sortOrder: 2 },
+      { slug: 'cloudy',  title: 'Cloudy',  word: 'Cloudy',  imageFile: 'weather/cloudy.webp',  audioFile: 'weather/cloudy.mp3',  sortOrder: 3 },
+      { slug: 'snowy',   title: 'Snowy',   word: 'Snowy',   imageFile: 'weather/snowy.webp',   audioFile: 'weather/snowy.mp3',   sortOrder: 4 },
+      { slug: 'windy',   title: 'Windy',   word: 'Windy',   imageFile: 'weather/windy.webp',   audioFile: 'weather/windy.mp3',   sortOrder: 5 },
+      { slug: 'stormy',  title: 'Stormy',  word: 'Stormy',  imageFile: 'weather/stormy.webp',  audioFile: 'weather/stormy.mp3',  sortOrder: 6 },
+      { slug: 'rainbow', title: 'Rainbow', word: 'Rainbow', imageFile: 'weather/rainbow.webp', audioFile: 'weather/rainbow.mp3', sortOrder: 7 },
+      { slug: 'foggy',   title: 'Foggy',   word: 'Foggy',   imageFile: 'weather/foggy.webp',   audioFile: 'weather/foggy.mp3',   sortOrder: 8 },
+    ],
+  },
+  {
+    slug: 'days-of-week', title: 'Days of the Week', iconEmoji: '📅', sortOrder: 12,
+    lessons: [
+      { slug: 'monday',    title: 'Monday',    word: 'Monday',    imageFile: 'days/monday.webp',    audioFile: 'days/monday.mp3',    sortOrder: 1 },
+      { slug: 'tuesday',   title: 'Tuesday',   word: 'Tuesday',   imageFile: 'days/tuesday.webp',   audioFile: 'days/tuesday.mp3',   sortOrder: 2 },
+      { slug: 'wednesday', title: 'Wednesday', word: 'Wednesday', imageFile: 'days/wednesday.webp', audioFile: 'days/wednesday.mp3', sortOrder: 3 },
+      { slug: 'thursday',  title: 'Thursday',  word: 'Thursday',  imageFile: 'days/thursday.webp',  audioFile: 'days/thursday.mp3',  sortOrder: 4 },
+      { slug: 'friday',    title: 'Friday',    word: 'Friday',    imageFile: 'days/friday.webp',    audioFile: 'days/friday.mp3',    sortOrder: 5 },
+      { slug: 'saturday',  title: 'Saturday',  word: 'Saturday',  imageFile: 'days/saturday.webp',  audioFile: 'days/saturday.mp3',  sortOrder: 6 },
+      { slug: 'sunday',    title: 'Sunday',    word: 'Sunday',    imageFile: 'days/sunday.webp',    audioFile: 'days/sunday.mp3',    sortOrder: 7 },
+    ],
+  },
 ];
 
 async function main() {

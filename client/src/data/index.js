@@ -7,6 +7,9 @@ import { bodyPartsModule }        from './modules/bodyParts.js';
 import { mannersModule }          from './modules/manners.js';
 import { householdObjectsModule } from './modules/householdObjects.js';
 import { foodPyramidModule }      from './modules/foodPyramid.js';
+import { emotionsModule }         from './modules/emotions.js';
+import { weatherModule }          from './modules/weather.js';
+import { daysOfWeekModule }       from './modules/daysOfWeek.js';
 
 export const MODULE_REGISTRY = [
   alphabetModule,
@@ -18,6 +21,9 @@ export const MODULE_REGISTRY = [
   mannersModule,
   householdObjectsModule,
   foodPyramidModule,
+  emotionsModule,
+  weatherModule,
+  daysOfWeekModule,
 ];
 
 export function getModule(slug) {

@@ -339,6 +339,38 @@ const FOOD = [
   { slug:'sweets',     word:'Sweets',     emoji:'🍬', c1:'#FD79A8', c2:'#E84393' },
 ];
 
+const EMOTIONS = [
+  { slug:'happy',     word:'Happy',     emoji:'😊', c1:'#FECA57', c2:'#FF9F43' },
+  { slug:'sad',       word:'Sad',       emoji:'😢', c1:'#74B9FF', c2:'#0984E3' },
+  { slug:'angry',     word:'Angry',     emoji:'😠', c1:'#FF6B6B', c2:'#C0392B' },
+  { slug:'scared',    word:'Scared',    emoji:'😨', c1:'#A29BFE', c2:'#6C5CE7' },
+  { slug:'surprised', word:'Surprised', emoji:'😲', c1:'#55EFC4', c2:'#00B894' },
+  { slug:'excited',   word:'Excited',   emoji:'🤩', c1:'#FD79A8', c2:'#E84393' },
+  { slug:'tired',     word:'Tired',     emoji:'😴', c1:'#636E72', c2:'#2D3436' },
+  { slug:'silly',     word:'Silly',     emoji:'😜', c1:'#FDCB6E', c2:'#E17055' },
+];
+
+const WEATHER = [
+  { slug:'sunny',   word:'Sunny',   emoji:'☀️',  c1:'#FECA57', c2:'#F9CA24' },
+  { slug:'rainy',   word:'Rainy',   emoji:'🌧️', c1:'#74B9FF', c2:'#0984E3' },
+  { slug:'cloudy',  word:'Cloudy',  emoji:'☁️',  c1:'#B2BEC3', c2:'#636E72' },
+  { slug:'snowy',   word:'Snowy',   emoji:'❄️',  c1:'#DFE6E9', c2:'#74B9FF' },
+  { slug:'windy',   word:'Windy',   emoji:'💨',  c1:'#55EFC4', c2:'#00CEC9' },
+  { slug:'stormy',  word:'Stormy',  emoji:'⛈️',  c1:'#2D3436', c2:'#6C5CE7' },
+  { slug:'rainbow', word:'Rainbow', emoji:'🌈',  c1:'#FF6B6B', c2:'#A29BFE' },
+  { slug:'foggy',   word:'Foggy',   emoji:'🌫️', c1:'#B2BEC3', c2:'#636E72' },
+];
+
+const DAYS = [
+  { slug:'monday',    word:'Monday',    emoji:'🌙', c1:'#6C5CE7', c2:'#A29BFE' },
+  { slug:'tuesday',   word:'Tuesday',   emoji:'🔥', c1:'#E17055', c2:'#FDCB6E' },
+  { slug:'wednesday', word:'Wednesday', emoji:'💧', c1:'#0984E3', c2:'#74B9FF' },
+  { slug:'thursday',  word:'Thursday',  emoji:'⚡', c1:'#F9CA24', c2:'#F0932B' },
+  { slug:'friday',    word:'Friday',    emoji:'🎉', c1:'#FD79A8', c2:'#E84393' },
+  { slug:'saturday',  word:'Saturday',  emoji:'⭐', c1:'#FECA57', c2:'#FF9F43' },
+  { slug:'sunday',    word:'Sunday',    emoji:'☀️', c1:'#FF6B6B', c2:'#FDCB6E' },
+];
+
 // ─── main ────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -362,6 +394,15 @@ async function main() {
 
   console.log('\n🥗 Food Pyramid...');
   await genEmojiCard(FOOD, 'food');
+
+  console.log('\n😊 Emotions...');
+  await genEmojiCard(EMOTIONS, 'emotions');
+
+  console.log('\n⛅ Weather...');
+  await genEmojiCard(WEATHER, 'weather');
+
+  console.log('\n📅 Days of Week...');
+  await genEmojiCard(DAYS, 'days');
 
   console.log('\n✅ Done! All images generated.');
 }
