@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String       @id @default(uuid())
+  supabaseAuthId String       @unique
+  email          String       @unique
+  name           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  kids           KidProfile[]
+}
+
+model KidProfile {
+  id          String   @id @default(uuid())
+  parentId    String
+  parent      User     @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  name        String
+  avatarId    String   @default("bear")
+  ageGroup    String?
+  totalStars  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  progress     LessonProgress[]
+  achievements Achievement[]
+}
+
+model Module {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  title     String
+  iconEmoji String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  lessons   Lesson[]
+}
+
+model Lesson {
+  id        String   @id @default(uuid())
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  slug      String
+  title     String
+  word      String
+  imageFile String
+  audioFile String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  progress  LessonProgress[]
+
+  @@unique([moduleId, slug])
+}
+
+model LessonProgress {
+  id          String     @id @default(uuid())
+  kidId       String
+  kid         KidProfile @relation(fields: [kidId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  viewed      Boolean    @default(false)
+  matchScore  Int?
+  traceScore  Int?
+  quizScore   Int?
+  starsEarned Int        @default(0)
+  completedAt DateTime?
+  attempts    Int        @default(0)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([kidId, lessonId])
+}
+
+model Achievement {
+  id         String     @id @default(uuid())
+  kidId      String
+  kid        KidProfile @relation(fields: [kidId], references: [id], onDelete: Cascade)
+  type       String
+  moduleSlug String?
+  label      String
+  iconEmoji  String
+  earnedAt   DateTime   @default(now())
+
+  @@unique([kidId, type, moduleSlug])
+}
