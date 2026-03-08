@@ -43,48 +43,107 @@ function base(bg = 'url(#g)') {
 // ─── alphabet ───────────────────────────────────────────────────────────────
 
 const ALPHA = [
-  { l:'A', word:'Apple',     c1:'#FF6B6B', c2:'#FFE66D' },
-  { l:'B', word:'Ball',      c1:'#4ECDC4', c2:'#44C49B' },
-  { l:'C', word:'Cat',       c1:'#F7B731', c2:'#F39C12' },
-  { l:'D', word:'Dog',       c1:'#A29BFE', c2:'#6C5CE7' },
-  { l:'E', word:'Elephant',  c1:'#FD79A8', c2:'#E84393' },
-  { l:'F', word:'Fish',      c1:'#00CEC9', c2:'#0984E3' },
-  { l:'G', word:'Grapes',    c1:'#6C5CE7', c2:'#A29BFE' },
-  { l:'H', word:'House',     c1:'#FDCB6E', c2:'#E17055' },
-  { l:'I', word:'Ice Cream', c1:'#FD79A8', c2:'#FDCB6E' },
-  { l:'J', word:'Jar',       c1:'#55EFC4', c2:'#00B894' },
-  { l:'K', word:'Kite',      c1:'#74B9FF', c2:'#0984E3' },
-  { l:'L', word:'Lion',      c1:'#FFEAA7', c2:'#FDCB6E' },
-  { l:'M', word:'Moon',      c1:'#6C5CE7', c2:'#2D3436' },
-  { l:'N', word:'Nest',      c1:'#A29BFE', c2:'#FDCB6E' },
-  { l:'O', word:'Orange',    c1:'#FF7675', c2:'#FDCB6E' },
-  { l:'P', word:'Penguin',   c1:'#2D3436', c2:'#636E72' },
-  { l:'Q', word:'Queen',     c1:'#FD79A8', c2:'#6C5CE7' },
-  { l:'R', word:'Rainbow',   c1:'#FF6B6B', c2:'#A29BFE' },
-  { l:'S', word:'Sun',       c1:'#FFEAA7', c2:'#F9CA24' },
-  { l:'T', word:'Tiger',     c1:'#F39C12', c2:'#2D3436' },
-  { l:'U', word:'Umbrella',  c1:'#74B9FF', c2:'#0984E3' },
-  { l:'V', word:'Violin',    c1:'#A29BFE', c2:'#6C5CE7' },
-  { l:'W', word:'Whale',     c1:'#0984E3', c2:'#00CEC9' },
-  { l:'X', word:'Xylophone', c1:'#FF6B6B', c2:'#FDCB6E' },
-  { l:'Y', word:'Yak',       c1:'#55EFC4', c2:'#FFEAA7' },
-  { l:'Z', word:'Zebra',     c1:'#2D3436', c2:'#636E72' },
+  { l:'A', word:'Apple',     emoji:'🍎', c1:'#FF6B6B', c2:'#FFE66D' },
+  { l:'B', word:'Ball',      emoji:'⚽', c1:'#4ECDC4', c2:'#44C49B' },
+  { l:'C', word:'Cat',       emoji:'🐱', c1:'#F7B731', c2:'#F39C12' },
+  { l:'D', word:'Dog',       emoji:'🐶', c1:'#A29BFE', c2:'#6C5CE7' },
+  { l:'E', word:'Elephant',  emoji:'🐘', c1:'#FD79A8', c2:'#E84393' },
+  { l:'F', word:'Fish',      emoji:'🐟', c1:'#00CEC9', c2:'#0984E3' },
+  { l:'G', word:'Grapes',    emoji:'🍇', c1:'#6C5CE7', c2:'#A29BFE' },
+  { l:'H', word:'House',     emoji:'🏠', c1:'#FDCB6E', c2:'#E17055' },
+  { l:'I', word:'Ice Cream', emoji:'🍦', c1:'#FD79A8', c2:'#FDCB6E' },
+  { l:'J', word:'Jar',       emoji:'🫙', c1:'#55EFC4', c2:'#00B894' },
+  { l:'K', word:'Kite',      emoji:'🪁', c1:'#74B9FF', c2:'#0984E3' },
+  { l:'L', word:'Lion',      emoji:'🦁', c1:'#FFEAA7', c2:'#FDCB6E' },
+  { l:'M', word:'Moon',      emoji:'🌙', c1:'#6C5CE7', c2:'#2D3436' },
+  { l:'N', word:'Nest',      emoji:'🪺', c1:'#A29BFE', c2:'#FDCB6E' },
+  { l:'O', word:'Orange',    emoji:'🍊', c1:'#FF7675', c2:'#FDCB6E' },
+  { l:'P', word:'Penguin',   emoji:'🐧', c1:'#2D3436', c2:'#636E72' },
+  { l:'Q', word:'Queen',     emoji:'👑', c1:'#FD79A8', c2:'#6C5CE7' },
+  { l:'R', word:'Rainbow',   emoji:'🌈', c1:'#FF6B6B', c2:'#A29BFE' },
+  { l:'S', word:'Sun',       emoji:'☀️', c1:'#FFEAA7', c2:'#F9CA24' },
+  { l:'T', word:'Tiger',     emoji:'🐯', c1:'#F39C12', c2:'#2D3436' },
+  { l:'U', word:'Umbrella',  emoji:'☂️', c1:'#74B9FF', c2:'#0984E3' },
+  { l:'V', word:'Violin',    emoji:'🎻', c1:'#A29BFE', c2:'#6C5CE7' },
+  { l:'W', word:'Whale',     emoji:'🐳', c1:'#0984E3', c2:'#00CEC9' },
+  { l:'X', word:'Xylophone', emoji:'🎵', c1:'#FF6B6B', c2:'#FDCB6E' },
+  { l:'Y', word:'Yak',       emoji:'🐂', c1:'#55EFC4', c2:'#FFEAA7' },
+  { l:'Z', word:'Zebra',     emoji:'🦓', c1:'#2D3436', c2:'#636E72' },
 ];
 
 async function genAlphabet() {
   console.log('\n📝 Alphabet...');
   mkdir(path.join(OUT, 'alphabet'));
-  for (const { l, word, c1, c2 } of ALPHA) {
+  for (const { l, word, emoji, c1, c2 } of ALPHA) {
     const fileName = word.toLowerCase().replace(/ /g, '') + '.webp';
-    const svg = `<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-      ${grad('g', c1, c2)}
-      ${base()}
-      <text x="200" y="230" text-anchor="middle" font-family="Arial Black,sans-serif"
-            font-size="200" font-weight="900" fill="white" opacity="0.95">${l}</text>
-      <text x="200" y="340" text-anchor="middle" font-family="Arial,sans-serif"
-            font-size="38" font-weight="700" fill="white" opacity="0.85">${word}</text>
-    </svg>`;
-    await save(svg, path.join(OUT, 'alphabet', fileName));
+    const SIZE = 400;
+    const canvas = createCanvas(SIZE, SIZE);
+    const ctx = canvas.getContext('2d');
+
+    // gradient background
+    const grd = ctx.createLinearGradient(0, 0, SIZE, SIZE);
+    grd.addColorStop(0, c1);
+    grd.addColorStop(1, c2);
+
+    // rounded rect
+    const r = 48;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(SIZE - r, 0);
+    ctx.quadraticCurveTo(SIZE, 0, SIZE, r);
+    ctx.lineTo(SIZE, SIZE - r);
+    ctx.quadraticCurveTo(SIZE, SIZE, SIZE - r, SIZE);
+    ctx.lineTo(r, SIZE);
+    ctx.quadraticCurveTo(0, SIZE, 0, SIZE - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // letter badge (top-left circle)
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.beginPath();
+    ctx.arc(60, 60, 44, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 52px Arial Black, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(l, 60, 62);
+
+    // emoji (large, centered)
+    ctx.font = '160px AppleEmoji, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, SIZE / 2, SIZE / 2 - 10);
+
+    // word pill at bottom
+    ctx.font = 'bold 34px Arial';
+    const tw = ctx.measureText(word).width;
+    const pw = tw + 40, ph = 52;
+    const px = SIZE / 2 - pw / 2, py = SIZE - ph - 24;
+    const pr = 26;
+    ctx.fillStyle = 'rgba(255,255,255,0.30)';
+    ctx.beginPath();
+    ctx.moveTo(px + pr, py); ctx.lineTo(px + pw - pr, py);
+    ctx.quadraticCurveTo(px + pw, py, px + pw, py + pr);
+    ctx.lineTo(px + pw, py + ph - pr);
+    ctx.quadraticCurveTo(px + pw, py + ph, px + pw - pr, py + ph);
+    ctx.lineTo(px + pr, py + ph);
+    ctx.quadraticCurveTo(px, py + ph, px, py + ph - pr);
+    ctx.lineTo(px, py + pr);
+    ctx.quadraticCurveTo(px, py, px + pr, py);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 34px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(word, SIZE / 2, py + ph / 2);
+
+    const buf = canvas.toBuffer('image/png');
+    await sharp(buf).resize(400, 400).webp({ quality: 90 }).toFile(path.join(OUT, 'alphabet', fileName));
+    console.log('  ✓', 'alphabet/' + fileName);
   }
 }
 
