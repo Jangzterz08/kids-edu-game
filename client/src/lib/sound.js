@@ -40,24 +40,35 @@ function getKidsVoice() {
   return voices.find(v => v.lang.startsWith('en')) || voices[0];
 }
 
+function toAudioFilename(text) {
+  return '/audio/' + text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '') + '.mp3';
+}
+
 export function speakWord(word) {
-  if (muted || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
+  if (muted) return;
 
-  function speak() {
-    const utter = new SpeechSynthesisUtterance(word);
-    const voice = getKidsVoice();
-    if (voice) utter.voice = voice;
-    utter.rate  = 0.78;
-    utter.pitch = 1.5;
-    utter.volume = 1;
-    window.speechSynthesis.speak(utter);
-  }
+  // Try pre-generated MP3 first
+  const src = toAudioFilename(word);
+  const audio = getAudio(src);
 
-  // Voices may not be loaded yet on first call
-  if (window.speechSynthesis.getVoices().length > 0) {
-    speak();
-  } else {
-    window.speechSynthesis.onvoiceschanged = () => { speak(); };
-  }
+  const tryTTS = () => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    function speak() {
+      const utter = new SpeechSynthesisUtterance(word);
+      const voice = getKidsVoice();
+      if (voice) utter.voice = voice;
+      utter.rate  = 0.78;
+      utter.pitch = 1.5;
+      utter.volume = 1;
+      window.speechSynthesis.speak(utter);
+    }
+    if (window.speechSynthesis.getVoices().length > 0) speak();
+    else window.speechSynthesis.onvoiceschanged = () => speak();
+  };
+
+  // onerror fires if MP3 doesn't exist → fall back to TTS
+  audio.onerror = tryTTS;
+  audio.currentTime = 0;
+  audio.play().catch(tryTTS);
 }
