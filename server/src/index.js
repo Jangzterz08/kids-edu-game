@@ -27,21 +27,6 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Temporary debug — remove after fixing auth
-app.post('/debug/token', async (req, res) => {
-  const { token } = req.body;
-  if (!token) return res.json({ error: 'no token provided' });
-  const { createClient } = require('@supabase/supabase-js');
-  const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-  const { data, error } = await sb.auth.getUser(token);
-  res.json({
-    supabaseUrl: process.env.SUPABASE_URL,
-    hasServiceKey: !!process.env.SUPABASE_SERVICE_KEY,
-    user: data?.user ? { id: data.user.id, email: data.user.email } : null,
-    error: error?.message || null,
-  });
-});
-
 // Protected routes
 app.use('/api/auth', requireAuth, require('./routes/auth'));
 app.use('/api/kids', requireAuth, require('./routes/kids'));
