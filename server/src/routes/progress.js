@@ -82,16 +82,20 @@ router.get('/:kidId/module/:moduleSlug', async (req, res, next) => {
   }
 });
 
-// POST /api/progress/:kidId/lesson/:lessonId
-router.post('/:kidId/lesson/:lessonId', async (req, res, next) => {
+// POST /api/progress/:kidId/lesson/:lessonSlug
+router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
   try {
     const parent = await getParent(req.user.id);
     if (!parent) return res.status(404).json({ error: 'Parent not found' });
     const kid = await verifyKidOwnership(req.params.kidId, parent.id);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
+    // Resolve slug → UUID (client sends slug, DB stores UUID)
+    const lesson = await prisma.lesson.findFirst({ where: { slug: req.params.lessonSlug } });
+    if (!lesson) return res.status(404).json({ error: `Lesson not found: ${req.params.lessonSlug}` });
+
     const record = await upsertProgress(kid.id, {
-      lessonId: req.params.lessonId,
+      lessonId: lesson.id,
       ...req.body,
     });
     res.json(record);
