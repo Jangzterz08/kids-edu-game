@@ -38,7 +38,6 @@ export function useProgress(kidId) {
     upsertOfflineLesson(kidId, lessonId, update);
     try {
       await api.post(`/api/progress/${kidId}/lesson/${lessonId}`, update);
-      await fetchProgress();
     } catch (err) {
       console.error('Progress save failed — will sync later', err);
     }

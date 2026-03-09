@@ -2,6 +2,9 @@ import { supabase } from './supabase';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 
+// Wake Railway server immediately on app load to avoid cold start on first real request
+fetch(`${BASE_URL}/health`).catch(() => {});
+
 async function getAuthHeader() {
   if (!supabase) return {};
   const { data: { session } } = await supabase.auth.getSession();
