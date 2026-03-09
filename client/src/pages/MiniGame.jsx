@@ -26,20 +26,18 @@ export default function MiniGame() {
     const newScores = { ...scores, [gameType]: score };
     setScores(newScores);
 
-    // Record score for every lesson in the module
-    for (const lesson of mod.lessons) {
-      const update = {
-        viewed: true,
-        starsEarned: computeStars(newScores),
-        attempts: 1,
-        completedAt: new Date().toISOString(),
-      };
-      if (gameType === 'matching') update.matchScore   = score;
-      if (gameType === 'tracing')  update.traceScore   = score;
-      if (gameType === 'quiz')     update.quizScore    = score;
-      if (gameType === 'spelling') update.spellingScore = score;
-      await recordLesson(lesson.slug, update).catch(() => {});
-    }
+    // Record score for every lesson in the module (in parallel)
+    const update = {
+      viewed: true,
+      starsEarned: computeStars(newScores),
+      attempts: 1,
+      completedAt: new Date().toISOString(),
+    };
+    if (gameType === 'matching') update.matchScore   = score;
+    if (gameType === 'tracing')  update.traceScore   = score;
+    if (gameType === 'quiz')     update.quizScore    = score;
+    if (gameType === 'spelling') update.spellingScore = score;
+    await Promise.all(mod.lessons.map(lesson => recordLesson(lesson.slug, update).catch(() => {})));
 
     if (gameIdx < games.length - 1) {
       setGameIdx(i => i + 1);
