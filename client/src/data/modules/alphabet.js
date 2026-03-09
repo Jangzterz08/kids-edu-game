@@ -34,7 +34,7 @@ export const alphabetModule = {
   sortOrder: 1,
   color: '#FF6B6B',
   bgGradient: 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)',
-  games: ['matching', 'tracing', 'quiz'],
+  games: ['matching', 'tracing', 'quiz', 'phonics'],
   lessons: letters.map((item, i) => ({
     slug: `letter-${item.l.toLowerCase()}`,
     title: `${item.l} is for ${item.word}`,

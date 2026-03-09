@@ -7,6 +7,7 @@ import QuizGame from '../components/games/QuizGame';
 import MatchingGame from '../components/games/MatchingGame';
 import TracingGame from '../components/games/TracingGame';
 import SpellingGame from '../components/games/SpellingGame';
+import PhonicsGame from '../components/games/PhonicsGame';
 
 export default function MiniGame() {
   const { moduleSlug }          = useParams();
@@ -64,7 +65,7 @@ export default function MiniGame() {
         <span style={styles.modEmoji}>{mod.iconEmoji}</span>
         <span style={styles.modTitle}>{mod.title}</span>
         <span style={styles.gameBadge}>
-          {game === 'matching' ? '🃏 Match' : game === 'tracing' ? '✏️ Trace' : game === 'spelling' ? '🔤 Spell' : '❓ Quiz'}
+          {game === 'matching' ? '🃏 Match' : game === 'tracing' ? '✏️ Trace' : game === 'spelling' ? '🔤 Spell' : game === 'phonics' ? '🔊 Phonics' : '❓ Quiz'}
         </span>
         <span style={styles.gameCounter}>{gameIdx + 1}/{games.length}</span>
       </div>
@@ -80,6 +81,9 @@ export default function MiniGame() {
       )}
       {game === 'spelling' && (
         <SpellingGame lessons={mod.lessons} onComplete={handleGameComplete} />
+      )}
+      {game === 'phonics' && (
+        <PhonicsGame lessons={mod.lessons} onComplete={handleGameComplete} />
       )}
     </div>
   );
