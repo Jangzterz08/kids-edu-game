@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import StarBadge from '../modules/StarBadge';
+import Mascot from '../mascot/Mascot';
 
 const CONFETTI_COLORS = ['#FF5252','#FFD600','#4CAF50','#2979FF','#E91E8C','#FF9800','#9C27B0'];
 const BURST_EMOJIS   = ['⭐','🌟','🎊','💫','🎉','✨','🏆','❤️'];
@@ -92,7 +93,7 @@ export default function CelebrationModal({ stars = 3, moduleName = '', onContinu
       </div>
 
       <div style={styles.box}>
-        <div style={styles.emoji}>🎊</div>
+        <Mascot mood="excited" size="lg" showBubble={false} />
         <h1 style={styles.heading}>{msg}</h1>
         <p style={styles.sub}>{moduleName} complete!</p>
         <div style={{ marginBottom: 24 }}>

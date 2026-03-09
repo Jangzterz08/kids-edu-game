@@ -3,6 +3,7 @@ import { useKid } from '../context/KidContext';
 import { MODULE_REGISTRY } from '../data/index';
 import { api } from '../lib/api';
 import ModuleCard from '../components/modules/ModuleCard';
+import Mascot from '../components/mascot/Mascot';
 
 const AVATAR_EMOJIS = {
   bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
@@ -46,13 +47,16 @@ export default function KidHome() {
           </div>
         </div>
 
-        {streak > 0 && (
-          <div style={styles.streakBadge}>
-            <span style={styles.streakFire}>🔥</span>
-            <span style={styles.streakNum}>{streak}</span>
-            <span style={styles.streakLabel}>day streak!</span>
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Mascot streak={streak} size="md" showBubble={true} />
+          {streak > 0 && (
+            <div style={styles.streakBadge}>
+              <span style={styles.streakFire}>🔥</span>
+              <span style={styles.streakNum}>{streak}</span>
+              <span style={styles.streakLabel}>day streak!</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {earnedModuleSlugs.size > 0 && (

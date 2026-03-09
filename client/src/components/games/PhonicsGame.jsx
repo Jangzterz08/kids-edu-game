@@ -94,7 +94,7 @@ export default function PhonicsGame({ lessons, onComplete }) {
       if (idx < questions.length - 1) {
         setIdx(i => i + 1);
       } else {
-        const score = Math.round(((correct + (isCorrect ? 1 : 0)) / TOTAL_ROUNDS) * 100);
+        const score = Math.round(((correct + (isCorrect ? 1 : 0)) / questions.length) * 100);
         onComplete(score);
       }
     }, 1000);
@@ -248,7 +248,7 @@ function SyllableRound({ q, selected, imgErrors, onImgError, onAnswer, onSpeak }
 // ── Styles ─────────────────────────────────────────────────────────────────
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto' },
+  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', textAlign: 'center' },
   dots: { display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 12 },
   dot: { width: 12, height: 12, borderRadius: '50%', transition: 'all 0.2s' },
   modeTag: {
