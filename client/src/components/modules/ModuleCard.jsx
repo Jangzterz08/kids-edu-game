@@ -3,7 +3,7 @@ import ProgressRing from './ProgressRing';
 import StarBadge from './StarBadge';
 import { getModule } from '../../data/index';
 
-export default function ModuleCard({ moduleSlug, serverMeta, progressData }) {
+export default function ModuleCard({ moduleSlug, serverMeta, progressData, completed: isCompleted }) {
   const navigate = useNavigate();
   const mod      = getModule(moduleSlug);
   if (!mod) return null;
@@ -21,7 +21,10 @@ export default function ModuleCard({ moduleSlug, serverMeta, progressData }) {
     >
       <div style={styles.topRow}>
         <span style={styles.emoji}>{mod.iconEmoji}</span>
-        <ProgressRing percent={pct} size={52} stroke={5} color="rgba(255,255,255,0.9)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {isCompleted && <span style={styles.completedBadge}>✅</span>}
+          <ProgressRing percent={pct} size={52} stroke={5} color="rgba(255,255,255,0.9)" />
+        </div>
       </div>
       <div style={styles.title}>{mod.title}</div>
       <div style={styles.sub}>{completed}/{total} lessons</div>
@@ -43,4 +46,5 @@ const styles = {
   emoji: { fontSize: 48 },
   title: { fontSize: 'var(--font-md)', fontWeight: 900, marginTop: 4 },
   sub: { fontSize: 'var(--font-sm)', opacity: 0.85, marginBottom: 4 },
+  completedBadge: { fontSize: 20 },
 };

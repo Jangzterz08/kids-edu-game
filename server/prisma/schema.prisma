@@ -24,9 +24,11 @@ model KidProfile {
   name        String
   avatarId    String   @default("bear")
   ageGroup    String?
-  totalStars  Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  totalStars       Int       @default(0)
+  currentStreak    Int       @default(0)
+  lastActivityDate DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   progress     LessonProgress[]
   achievements Achievement[]

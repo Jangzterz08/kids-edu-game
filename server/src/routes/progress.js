@@ -98,6 +98,20 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
       lessonId: lesson.id,
       ...req.body,
     });
+
+    // Update daily streak
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const last = kid.lastActivityDate ? new Date(kid.lastActivityDate) : null;
+    if (last) last.setHours(0, 0, 0, 0);
+    const diffDays = last ? Math.round((today - last) / 86400000) : null;
+    if (diffDays !== 0) {
+      const newStreak = diffDays === 1 ? kid.currentStreak + 1 : 1;
+      await prisma.kidProfile.update({
+        where: { id: kid.id },
+        data: { currentStreak: newStreak, lastActivityDate: new Date() },
+      });
+    }
+
     res.json(record);
   } catch (err) {
     next(err);
