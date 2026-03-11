@@ -47,10 +47,6 @@ function toAudioFilename(text) {
 export function speakWord(word) {
   if (muted) return;
 
-  // Try pre-generated MP3 first
-  const src = toAudioFilename(word);
-  const audio = getAudio(src);
-
   const tryTTS = () => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
@@ -67,6 +63,15 @@ export function speakWord(word) {
     else window.speechSynthesis.onvoiceschanged = () => speak();
   };
 
+  const src = toAudioFilename(word);
+
+  // If the audio has already errored (e.g. 404 cached), skip straight to TTS
+  if (cache[src]?.error) {
+    tryTTS();
+    return;
+  }
+
+  const audio = getAudio(src);
   // onerror fires if MP3 doesn't exist → fall back to TTS
   audio.onerror = tryTTS;
   audio.currentTime = 0;

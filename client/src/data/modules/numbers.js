@@ -18,7 +18,7 @@ export const numbersModule = {
   sortOrder: 2,
   color: '#4ECDC4',
   bgGradient: 'linear-gradient(135deg, #4ECDC4 0%, #A8E6CF 100%)',
-  games: ['matching', 'tracing', 'quiz'],
+  games: ['matching', 'tracing', 'quiz', 'phonics'],
   lessons: nums.map((item, i) => ({
     slug: `number-${item.n}`,
     title: item.word,

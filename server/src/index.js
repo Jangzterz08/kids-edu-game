@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const cors    = require('cors');
+const cron    = require('node-cron');
+const { sendWeeklyDigests } = require('./services/weeklyDigest');
 const { requireAuth } = require('./middleware/auth');
 
 const app = express();
@@ -47,5 +49,11 @@ const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Kids Edu API running on port ${PORT}`);
 });
+
+// Weekly digest — every Monday at 8:00 AM (server local time)
+cron.schedule('0 8 * * 1', () => {
+  sendWeeklyDigests().catch(err => console.error('[digest] Unhandled error:', err));
+});
+console.log('[digest] Weekly digest cron scheduled (Mon 08:00)');
 
 module.exports = app;

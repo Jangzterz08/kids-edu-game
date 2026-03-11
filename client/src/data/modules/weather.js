@@ -16,7 +16,7 @@ export const weatherModule = {
   sortOrder: 11,
   color: '#54A0FF',
   bgGradient: 'linear-gradient(135deg, #54A0FF 0%, #5F27CD 100%)',
-  games: ['matching', 'quiz', 'spelling'],
+  games: ['matching', 'quiz', 'spelling', 'phonics'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

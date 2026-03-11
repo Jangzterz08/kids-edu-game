@@ -107,7 +107,9 @@ export default function SpellingGame({ lessons, onComplete }) {
         ) : (
           <span style={styles.emoji}>{lesson.emoji || '❓'}</span>
         )}
-        <button style={styles.speakBtn} onClick={() => speakWord(lesson.word)}>🔊</button>
+        {/* ALL CAPS label so kids can match the letters they see */}
+        <p style={styles.wordLabel}>{lesson.word.toUpperCase()}</p>
+        <button style={styles.speakBtn} onClick={() => speakWord(lesson.word)} aria-label={`Hear ${lesson.word}`}>🔊</button>
       </div>
 
       {/* Answer slots */}
@@ -147,11 +149,22 @@ const styles = {
     background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)',
     boxShadow: 'var(--shadow-card)', width: '100%', maxWidth: 280,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    minHeight: 200, padding: 16,
+    minHeight: 220, paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 72,
   },
   img:      { width: 160, height: 160, objectFit: 'contain' },
   emoji:    { fontSize: 100, lineHeight: 1 },
-  speakBtn: { position: 'absolute', bottom: 12, right: 12, background: 'none', border: 'none', fontSize: 28, cursor: 'pointer' },
+  wordLabel: {
+    position: 'absolute', bottom: 40, left: 0, right: 0, textAlign: 'center',
+    fontSize: 'var(--font-lg)', fontWeight: 900, color: 'var(--text-primary)',
+    letterSpacing: 2, margin: 0,
+  },
+  speakBtn: {
+    position: 'absolute', bottom: 8, right: 8,
+    background: 'var(--accent-yellow, #FFD600)', border: 'none',
+    borderRadius: '50%', width: 44, height: 44,
+    fontSize: 22, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+  },
   answerRow: {
     display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'center',
     padding: '12px 20px', borderRadius: 20, minWidth: 200, flexWrap: 'wrap',
@@ -159,24 +172,23 @@ const styles = {
     position: 'relative',
   },
   slot: {
-    width: 44, height: 52, border: '3px solid var(--text-muted)',
+    width: 52, height: 60, border: '3px solid var(--text-muted)',
     borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
     background: 'var(--bg-surface)',
   },
-  slotLetter: { fontSize: 'var(--font-lg)', fontWeight: 900, color: 'var(--text-primary)' },
+  slotLetter: { fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' },
   backBtn: {
-    background: 'none', border: 'none', fontSize: 24, cursor: 'pointer',
+    background: 'none', border: 'none', fontSize: 28, cursor: 'pointer',
     color: 'var(--text-secondary)', marginLeft: 4,
   },
   tileGrid: {
-    display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center', maxWidth: 380,
+    display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', maxWidth: 400,
   },
   tile: {
-    width: 56, height: 56, borderRadius: 14, border: 'none',
+    width: 64, height: 64, borderRadius: 16, border: 'none',
     background: 'var(--accent-purple)', color: '#fff',
-    fontSize: 'var(--font-lg)', fontWeight: 900,
+    fontSize: 26, fontWeight: 900,
     boxShadow: '0 4px 0 rgba(0,0,0,0.2)',
     cursor: 'pointer', transition: 'opacity 0.15s, transform 0.1s',
-    active: { transform: 'translateY(2px)', boxShadow: '0 2px 0 rgba(0,0,0,0.2)' },
   },
 };

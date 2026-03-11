@@ -27,6 +27,8 @@ model KidProfile {
   totalStars       Int       @default(0)
   currentStreak    Int       @default(0)
   lastActivityDate DateTime?
+  coins            Int       @default(0)
+  unlockedItems    String    @default("[]")
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

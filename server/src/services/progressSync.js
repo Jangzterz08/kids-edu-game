@@ -49,16 +49,20 @@ async function upsertProgress(kidId, entry) {
     },
   });
 
-  // Update totalStars on kid profile
-  if (finalStars > (existing?.starsEarned ?? 0)) {
-    const delta = finalStars - (existing?.starsEarned ?? 0);
+  // Update totalStars and coins on kid profile
+  const starDelta = finalStars - (existing?.starsEarned ?? 0);
+  const coinsDelta = starDelta > 0 ? starDelta * 5 : 0;
+  if (starDelta > 0) {
     await prisma.kidProfile.update({
       where: { id: kidId },
-      data: { totalStars: { increment: delta } },
+      data: {
+        totalStars: { increment: starDelta },
+        coins: { increment: coinsDelta },
+      },
     });
   }
 
-  return record;
+  return { ...record, coinsDelta };
 }
 
 function maxScore(a, b) {

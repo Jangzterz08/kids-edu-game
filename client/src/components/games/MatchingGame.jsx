@@ -33,6 +33,11 @@ export default function MatchingGame({ lessons, onComplete }) {
     if (flipped.includes(idx)) return;
     if (matched.includes(cards[idx].pairId)) return;
 
+    // Speak the word when a text-only card is revealed so pre-readers can hear it
+    if (cards[idx].type === 'word') {
+      speakWord(cards[idx].label);
+    }
+
     const newFlipped = [...flipped, idx];
     setFlipped(newFlipped);
 

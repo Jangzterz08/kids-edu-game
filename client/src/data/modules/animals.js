@@ -18,7 +18,7 @@ export const animalsModule = {
   sortOrder: 5,
   color: '#4CAF50',
   bgGradient: 'linear-gradient(135deg, #4CAF50 0%, #A8E6CF 100%)',
-  games: ['matching', 'quiz', 'spelling'],
+  games: ['matching', 'quiz', 'spelling', 'phonics'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

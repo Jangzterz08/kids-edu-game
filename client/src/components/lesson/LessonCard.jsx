@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import SoundButton from './SoundButton';
+import SpeakAlongButton from './SpeakAlongButton';
 
 export default function LessonCard({ lesson }) {
   const { title, word, imageFile, letter, numeral, emoji, tip } = lesson;
@@ -34,6 +35,9 @@ export default function LessonCard({ lesson }) {
         <span style={styles.word}>{word}</span>
         <SoundButton word={word} size="md" />
       </div>
+
+      {/* Speak-along mic — child repeats what the speaker says */}
+      <SpeakAlongButton word={word} />
 
       {/* Tip (manners / food) */}
       {tip && <div style={styles.tip}>{tip}</div>}

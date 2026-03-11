@@ -5,7 +5,7 @@ import Mascot from '../mascot/Mascot';
 const CONFETTI_COLORS = ['#FF5252','#FFD600','#4CAF50','#2979FF','#E91E8C','#FF9800','#9C27B0'];
 const BURST_EMOJIS   = ['⭐','🌟','🎊','💫','🎉','✨','🏆','❤️'];
 
-export default function CelebrationModal({ stars = 3, moduleName = '', onContinue }) {
+export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, onContinue }) {
   const canvasRef = useRef(null);
   const [burst, setBurst] = useState([]);
 
@@ -99,6 +99,12 @@ export default function CelebrationModal({ stars = 3, moduleName = '', onContinu
         <div style={{ marginBottom: 24 }}>
           <StarBadge stars={stars} size="lg" />
         </div>
+        {coinsEarned > 0 && (
+          <div style={styles.coinBanner}>
+            <span style={styles.coinIcon}>🪙</span>
+            <span style={styles.coinText}>+{coinsEarned} coins earned!</span>
+          </div>
+        )}
         <button className="kid-btn green" onClick={onContinue} style={{ width: '100%' }}>
           Keep Going!
         </button>
@@ -130,4 +136,13 @@ const styles = {
   emoji:   { fontSize: 72, marginBottom: 8 },
   heading: { fontSize: 'var(--font-xl)', fontWeight: 900, marginBottom: 8 },
   sub:     { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 16 },
+  coinBanner: {
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+    background: 'linear-gradient(135deg, #FFF9C4, #FFF176)',
+    border: '2px solid #F9A825', borderRadius: 16,
+    padding: '10px 20px', marginBottom: 16,
+    animation: 'bounce-in 0.4s ease',
+  },
+  coinIcon: { fontSize: 28 },
+  coinText: { fontSize: 18, fontWeight: 800, color: '#5D4037' },
 };

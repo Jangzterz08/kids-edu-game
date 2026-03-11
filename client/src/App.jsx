@@ -13,6 +13,7 @@ import ModuleIntro     from './pages/ModuleIntro';
 import LessonPlayer    from './pages/LessonPlayer';
 import MiniGame        from './pages/MiniGame';
 import ModuleComplete  from './pages/ModuleComplete';
+import CoinStore       from './pages/CoinStore';
 import NotFound        from './pages/NotFound';
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
             <Route element={<ProtectedRoute requireKid />}>
               <Route element={<KidLayout />}>
                 <Route path="/play"                    element={<KidHome />} />
+                <Route path="/play/store"              element={<CoinStore />} />
                 <Route path="/play/:moduleSlug"        element={<ModuleIntro />} />
                 <Route path="/play/:moduleSlug/lesson" element={<LessonPlayer />} />
                 <Route path="/play/:moduleSlug/game"   element={<MiniGame />} />

@@ -16,7 +16,7 @@ export const shapesModule = {
   sortOrder: 3,
   color: '#FF9800',
   bgGradient: 'linear-gradient(135deg, #FF9800 0%, #FFE082 100%)',
-  games: ['matching', 'tracing', 'quiz'],
+  games: ['matching', 'tracing', 'quiz', 'phonics'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

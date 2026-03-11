@@ -17,6 +17,7 @@ export default function ModuleComplete() {
   const scoreVals = Object.values(scores).filter(v => v !== undefined);
   const avgScore  = scoreVals.length ? Math.round(scoreVals.reduce((a,b) => a+b,0) / scoreVals.length) : 50;
   const stars     = avgScore >= 80 ? 3 : avgScore >= 55 ? 2 : 1;
+  const coinsEarned = stars * 5;
 
   useEffect(() => {
     const t = setTimeout(() => setShow(true), 200);
@@ -40,6 +41,7 @@ export default function ModuleComplete() {
     <CelebrationModal
       stars={stars}
       moduleName={mod?.title || moduleSlug}
+      coinsEarned={coinsEarned}
       onContinue={() => navigate('/play')}
     />
   );

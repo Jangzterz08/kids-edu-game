@@ -83,6 +83,34 @@ router.put('/:kidId', async (req, res, next) => {
   }
 });
 
+// POST /api/kids/:kidId/store/buy
+router.post('/:kidId/store/buy', async (req, res, next) => {
+  try {
+    const parent = await getParent(req.user.id);
+    if (!parent) return res.status(404).json({ error: 'Parent account not found' });
+    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    const { itemId, price } = req.body;
+    if (!itemId || price == null) return res.status(400).json({ error: 'itemId and price required' });
+
+    const unlocked = JSON.parse(kid.unlockedItems || '[]');
+    if (unlocked.includes(itemId)) return res.status(400).json({ error: 'Already unlocked' });
+    if (kid.coins < price) return res.status(400).json({ error: 'Not enough coins' });
+
+    const updated = await prisma.kidProfile.update({
+      where: { id: kid.id },
+      data: {
+        coins: { decrement: price },
+        unlockedItems: JSON.stringify([...unlocked, itemId]),
+      },
+    });
+    res.json({ coins: updated.coins, unlockedItems: JSON.parse(updated.unlockedItems) });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // DELETE /api/kids/:kidId
 router.delete('/:kidId', async (req, res, next) => {
   try {

@@ -16,7 +16,7 @@ export const householdObjectsModule = {
   sortOrder: 8,
   color: '#FF9800',
   bgGradient: 'linear-gradient(135deg, #FF9800 0%, #FFCC80 100%)',
-  games: ['matching', 'quiz'],
+  games: ['matching', 'quiz', 'phonics'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

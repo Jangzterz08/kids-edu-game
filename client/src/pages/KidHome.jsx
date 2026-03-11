@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useKid } from '../context/KidContext';
 import { MODULE_REGISTRY } from '../data/index';
 import { api } from '../lib/api';
@@ -8,13 +9,18 @@ import Mascot from '../components/mascot/Mascot';
 const AVATAR_EMOJIS = {
   bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
   dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
+  // Store unlockables
+  frog: '🐸', chick: '🐥', hamster: '🐹', panda: '🐼',
+  butterfly: '🦋', dragon: '🐉', dino: '🦖', unicorn: '🦄',
 };
 
 export default function KidHome() {
   const { activeKid, refreshKids } = useKid();
+  const navigate = useNavigate();
   const [progressData, setProgressData]     = useState([]);
   const [achievements, setAchievements]     = useState([]);
   const [streak, setStreak]                 = useState(0);
+  const [coins, setCoins]                   = useState(activeKid?.coins || 0);
 
   useEffect(() => {
     if (!activeKid) return;
@@ -24,10 +30,13 @@ export default function KidHome() {
     api.get(`/api/achievements/${activeKid.id}`)
       .then(d => setAchievements(d.achievements || []))
       .catch(() => {});
-    // Refresh kid to get updated streak + totalStars
+    // Refresh kid to get updated streak + totalStars + coins
     refreshKids().then(kids => {
       const kid = kids?.find(k => k.id === activeKid.id);
-      if (kid) setStreak(kid.currentStreak || 0);
+      if (kid) {
+        setStreak(kid.currentStreak || 0);
+        setCoins(kid.coins || 0);
+      }
     });
   }, [activeKid?.id]);
 
@@ -47,7 +56,7 @@ export default function KidHome() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <Mascot streak={streak} size="md" showBubble={true} />
           {streak > 0 && (
             <div style={styles.streakBadge}>
@@ -56,6 +65,11 @@ export default function KidHome() {
               <span style={styles.streakLabel}>day streak!</span>
             </div>
           )}
+          <button style={styles.coinBadge} onClick={() => navigate('/play/store')}>
+            <span style={styles.coinIcon}>🪙</span>
+            <span style={styles.coinNum}>{coins}</span>
+            <span style={styles.coinLabel}>Store</span>
+          </button>
         </div>
       </div>
 
@@ -103,6 +117,16 @@ const styles = {
   streakFire: { fontSize: 28 },
   streakNum: { fontSize: 32, fontWeight: 900, color: '#fff' },
   streakLabel: { fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.9)' },
+  coinBadge: {
+    display: 'flex', alignItems: 'center', gap: 6,
+    background: 'linear-gradient(135deg, #FFF9C4, #FFD600)',
+    border: '2px solid #F9A825', borderRadius: 20, padding: '10px 20px',
+    boxShadow: '0 4px 12px rgba(249,168,37,0.35)',
+    cursor: 'pointer', fontFamily: 'inherit',
+  },
+  coinIcon: { fontSize: 24 },
+  coinNum: { fontSize: 28, fontWeight: 900, color: '#5D4037' },
+  coinLabel: { fontSize: 13, fontWeight: 700, color: '#795548' },
   badgesSection: { marginBottom: 28 },
   badgesTitle: { fontSize: 'var(--font-base)', fontWeight: 800, marginBottom: 12, color: 'var(--text-primary)' },
   badgesRow: { display: 'flex', gap: 12, flexWrap: 'wrap' },

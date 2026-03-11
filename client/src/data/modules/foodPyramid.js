@@ -15,7 +15,7 @@ export const foodPyramidModule = {
   sortOrder: 9,
   color: '#43A047',
   bgGradient: 'linear-gradient(135deg, #43A047 0%, #A5D6A7 100%)',
-  games: ['matching', 'quiz'],
+  games: ['matching', 'quiz', 'phonics'],
   lessons: items.map((item, i) => ({
     slug: item.slug,
     title: item.word,

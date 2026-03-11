@@ -54,6 +54,71 @@ router.get('/:kidId', async (req, res, next) => {
   }
 });
 
+// GET /api/progress/:kidId/stats — summary, accuracy, weekly activity, recommended
+router.get('/:kidId/stats', async (req, res, next) => {
+  try {
+    const parent = await getParent(req.user.id);
+    if (!parent) return res.status(404).json({ error: 'Parent not found' });
+    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    const allProgress = await prisma.lessonProgress.findMany({
+      where: { kidId: kid.id },
+      select: { matchScore: true, traceScore: true, quizScore: true, starsEarned: true, updatedAt: true },
+    });
+
+    const totalLessonsCompleted = allProgress.filter(p => p.starsEarned > 0).length;
+
+    const avg = arr => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : null;
+    const matchScores = allProgress.filter(p => p.matchScore != null).map(p => p.matchScore);
+    const traceScores = allProgress.filter(p => p.traceScore != null).map(p => p.traceScore);
+    const quizScores  = allProgress.filter(p => p.quizScore  != null).map(p => p.quizScore);
+
+    // Weekly activity — past 7 days by updatedAt
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const weekMap = {};
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      weekMap[key] = { day: dayNames[d.getDay()], count: 0 };
+    }
+    allProgress.forEach(p => {
+      const key = new Date(p.updatedAt).toISOString().slice(0, 10);
+      if (weekMap[key]) weekMap[key].count++;
+    });
+    const weeklyActivity = Object.values(weekMap);
+
+    // Recommended: lowest-pct incomplete module
+    const modules = await prisma.module.findMany({
+      orderBy: { sortOrder: 'asc' },
+      include: { lessons: { include: { progress: { where: { kidId: kid.id } } } } },
+    });
+    let recommended = null;
+    let lowestPct = 1;
+    for (const mod of modules) {
+      const total = mod.lessons.length;
+      if (total === 0) continue;
+      const done = mod.lessons.filter(l => (l.progress[0]?.starsEarned ?? 0) > 0).length;
+      const pct = done / total;
+      if (pct < 1 && pct <= lowestPct) {
+        lowestPct = pct;
+        recommended = { slug: mod.slug, title: mod.title, iconEmoji: mod.iconEmoji, pct: Math.round(pct * 100) };
+      }
+    }
+
+    res.json({
+      summary: { totalStars: kid.totalStars, currentStreak: kid.currentStreak, totalLessonsCompleted },
+      gameAccuracy: { match: avg(matchScores), trace: avg(traceScores), quiz: avg(quizScores) },
+      weeklyActivity,
+      recommended,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/progress/:kidId/module/:moduleSlug
 router.get('/:kidId/module/:moduleSlug', async (req, res, next) => {
   try {
