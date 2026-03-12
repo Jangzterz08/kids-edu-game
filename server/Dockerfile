@@ -5,7 +5,8 @@ WORKDIR /app
 # Install openssl for Prisma
 RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
-# Copy package files and prisma schema first (better layer caching)
+# Break cache to forcefully generate new Prisma client on Railway
+ARG CACHE_BUST=2
 COPY package*.json ./
 COPY prisma ./prisma/
 
