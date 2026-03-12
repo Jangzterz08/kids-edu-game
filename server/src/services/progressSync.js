@@ -51,12 +51,21 @@ async function upsertProgress(kidId, entry) {
 
   // Update totalStars and coins on kid profile
   const starDelta = finalStars - (existing?.starsEarned ?? 0);
-  const coinsDelta = starDelta > 0 ? starDelta * 5 : 0;
+  // 5 coins per new star. If already perfected (starDelta === 0), award 3 coins for playing again!
+  const coinsDelta = starDelta > 0 ? starDelta * 5 : 3;
+
   if (starDelta > 0) {
     await prisma.kidProfile.update({
       where: { id: kidId },
       data: {
         totalStars: { increment: starDelta },
+      },
+    });
+  }
+  if (coinsDelta > 0) {
+    await prisma.kidProfile.update({
+      where: { id: kidId },
+      data: {
         coins: { increment: coinsDelta },
       },
     });

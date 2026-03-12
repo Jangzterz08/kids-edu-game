@@ -2,40 +2,57 @@
 
 ## Quick Status Update
 
-Full-stack kids educational app. **Fully deployed and live.**
+Full-stack kids educational app. **Deployed and live** (migrated to new Supabase project 2026-03-12).
 
 - **Client:** `https://kids-edu-game.vercel.app` (Vercel, root=`client/`)
 - **Server:** `https://kids-edu-game-production.up.railway.app` (Railway, root=`server/`)
 - **Stack:** React + Vite / Express + Prisma 7 / Supabase PostgreSQL
-- **12 modules, 107 lessons, 5 game types:** Matching, Quiz, Tracing, Spelling, Phonics
-- **Phonics game:** Now in all 12 modules (was Alphabet-only).
-- **Streak counter:** `currentStreak` + `lastActivityDate` on KidProfile. Orange 🔥 badge on KidHome.
-- **Module badges:** Yellow badge row on KidHome, ✅ overlay on completed ModuleCards.
-- **Mascot "Sunny":** Emoji-based character with 6 moods. On KidHome + CelebrationModal.
-- **Audio:** 147 pre-generated MP3s in `client/public/audio/` (en-US-AriaNeural). TTS fallback.
-- **SpeakAlongButton:** Mic-based word recognition (Web Speech API). iOS Safari fallback → `TypeItButton` (text input + fuzzy Levenshtein match). Lives in `client/src/components/lesson/SpeakAlongButton.jsx`.
-- **Coin economy:** `coins Int` + `unlockedItems String` on KidProfile (migrated). `progressSync.js` awards 5 coins per star delta. `CelebrationModal` shows "+N 🪙 coins earned!". KidHome shows coin badge → `/play/store`.
-- **CoinStore:** 8 premium avatars (🐸30🐥40🐹60🐼80🦋100🐉120🦖150🦄200). `POST /api/kids/:kidId/store/buy`. `KidCard` + `KidHome` AVATAR_EMOJIS include all 16 avatars.
-- **Weekly email digest:** `node-cron` (Mon 08:00) + `resend` SDK. `server/src/services/weeklyDigest.js`. Sends HTML email per parent with each kid's stars/streak/lessons-this-week/recommended module.
+- **Supabase project:** `efjbcsarporphqiuwuyw` (Portfolio project, schema `kids_edu_game`)
+- **DB connection:** `aws-1-eu-west-1.pooler.supabase.com:5432` (session mode)
+- **12 modules, 117 lessons, 5 game types:** Matching, Quiz, Tracing, Spelling, Phonics
+- **Features:** Streak counter, module badges, mascot "Sunny", 147 audio MP3s, SpeakAlongButton (iOS fallback), coin economy, CoinStore (8 premium avatars), weekly email digest
+
+## Supabase Migration (2026-03-12)
+
+Old project `srqlgkyunqnbimhfyypg` was paused (free tier limit). Migrated to Portfolio project `efjbcsarporphqiuwuyw`:
+- Created `kids_edu_game` schema (isolated from Portfolio's `public` schema)
+- Ran `prisma db push` + baselined 3 migrations with `prisma migrate resolve --applied`
+- Seeded 12 modules, 117 lessons
+- Updated all env files (client/.env, client/.env.production, server/.env)
+- Updated Railway + Vercel env vars
+- Disabled email confirmation in Supabase Auth settings
+
+## Known Issue — Coins Not Awarding
+
+**Status:** Fix pushed (commit `7bc2a9c`), awaiting Railway redeploy verification.
+
+**Root cause:** Railway Docker cache served stale Prisma client without `coins`/`unlockedItems` fields. The `kidProfile.update({ coins: { increment } })` silently failed because Prisma client didn't know the field.
+
+**Fix:** Added comment to `schema.prisma` to bust Docker layer cache. If coins still don't work after Railway auto-deploys, redeploy with **"Clear build cache"** checked.
+
+**Verify with:** `SELECT name, coins, "totalStars" FROM kids_edu_game."KidProfile"` — coins should increment when playing games.
 
 ## Railway Deployment Notes
 
 Nixpacks v1.38.0 pins Node 22.11.0 — incompatible with Prisma 7. **Fix: `server/Dockerfile` using `node:24-slim`.** Do NOT remove the Dockerfile.
 
 Key Railway env vars:
-- `DATABASE_URL`, `NODE_ENV=production`, `SUPABASE_SERVICE_KEY`, `SUPABASE_URL`, `PORT=3002`
-- `ALLOWED_ORIGINS=https://kids-edu-game.vercel.app`
+- `DATABASE_URL=postgresql://postgres.efjbcsarporphqiuwuyw:I5CWRveZb2pnXzE0@aws-1-eu-west-1.pooler.supabase.com:5432/postgres?schema=kids_edu_game`
+- `SUPABASE_URL=https://efjbcsarporphqiuwuyw.supabase.co`
+- `SUPABASE_SERVICE_KEY` (service_role key for efjbcsarporphqiuwuyw)
+- `NODE_ENV=production`, `PORT=3002`, `ALLOWED_ORIGINS=https://kids-edu-game.vercel.app`
 
 Key Vercel env vars:
 - `VITE_API_URL=https://kids-edu-game-production.up.railway.app`
-- `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+- `VITE_SUPABASE_URL=https://efjbcsarporphqiuwuyw.supabase.co`
+- `VITE_SUPABASE_ANON_KEY` (anon key for efjbcsarporphqiuwuyw)
 
 ## Next Steps When We Return
 
-1. **Deploy to production:** Commit all unstaged changes (see git status — large batch), push, let Railway + Vercel auto-deploy. Remember to add `RESEND_API_KEY`, `DIGEST_FROM_EMAIL`, `CLIENT_URL` to Railway env vars for the email digest to work.
-2. **Resend setup for digest:** Sign up at resend.com, verify domain (or use `onboarding@resend.dev` for testing), get API key, add to Railway + local `.env`.
-3. **Monetization (next feature):** Stripe Checkout + `isPremium` field on User. Freemium: 3 free modules; unlock all for $2.99–$4.99. Say "add Stripe paywall to KidsLearn" to start.
-4. **Interest theme personalization:** Ask theme on profile create (Dinosaurs, Space, Ocean). Swap module card backgrounds + celebration sounds per theme.
+1. **Verify coins fix:** After Railway redeploy, play a game and check coins increment. If still 0, redeploy with "Clear build cache". If cache-busting comment didn't work, add `spellingScore`/`phonicsScore` fields to schema + update `progressSync.js` server-side `computeStars`.
+2. **Resend setup for digest:** Sign up at resend.com, verify domain, get API key, add `RESEND_API_KEY`, `DIGEST_FROM_EMAIL`, `CLIENT_URL` to Railway env vars.
+3. **Monetization:** Stripe Checkout + `isPremium` field on User. Freemium: 3 free modules; unlock all for $2.99–$4.99.
+4. **Interest theme personalization:** Ask theme on profile create (Dinosaurs, Space, Ocean). Swap module card backgrounds + celebration sounds.
 
 ## Key Files
 
@@ -46,25 +63,8 @@ Key Vercel env vars:
 | `client/src/components/lesson/SpeakAlongButton.jsx` | Mic + TypeItButton iOS fallback |
 | `client/src/pages/CoinStore.jsx` | Premium avatar store |
 | `client/src/pages/KidHome.jsx` | Home — streak/coin badges, module grid, Sunny mascot |
-| `client/src/pages/ParentDashboard.jsx` | Stat cards, weekly chart, accuracy bars, recommended |
 | `client/src/pages/MiniGame.jsx` | Routes between all 5 game types |
-| `server/src/routes/kids.js` | CRUD + `POST /store/buy` endpoint |
 | `server/src/services/progressSync.js` | Upserts progress + awards coins |
 | `server/src/services/weeklyDigest.js` | Weekly email via Resend |
-| `server/src/index.js` | Express app + node-cron weekly digest schedule |
 | `server/Dockerfile` | Node 24-slim — do not remove |
 | `server/railway.toml` | Runs `prisma migrate deploy` before server start |
-
-## Monetization Options (for later)
-
-**Option 1 — Freemium (recommended first)**
-- Free: Alphabet, Numbers, Colors (3 modules); Paid: unlock all 12 — $2.99–$4.99 one-time or $2.99/mo
-- Implementation: Stripe Checkout + `isPremium` field on User model
-
-**Option 2 — Family subscription** — $4.99/month or $29.99/year, Stripe Billing
-
-**Option 3 — App Store** — Wrap PWA with Capacitor → App Store + Google Play
-
-**Option 4 — School/B2B licenses** — $99–$299/year per school + teacher dashboard
-
-**When ready:** Say "add Stripe paywall to KidsLearn" to start building.
