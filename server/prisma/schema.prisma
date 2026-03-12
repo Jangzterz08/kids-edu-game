@@ -1,3 +1,4 @@
+// Prisma 7 — regenerate client on deploy
 generator client {
   provider = "prisma-client-js"
 }
