@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "commonjs",
   "engines": {
-    "node": ">=22.12"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "nodemon src/index.js",
