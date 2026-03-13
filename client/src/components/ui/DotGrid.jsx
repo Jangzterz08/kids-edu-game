@@ -30,8 +30,8 @@ const styles = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
     gap: 8, height: '100%', width: '100%'
   },
-  zeroIcon: { fontSize: 48, filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4))' },
-  zeroText: { fontSize: 16, fontWeight: 900, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 2 },
+  zeroIcon: { fontSize: 48, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' },
+  zeroText: { fontSize: 16, fontWeight: 900, color: 'var(--text-dark)', textTransform: 'uppercase', letterSpacing: 2 },
   grid: {
     display: 'grid',
     gap: 16,
@@ -48,7 +48,7 @@ const styles = {
     height: 28,
     borderRadius: '50%',
     background: '#fff',
-    boxShadow: '0 0 16px rgba(255,255,255,0.9), inset 0 0 8px rgba(0,0,0,0.3)',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 2px 2px 6px rgba(255,255,255,0.8), inset -2px -4px 6px rgba(0,0,0,0.2)',
     animation: 'pulse-glow 2s infinite ease-in-out alternate'
   }
 };

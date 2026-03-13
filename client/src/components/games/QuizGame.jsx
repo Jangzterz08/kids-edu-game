@@ -55,19 +55,20 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   }
 
   function getOptionStyle(opt) {
-    let bg = 'var(--glass-bg)';
-    let border = '1px solid var(--glass-border)';
-    let shadow = '0 8px 24px rgba(0,0,0,0.3)';
+    let bg = 'var(--clay-bg-light)';
+    let border = 'none';
+    let shadow = '0 12px 24px var(--clay-shadow-hard), inset 4px 4px 12px var(--clay-highlight), inset -4px -6px 16px var(--clay-shadow-soft)';
+    let transformY = 0;
 
     if (selected) {
       if (opt.correct) {
-        bg = 'var(--btn-green-base)';
-        border = '1px solid #fff';
-        shadow = '0 0 20px var(--btn-green-shade)';
+        bg = 'var(--accent-green)';
+        shadow = '0 6px 12px var(--clay-shadow-soft), inset 4px 4px 12px rgba(255,255,255,0.6), inset -4px -6px 12px rgba(0,0,0,0.2)';
+        transformY = 8;
       } else if (selected?.word === opt.word) {
         bg = 'var(--accent-red)';
-        border = '1px solid #fff';
-        shadow = '0 0 20px var(--accent-red)';
+        shadow = '0 6px 12px var(--clay-shadow-soft), inset 4px 4px 12px rgba(255,255,255,0.6), inset -4px -6px 12px rgba(0,0,0,0.2)';
+        transformY = 4;
       }
     }
     return {
@@ -75,9 +76,8 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
       background: bg,
       border,
       boxShadow: shadow,
-      color: '#fff',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
+      color: 'var(--text-dark)',
+      transform: `translateY(${transformY}px)`,
       animation: shake === opt.word ? 'shake 0.4s ease' : 'none',
     };
   }
@@ -153,22 +153,24 @@ const styles = {
   container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', position: 'relative' },
   sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
   sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards', filter: 'drop-shadow(0 0 8px #FFF)' },
-  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 8, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'rgba(255,255,255,0.9)', marginBottom: 8, fontWeight: 900, textShadow: '0 2px 4px rgba(0,0,0,0.6)' },
   questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
-  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
+  question: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 4px 0px rgba(0,0,0,0.6)' },
   speakBtn: {
-    background: 'none', border: 'none', cursor: 'pointer',
-    fontSize: 32, lineHeight: 1, padding: 4, borderRadius: 8,
-    flexShrink: 0, filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4))',
-    transition: 'transform 0.2s'
+    background: 'var(--clay-bg-blue)', border: 'none', cursor: 'pointer',
+    fontSize: 32, lineHeight: 1, padding: 8, borderRadius: 16,
+    flexShrink: 0,
+    boxShadow: '0 6px 12px var(--clay-shadow-soft), inset 3px 3px 8px var(--clay-highlight), inset -3px -5px 8px var(--clay-shadow-soft)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
   },
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 },
   option: {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-    padding: 24, borderRadius: 28, cursor: 'pointer',
+    padding: 24, borderRadius: 32, cursor: 'pointer',
     transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     minHeight: 180, justifyContent: 'center',
+    fontWeight: 900, fontSize: 'var(--font-md)'
   },
-  img: { width: 90, height: 90, objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
-  fallbackEmoji: { fontSize: 64, filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
+  img: { width: 90, height: 90, objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.2))' },
+  fallbackEmoji: { fontSize: 64, filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.2))' },
 };
