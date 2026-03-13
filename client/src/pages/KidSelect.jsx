@@ -60,18 +60,18 @@ export default function KidSelect() {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 800, margin: '0 auto' },
-  heading: { fontSize: 'var(--font-xl)', fontWeight: 900, textAlign: 'center', marginBottom: 40 },
-  loading: { textAlign: 'center', fontSize: 'var(--font-md)', color: 'var(--text-secondary)' },
+  container: { padding: 'var(--space-2xl) var(--space-xl)', maxWidth: 840, margin: '0 auto' },
+  heading: { fontSize: 'var(--font-2xl)', fontWeight: 900, textAlign: 'center', marginBottom: 48, color: '#fff', textShadow: '0 4px 12px rgba(0,0,0,0.6)' },
+  loading: { textAlign: 'center', fontSize: 'var(--font-md)', color: 'var(--text-secondary)', fontWeight: 800 },
   grid: {
-    display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 20,
+    display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 24,
   },
   addCard: {
-    background: 'var(--bg-surface)', borderRadius: 24, padding: 24,
-    border: '3px dashed var(--text-muted)', cursor: 'pointer',
+    background: 'rgba(255,255,255,0.05)', borderRadius: 32, padding: 24,
+    border: '2px dashed rgba(255,255,255,0.3)', cursor: 'pointer',
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-    minHeight: 140, gap: 8, transition: 'border-color 0.15s',
+    minHeight: 180, gap: 12, transition: 'all 0.2s', backdropFilter: 'blur(10px)',
   },
-  addIcon: { fontSize: 48, color: 'var(--text-muted)' },
-  addLabel: { fontSize: 'var(--font-base)', fontWeight: 700, color: 'var(--text-muted)' },
+  addIcon: { fontSize: 56, color: 'rgba(255,255,255,0.8)' },
+  addLabel: { fontSize: 'var(--font-md)', fontWeight: 800, color: 'rgba(255,255,255,0.8)' },
 };

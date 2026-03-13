@@ -99,13 +99,14 @@ export default function CoinStore() {
           const isFlash   = flash?.id === item.id;
           const isBuying  = buying === item.id;
 
-          let cardBg = 'var(--bg-surface)';
-          if (isOwned) cardBg = 'linear-gradient(135deg, #E8F5E9, #C8E6C9)';
-          if (isFlash && flash.success) cardBg = 'linear-gradient(135deg, #FFF9C4, #FFF176)';
-          if (isFlash && !flash.success) cardBg = 'linear-gradient(135deg, #FFEBEE, #FFCDD2)';
+          let cardBg = 'rgba(255,255,255,0.1)';
+          let border = '1px solid rgba(255,255,255,0.2)';
+          if (isOwned) { cardBg = 'rgba(76, 175, 80, 0.2)'; border = '1px solid rgba(76, 175, 80, 0.5)'; }
+          if (isFlash && flash.success) cardBg = 'rgba(255, 234, 0, 0.3)';
+          if (isFlash && !flash.success) cardBg = 'rgba(255, 23, 68, 0.3)';
 
           return (
-            <div key={item.id} style={{ ...styles.card, background: cardBg }}>
+            <div key={item.id} className="glass-panel" style={{ ...styles.card, background: cardBg, border }}>
               <div style={styles.emojiWrap}>
                 <span style={styles.itemEmoji}>{item.emoji}</span>
                 {isOwned && <span style={styles.ownedBadge}>✓</span>}
