@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { buildQuizOptions } from '../../data/index';
 import { speakWord } from '../../lib/sound';
+import DotGrid from '../ui/DotGrid';
 
 export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   const [qIdx, setQIdx]           = useState(0);
@@ -113,26 +114,33 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
       </div>
 
       <div style={styles.grid}>
-        {q.options.map(opt => {
-          const key = `${opt.word}-${qIdx}`;
-          const showEmoji = imgErrors[key] || !opt.imageFile;
+        {q.options.map((opt, i) => {
+          const key = `${opt.word}-${qIdx}-${i}`;
+          
+          let content;
+          if (opt.dotCount !== undefined) {
+            content = <DotGrid count={opt.dotCount} />;
+          } else if (!imgErrors[key] && opt.imageFile) {
+            content = (
+              <img
+                src={`/assets/images/${opt.imageFile}`}
+                alt={opt.word}
+                style={styles.img}
+                onError={() => setImgErrors(prev => ({ ...prev, [key]: true }))}
+              />
+            );
+          } else {
+            content = <span style={styles.fallbackEmoji}>{opt.emoji || opt.word[0]}</span>;
+          }
+
           return (
             <button
-              key={opt.word}
+              key={key}
               style={getOptionStyle(opt)}
               onClick={() => handleSelect(opt)}
 
             >
-              {!showEmoji ? (
-                <img
-                  src={`/assets/images/${opt.imageFile}`}
-                  alt={opt.word}
-                  style={styles.img}
-                  onError={() => setImgErrors(prev => ({ ...prev, [key]: true }))}
-                />
-              ) : (
-                <span style={styles.fallbackEmoji}>{opt.emoji || opt.word[0]}</span>
-              )}
+              {content}
             </button>
           );
         })}

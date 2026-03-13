@@ -1,14 +1,14 @@
 const nums = [
-  { n: '0', word: 'Zero',  emoji: '0️⃣', img: 'numbers/zero.webp' },
-  { n: '1', word: 'One',   emoji: '1️⃣', img: 'numbers/one.webp' },
-  { n: '2', word: 'Two',   emoji: '2️⃣', img: 'numbers/two.webp' },
-  { n: '3', word: 'Three', emoji: '3️⃣', img: 'numbers/three.webp' },
-  { n: '4', word: 'Four',  emoji: '4️⃣', img: 'numbers/four.webp' },
-  { n: '5', word: 'Five',  emoji: '5️⃣', img: 'numbers/five.webp' },
-  { n: '6', word: 'Six',   emoji: '6️⃣', img: 'numbers/six.webp' },
-  { n: '7', word: 'Seven', emoji: '7️⃣', img: 'numbers/seven.webp' },
-  { n: '8', word: 'Eight', emoji: '8️⃣', img: 'numbers/eight.webp' },
-  { n: '9', word: 'Nine',  emoji: '9️⃣', img: 'numbers/nine.webp' },
+  { n: '0', word: 'Zero',  emoji: '0️⃣' },
+  { n: '1', word: 'One',   emoji: '1️⃣' },
+  { n: '2', word: 'Two',   emoji: '2️⃣' },
+  { n: '3', word: 'Three', emoji: '3️⃣' },
+  { n: '4', word: 'Four',  emoji: '4️⃣' },
+  { n: '5', word: 'Five',  emoji: '5️⃣' },
+  { n: '6', word: 'Six',   emoji: '6️⃣' },
+  { n: '7', word: 'Seven', emoji: '7️⃣' },
+  { n: '8', word: 'Eight', emoji: '8️⃣' },
+  { n: '9', word: 'Nine',  emoji: '9️⃣' },
 ];
 
 export const numbersModule = {
@@ -25,16 +25,16 @@ export const numbersModule = {
     word: item.word,
     numeral: item.n,
     emoji: item.emoji,
+    dotCount: parseInt(item.n, 10),
     sortOrder: i + 1,
-    imageFile: item.img,
     audioFile: `numbers/${item.word.toLowerCase()}.mp3`,
     traceTemplate: `traces/number-${item.n}.svg`,
     quizOptions: [
-      { word: item.word, imageFile: item.img, correct: true },
+      { word: item.word, dotCount: parseInt(item.n, 10), correct: true },
     ],
     matchingPairs: [
-      { id: `n${item.n}-img`, type: 'image', content: item.img },
-      { id: `n${item.n}-img`, type: 'word',  content: item.n },
+      { id: `n${item.n}-dots`, type: 'dots', content: parseInt(item.n, 10) },
+      { id: `n${item.n}-dots`, type: 'word', content: item.n },
     ],
   })),
 };

@@ -1,24 +1,27 @@
 import { useState } from 'react';
 import SoundButton from './SoundButton';
 import SpeakAlongButton from './SpeakAlongButton';
+import DotGrid from '../ui/DotGrid';
 
 export default function LessonCard({ lesson }) {
-  const { title, word, imageFile, letter, numeral, emoji, tip } = lesson;
+  const { title, word, imageFile, dotCount, letter, numeral, emoji, tip } = lesson;
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
     <div className="glass-panel" style={styles.card}>
-      {/* Large symbol (letter/number/emoji) IF no image */}
-      {!imageFile && (letter || numeral) && (
+      {/* Large symbol (letter/number/emoji) IF no image and no dots */}
+      {!imageFile && dotCount === undefined && (letter || numeral) && (
         <div style={styles.symbol}>{letter || numeral}</div>
       )}
-      {!imageFile && emoji && !letter && !numeral && (
+      {!imageFile && dotCount === undefined && emoji && !letter && !numeral && (
         <div style={styles.symbolEmoji}>{emoji}</div>
       )}
 
-      {/* Image or emoji fallback */}
+      {/* Image, DotGrid, or emoji fallback */}
       <div style={styles.imageWrap}>
-        {!imgFailed && imageFile ? (
+        {dotCount !== undefined ? (
+          <DotGrid count={dotCount} />
+        ) : !imgFailed && imageFile ? (
           <img
             src={`/assets/images/${imageFile}`}
             alt={word}

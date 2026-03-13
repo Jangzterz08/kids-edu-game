@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { speakWord } from '../../lib/sound';
+import DotGrid from '../ui/DotGrid';
 
 function shuffle(arr) {
   const a = [...arr];
@@ -15,10 +16,18 @@ export default function MatchingGame({ lessons, onComplete }) {
   const subset = lessons.slice(0, 6);
 
   const cards = useMemo(() => shuffle(
-    subset.flatMap(l => [
-      { uid: `${l.slug}-img`, pairId: l.slug, type: 'image', content: l.imageFile, label: l.word, emoji: l.emoji },
-      { uid: `${l.slug}-word`, pairId: l.slug, type: 'word', content: l.word, label: l.word },
-    ])
+    subset.flatMap(l => {
+      // Use the pre-calculated matchingPairs if available, else standard image/word.
+      if (l.matchingPairs && l.matchingPairs.length === 2) {
+        return l.matchingPairs.map(p => ({
+          uid: `${p.id}-${p.type}-${Math.random()}`, pairId: l.slug, type: p.type, content: p.content, label: l.word, emoji: l.emoji
+        }));
+      }
+      return [
+        { uid: `${l.slug}-img`, pairId: l.slug, type: 'image', content: l.imageFile, label: l.word, emoji: l.emoji },
+        { uid: `${l.slug}-word`, pairId: l.slug, type: 'word', content: l.word, label: l.word },
+      ];
+    })
   ), []);
 
   const [flipped, setFlipped]         = useState([]);  // indices
@@ -71,6 +80,13 @@ export default function MatchingGame({ lessons, onComplete }) {
   function renderCardContent(card) {
     if (card.type === 'word') {
       return <span style={styles.cardWord}>{card.content}</span>;
+    }
+    if (card.type === 'dots') {
+      return (
+        <div style={styles.dotsWrap}>
+          <DotGrid count={card.content} />
+        </div>
+      );
     }
     // image card
     if (!imgErrors[card.uid] && card.content) {
@@ -138,4 +154,5 @@ const styles = {
   cardImg: { width: 80, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
   cardEmoji: { fontSize: 64, filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
   cardWord: { fontSize: 'var(--font-base)', fontWeight: 900, textAlign: 'center', padding: 8, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  dotsWrap: { transform: 'scale(0.6)' },
 };

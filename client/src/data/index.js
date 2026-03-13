@@ -45,8 +45,8 @@ export function buildQuizOptions(moduleSlug, lessonSlug) {
   const others = mod.lessons.filter(l => l.slug !== lessonSlug);
   const wrongs = others.sort(() => Math.random() - 0.5).slice(0, 3);
   const options = [
-    { word: lesson.word, imageFile: lesson.imageFile, emoji: lesson.emoji, correct: true },
-    ...wrongs.map(l => ({ word: l.word, imageFile: l.imageFile, emoji: l.emoji, correct: false })),
+    { word: lesson.word, imageFile: lesson.imageFile, emoji: lesson.emoji, dotCount: lesson.dotCount, correct: true },
+    ...wrongs.map(l => ({ word: l.word, imageFile: l.imageFile, emoji: l.emoji, dotCount: l.dotCount, correct: false })),
   ];
   return options.sort(() => Math.random() - 0.5);
 }
