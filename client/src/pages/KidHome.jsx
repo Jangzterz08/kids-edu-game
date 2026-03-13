@@ -59,13 +59,13 @@ export default function KidHome() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <Mascot streak={streak} size="md" showBubble={true} />
           {streak > 0 && (
-            <div style={styles.streakBadge}>
+            <div className="glass-pill" style={styles.streakBadge}>
               <span style={styles.streakFire}>🔥</span>
               <span style={styles.streakNum}>{streak}</span>
               <span style={styles.streakLabel}>day streak!</span>
             </div>
           )}
-          <button style={styles.coinBadge} onClick={() => navigate('/play/store')}>
+          <button className="glass-pill" style={styles.coinBadge} onClick={() => navigate('/play/store')}>
             <span style={styles.coinIcon}>🪙</span>
             <span style={styles.coinNum}>{coins}</span>
             <span style={styles.coinLabel}>Store</span>
@@ -114,26 +114,27 @@ const styles = {
   },
   streakFire: { fontSize: 28, filter: 'drop-shadow(0 0 8px #FF6D00)' },
   streakNum: { fontSize: 32, fontWeight: 900, color: '#fff', textShadow: '0 0 12px rgba(255,255,255,0.8)' },
-  streakLabel: { fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 1 },
+  streakLabel: { fontSize: 14, fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: 1, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   coinBadge: {
     display: 'flex', alignItems: 'center', gap: 6,
     padding: '10px 24px', cursor: 'pointer', fontFamily: 'inherit',
-    transition: 'transform 0.2s',
+    transition: 'all 0.2s',
   },
   coinIcon: { fontSize: 28, filter: 'drop-shadow(0 0 8px #FFEA00)' },
   coinNum: { fontSize: 32, fontWeight: 900, color: '#fff', textShadow: '0 0 12px rgba(255,255,255,0.8)' },
-  coinLabel: { fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 1 },
+  coinLabel: { fontSize: 14, fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: 1, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   badgesSection: { marginBottom: 32 },
   badgesTitle: { fontSize: 'var(--font-base)', fontWeight: 800, marginBottom: 16, color: 'var(--text-muted)' },
   badgesRow: { display: 'flex', gap: 16, flexWrap: 'wrap' },
   badge: {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
     padding: '14px 20px', minWidth: 80,
-    background: 'rgba(255, 234, 0, 0.1)',
-    border: '1px solid rgba(255, 234, 0, 0.3)',
+    background: 'rgba(255, 234, 0, 0.15)',
+    border: '1px solid rgba(255, 234, 0, 0.4)',
     borderRadius: 20,
-    boxShadow: '0 8px 24px rgba(255, 234, 0, 0.15)',
-    backdropFilter: 'blur(10px)',
+    boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
   },
   badgeEmoji: { fontSize: 36, filter: 'drop-shadow(0 0 10px rgba(255,234,0,0.5))' },
   badgeName: { fontSize: 13, fontWeight: 800, color: '#FFF', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },

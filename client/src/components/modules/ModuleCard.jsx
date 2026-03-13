@@ -21,13 +21,11 @@ export default function ModuleCard({ moduleSlug, serverMeta, progressData, compl
       onClick={() => navigate(`/play/${mod.slug}`)}
       onMouseEnter={(e) => { 
         e.currentTarget.style.transform = 'translateY(-12px) scale(1.03)'; 
-        e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0, 229, 255, 0.2)'; 
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)';
+        e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0, 229, 255, 0.3)'; 
       }}
       onMouseLeave={(e) => { 
-        e.currentTarget.style.transform = 'translateY(0) scale(1)'; 
-        e.currentTarget.style.boxShadow = '0 16px 40px rgba(0, 0, 0, 0.4)'; 
-        e.currentTarget.style.borderColor = 'var(--glass-border)';
+        e.currentTarget.style.transform = ''; 
+        e.currentTarget.style.boxShadow = ''; 
       }}
     >
       <div style={styles.topRow}>
