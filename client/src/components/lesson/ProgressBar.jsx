@@ -8,6 +8,6 @@ export default function ProgressBar({ current, total, color = 'var(--accent-blue
 }
 
 const styles = {
-  track: { height: 12, borderRadius: 6, background: '#E0E0E0', overflow: 'hidden', width: '100%' },
-  fill: { height: '100%', borderRadius: 6, transition: 'width 0.4s ease' },
+  track: { height: 16, borderRadius: 8, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', overflow: 'hidden', width: '100%', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' },
+  fill: { height: '100%', borderRadius: 8, transition: 'width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' },
 };

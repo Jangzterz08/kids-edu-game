@@ -74,7 +74,7 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
     <div style={styles.overlay}>
       <canvas ref={canvasRef} style={styles.canvas} />
 
-      {/* Emoji burst particles */}
+        {/* Emoji burst particles */}
       <div style={styles.burstOrigin}>
         {burst.map(p => (
           <span
@@ -92,11 +92,11 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
         ))}
       </div>
 
-      <div style={styles.box}>
+      <div className="glass-panel" style={styles.box}>
         <Mascot mood="excited" size="lg" showBubble={false} />
         <h1 style={styles.heading}>{msg}</h1>
         <p style={styles.sub}>{moduleName} complete!</p>
-        <div style={{ marginBottom: 24 }}>
+        <div style={{ marginBottom: 32 }}>
           <StarBadge stars={stars} size="lg" />
         </div>
         {coinsEarned > 0 && (
@@ -115,7 +115,8 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
 
 const styles = {
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
+    position: 'fixed', inset: 0, background: 'rgba(7, 9, 29, 0.85)',
+    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999,
   },
   canvas: { position: 'absolute', inset: 0, pointerEvents: 'none' },
@@ -125,24 +126,23 @@ const styles = {
   },
   burstParticle: {
     position: 'absolute', top: '50%', left: '50%',
-    fontSize: 28, lineHeight: 1,
+    fontSize: 48, lineHeight: 1, filter: 'drop-shadow(0 0 12px #FFF)',
     animation: 'burst-out 0.9s ease-out forwards',
   },
   box: {
-    background: 'var(--bg-surface)', borderRadius: 'var(--modal-radius)',
-    padding: 48, textAlign: 'center', zIndex: 3, maxWidth: 380, width: '90%',
-    boxShadow: 'var(--shadow-modal)', animation: 'bounce-in 0.5s ease',
+    padding: '48px 32px', textAlign: 'center', zIndex: 3, maxWidth: 460, width: '90%',
+    animation: 'bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   },
-  emoji:   { fontSize: 72, marginBottom: 8 },
-  heading: { fontSize: 'var(--font-xl)', fontWeight: 900, marginBottom: 8 },
-  sub:     { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 16 },
+  emoji:   { fontSize: 80, marginBottom: 12 },
+  heading: { fontSize: 'var(--font-xl)', fontWeight: 900, marginBottom: 12, color: '#fff', textShadow: '0 4px 12px rgba(0,0,0,0.6)' },
+  sub:     { fontSize: 'var(--font-lg)', color: 'var(--text-secondary)', marginBottom: 24, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   coinBanner: {
-    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-    background: 'linear-gradient(135deg, #FFF9C4, #FFF176)',
-    border: '2px solid #F9A825', borderRadius: 16,
-    padding: '10px 20px', marginBottom: 16,
-    animation: 'bounce-in 0.4s ease',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+    background: 'rgba(255, 234, 0, 0.2)', border: '1px solid rgba(255,234,0,0.5)',
+    borderRadius: 24, padding: '16px 24px', marginBottom: 28,
+    animation: 'bounce-in 0.4s ease', backdropFilter: 'blur(10px)',
+    boxShadow: '0 12px 24px rgba(255,234,0,0.2)',
   },
-  coinIcon: { fontSize: 28 },
-  coinText: { fontSize: 18, fontWeight: 800, color: '#5D4037' },
+  coinIcon: { fontSize: 40, filter: 'drop-shadow(0 0 12px rgba(255,234,0,0.8))' },
+  coinText: { fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.6)', letterSpacing: 1 },
 };

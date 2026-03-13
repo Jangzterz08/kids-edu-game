@@ -199,16 +199,17 @@ export default function TracingGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 420, margin: '0 auto' },
-  dots: { display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 16 },
-  dot: { width: 12, height: 12, borderRadius: '50%', transition: 'all 0.2s' },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 20 },
+  container: { padding: 'var(--space-xl)', maxWidth: 460, margin: '0 auto' },
+  dots: { display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 20 },
+  dot: { width: 14, height: 14, borderRadius: '50%', transition: 'all 0.3s' },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 24, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
   canvasWrap: {
-    borderRadius: 24, overflow: 'hidden', border: '3px solid var(--text-muted)',
-    boxShadow: 'var(--shadow-card)', background: '#FAFAFA',
-    display: 'flex', justifyContent: 'center', marginBottom: 16,
+    borderRadius: 32, overflow: 'hidden', border: '2px solid var(--glass-border)',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.4)', background: 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+    display: 'flex', justifyContent: 'center', marginBottom: 24,
   },
   canvas: { touchAction: 'none', cursor: 'crosshair', display: 'block' },
-  coverage: { textAlign: 'center', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 16 },
-  actions: { display: 'flex', gap: 12 },
+  coverage: { textAlign: 'center', fontWeight: 800, color: '#fff', marginBottom: 24, fontSize: 'var(--font-base)', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  actions: { display: 'flex', gap: 16 },
 };

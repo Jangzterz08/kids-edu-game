@@ -112,21 +112,30 @@ export default function MatchingGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 560, margin: '0 auto' },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 8 },
-  sub: { textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 24, fontWeight: 700 },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 },
+  container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto' },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 8, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
+  sub: { textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 24, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 },
   card: {
-    aspect: '1', height: 110, borderRadius: 18, border: 'none',
-    background: 'var(--accent-blue)', cursor: 'pointer',
+    aspect: '1', height: 120, borderRadius: 24, border: 'none',
+    background: 'var(--btn-blue-base)', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    transition: 'transform 0.2s, background 0.2s',
-    boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
+    transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    boxShadow: '0 8px 0 var(--btn-blue-shade), 0 15px 25px rgba(0, 0, 0, 0.4)',
   },
-  cardFlipped: { background: 'var(--bg-surface)', border: '3px solid var(--accent-blue)' },
-  cardMatched: { background: '#E8F5E9', border: '3px solid var(--success)' },
-  cardBack: { fontSize: 'var(--font-xl)', color: '#fff', fontWeight: 900 },
-  cardImg: { width: 64, height: 64, objectFit: 'contain' },
-  cardEmoji: { fontSize: 44 },
-  cardWord: { fontSize: 'var(--font-sm)', fontWeight: 900, textAlign: 'center', padding: 4 },
+  cardFlipped: { 
+    background: 'var(--glass-bg)', border: '2px solid rgba(255,255,255,0.6)', 
+    boxShadow: '0 0 20px rgba(255,255,255,0.2), 0 10px 20px rgba(0,0,0,0.4)', 
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+    transform: 'translateY(6px)'
+  },
+  cardMatched: { 
+    background: 'var(--btn-green-base)', border: '2px solid #fff',
+    boxShadow: '0 0 30px var(--btn-green-shade)',
+    transform: 'translateY(8px)'
+  },
+  cardBack: { fontSize: 'var(--font-2xl)', color: '#fff', fontWeight: 900, textShadow: '0 4px 8px rgba(0,0,0,0.5)' },
+  cardImg: { width: 80, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
+  cardEmoji: { fontSize: 64, filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
+  cardWord: { fontSize: 'var(--font-base)', fontWeight: 900, textAlign: 'center', padding: 8, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
 };

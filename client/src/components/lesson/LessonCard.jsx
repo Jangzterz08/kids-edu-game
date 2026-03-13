@@ -7,7 +7,7 @@ export default function LessonCard({ lesson }) {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
-    <div style={styles.card}>
+    <div className="glass-panel" style={styles.card}>
       {/* Large symbol (letter/number/emoji) */}
       {(letter || numeral) && (
         <div style={styles.symbol}>{letter || numeral}</div>
@@ -47,27 +47,26 @@ export default function LessonCard({ lesson }) {
 
 const styles = {
   card: {
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
-    padding: 'var(--space-xl)', maxWidth: 420, margin: '0 auto',
-    background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)',
-    boxShadow: 'var(--shadow-card)',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24,
+    padding: 'var(--space-2xl) var(--space-xl)', maxWidth: 460, margin: '0 auto',
   },
   symbol: {
-    fontSize: 96, fontWeight: 900, lineHeight: 1, color: 'var(--accent-blue)',
-    textShadow: '2px 4px 8px rgba(0,0,0,0.1)',
+    fontSize: 120, fontWeight: 900, lineHeight: 1, color: 'var(--accent-cyan)',
+    textShadow: '0 0 24px rgba(0, 229, 255, 0.6)', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))'
   },
-  symbolEmoji: { fontSize: 80 },
+  symbolEmoji: { fontSize: 100, filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' },
   imageWrap: {
-    width: 200, height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: 'var(--bg-surface-alt)', borderRadius: 24, overflow: 'hidden',
+    width: 240, height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)',
+    borderRadius: 40, overflow: 'hidden', boxShadow: 'inset 0 12px 24px rgba(0,0,0,0.2)',
   },
-  image: { width: '100%', height: '100%', objectFit: 'contain', padding: 16 },
-  imageEmoji: { fontSize: 100 },
-  wordRow: { display: 'flex', alignItems: 'center', gap: 16 },
-  word: { fontSize: 'var(--font-xl)', fontWeight: 900, color: 'var(--text-primary)' },
-  title: { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', fontWeight: 600 },
+  image: { width: '100%', height: '100%', objectFit: 'contain', padding: 24, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.6))' },
+  imageEmoji: { fontSize: 140, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.6))' },
+  wordRow: { display: 'flex', alignItems: 'center', gap: 20 },
+  word: { fontSize: 'var(--font-2xl)', fontWeight: 900, color: '#fff', textShadow: '0 4px 16px rgba(0,0,0,0.6)', letterSpacing: 2 },
   tip: {
-    fontSize: 'var(--font-sm)', color: 'var(--accent-purple)', fontWeight: 700,
-    background: '#F3E5F5', padding: '10px 16px', borderRadius: 16, textAlign: 'center',
+    fontSize: 'var(--font-base)', color: '#fff', fontWeight: 800,
+    background: 'rgba(213, 0, 249, 0.3)', border: '1px solid rgba(213, 0, 249, 0.6)',
+    padding: '12px 24px', borderRadius: 24, textAlign: 'center', textShadow: '0 2px 6px rgba(0,0,0,0.5)',
   },
 };

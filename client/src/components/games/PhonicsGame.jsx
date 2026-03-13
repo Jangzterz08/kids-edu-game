@@ -159,17 +159,28 @@ function BeginningRound({ q, selected, imgErrors, onImgError, onAnswer, onSpeak 
         {q.options.map(opt => {
           const isTarget = opt.slug === q.target.slug;
           const isSelected = selected === opt.slug;
-          let bg = 'var(--bg-surface-alt)';
+          let bg = 'var(--glass-bg)';
+          let border = '1px solid var(--glass-border)';
+          let shadow = '0 12px 30px rgba(0,0,0,0.3)';
+          
           if (selected) {
-            if (isTarget) bg = 'var(--success)';
-            else if (isSelected) bg = 'var(--error)';
+            if (isTarget) {
+              bg = 'var(--btn-green-base)';
+              border = '1px solid #fff';
+              shadow = '0 0 30px var(--btn-green-shade)';
+            }
+            else if (isSelected) {
+              bg = 'var(--accent-red)';
+              border = '1px solid #fff';
+              shadow = '0 0 30px var(--accent-red)';
+            }
           }
           const imgKey = `${opt.slug}-${q.letter}`;
           const showEmoji = imgErrors[imgKey] || !opt.imageFile;
           return (
             <button
               key={opt.slug}
-              style={{ ...styles.optionCard, background: bg }}
+              style={{ ...styles.optionCard, background: bg, border, boxShadow: shadow }}
               onClick={() => onAnswer(isTarget, opt.slug)}
             >
               {!showEmoji ? (
@@ -215,7 +226,7 @@ function SyllableRound({ q, selected, imgErrors, onImgError, onAnswer, onSpeak }
             onError={() => onImgError(imgKey)}
           />
         ) : (
-          <span style={{ fontSize: 96 }}>{q.target.emoji || q.target.word[0]}</span>
+          <span style={{ fontSize: 110, filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.5))' }}>{q.target.emoji || q.target.word[0]}</span>
         )}
         <div style={styles.syllableWord}>{q.target.word}</div>
       </div>
@@ -224,15 +235,22 @@ function SyllableRound({ q, selected, imgErrors, onImgError, onAnswer, onSpeak }
         {q.choices.map(num => {
           const isCorrect = num === q.correct;
           const isSelected = selected === String(num);
-          let bg = 'var(--bg-surface-alt)';
+          let bg = 'var(--glass-bg)';
+          let border = '1px solid var(--glass-border)';
+          let shadow = '0 12px 30px rgba(0,0,0,0.3)';
+
           if (selected) {
-            if (isCorrect) bg = 'var(--success)';
-            else if (isSelected) bg = 'var(--error)';
+            if (isCorrect) {
+              bg = 'var(--btn-green-base)'; border = '1px solid #fff'; shadow = '0 0 30px var(--btn-green-shade)';
+            }
+            else if (isSelected) {
+              bg = 'var(--accent-red)'; border = '1px solid #fff'; shadow = '0 0 30px var(--accent-red)';
+            }
           }
           return (
             <button
               key={num}
-              style={{ ...styles.syllableBtn, background: bg }}
+              style={{ ...styles.syllableBtn, background: bg, border, boxShadow: shadow }}
               onClick={() => onAnswer(isCorrect, String(num))}
             >
               <span style={styles.syllableNum}>{num}</span>
@@ -248,39 +266,41 @@ function SyllableRound({ q, selected, imgErrors, onImgError, onAnswer, onSpeak }
 // ── Styles ─────────────────────────────────────────────────────────────────
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', textAlign: 'center' },
-  dots: { display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 12 },
-  dot: { width: 12, height: 12, borderRadius: '50%', transition: 'all 0.2s' },
+  container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto', textAlign: 'center' },
+  dots: { display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 16 },
+  dot: { width: 14, height: 14, borderRadius: '50%', transition: 'all 0.3s' },
   modeTag: {
-    textAlign: 'center', fontSize: 14, fontWeight: 700,
-    color: 'var(--text-secondary)', marginBottom: 16,
-    background: 'var(--bg-surface-alt)', display: 'inline-block',
-    padding: '4px 16px', borderRadius: 20,
-    width: 'fit-content', margin: '0 auto 16px',
+    textAlign: 'center', fontSize: 15, fontWeight: 900, letterSpacing: 1,
+    color: '#fff', marginBottom: 24, textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+    background: 'var(--glass-bg)', display: 'inline-block',
+    padding: '8px 24px', borderRadius: 30, border: '1px solid var(--glass-border)',
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+    width: 'fit-content', margin: '0 auto 24px', boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
   },
-  questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 24 },
-  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0 },
-  letterHighlight: { color: 'var(--accent-blue)', fontWeight: 900, fontSize: '1.1em' },
-  speakBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: 28, padding: 4, flexShrink: 0 },
-  grid4: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
+  questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 32 },
+  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.6)' },
+  letterHighlight: { color: 'var(--accent-cyan)', fontWeight: 900, fontSize: '1.2em', textShadow: '0 0 16px rgba(0, 229, 255, 0.8)' },
+  speakBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: 36, padding: 4, flexShrink: 0, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))', transition: 'transform 0.2s' },
+  grid4: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 },
   optionCard: {
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-    padding: 14, borderRadius: 20, border: 'none', cursor: 'pointer',
-    boxShadow: 'var(--shadow-card)', minHeight: 130,
-    justifyContent: 'center', transition: 'background 0.2s',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
+    padding: 24, borderRadius: 28, border: 'none', cursor: 'pointer',
+    minHeight: 160, justifyContent: 'center', transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', color: '#fff'
   },
-  optImg: { width: 72, height: 72, objectFit: 'contain' },
-  optEmoji: { fontSize: 52 },
-  optWord: { fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' },
-  syllableImgWrap: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 28 },
-  syllableImg: { width: 120, height: 120, objectFit: 'contain' },
-  syllableWord: { fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' },
-  syllableChoices: { display: 'flex', justifyContent: 'center', gap: 16 },
+  optImg: { width: 90, height: 90, objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.5))' },
+  optEmoji: { fontSize: 70, filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.5))' },
+  optWord: { fontSize: 16, fontWeight: 900, color: '#fff', letterSpacing: 1, textShadow: '0 2px 4px rgba(0,0,0,0.5)', textTransform: 'uppercase' },
+  syllableImgWrap: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 40 },
+  syllableImg: { width: 160, height: 160, objectFit: 'contain', filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.5))' },
+  syllableWord: { fontSize: 36, fontWeight: 900, color: '#fff', letterSpacing: 2, textShadow: '0 4px 12px rgba(0,0,0,0.6)', textTransform: 'uppercase' },
+  syllableChoices: { display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap' },
   syllableBtn: {
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-    padding: '16px 24px', borderRadius: 20, border: 'none', cursor: 'pointer',
-    boxShadow: 'var(--shadow-card)', minWidth: 100, transition: 'background 0.2s',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+    padding: '24px 32px', borderRadius: 28, border: 'none', cursor: 'pointer',
+    minWidth: 120, transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', color: '#fff',
   },
-  syllableNum: { fontSize: 40, fontWeight: 900, color: 'var(--text-primary)' },
-  syllableClap: { fontSize: 20 },
+  syllableNum: { fontSize: 56, fontWeight: 900, color: '#fff', textShadow: '0 4px 12px rgba(0,0,0,0.6)' },
+  syllableClap: { fontSize: 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' },
 };

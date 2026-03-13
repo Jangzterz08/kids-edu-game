@@ -88,7 +88,7 @@ export default function SpellingGame({ lessons, onComplete }) {
 
   if (!lesson) return null;
 
-  const answerBg = status === 'correct' ? 'var(--success)' : status === 'wrong' ? 'var(--error)' : 'var(--bg-surface-alt)';
+  const answerBg = status === 'correct' ? 'var(--btn-green-base)' : status === 'wrong' ? 'var(--accent-red)' : 'var(--glass-bg)';
 
   return (
     <div style={styles.container}>
@@ -131,7 +131,12 @@ export default function SpellingGame({ lessons, onComplete }) {
             key={tile.id}
             onClick={() => handleTileTap(tile)}
             disabled={tile.used || !!status}
-            style={{ ...styles.tile, opacity: tile.used ? 0.25 : 1 }}
+            style={{ 
+              ...styles.tile, 
+              opacity: tile.used ? 0.2 : 1,
+              transform: tile.used ? 'translateY(6px) scale(0.95)' : 'translateY(0)',
+              boxShadow: tile.used ? '0 0px 0 var(--btn-blue-shade), 0 5px 10px rgba(0,0,0,0.2)' : styles.tile.boxShadow
+            }}
           >
             {tile.letter}
           </button>
@@ -142,53 +147,57 @@ export default function SpellingGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 480, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' },
-  progress:  { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', fontWeight: 700, alignSelf: 'flex-start' },
+  container: { padding: 'var(--space-xl)', maxWidth: 500, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center' },
+  progress:  { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', fontWeight: 800, alignSelf: 'flex-start', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   pictureCard: {
     position: 'relative',
-    background: 'var(--bg-surface)', borderRadius: 'var(--card-radius)',
-    boxShadow: 'var(--shadow-card)', width: '100%', maxWidth: 280,
+    background: 'var(--glass-bg)', borderRadius: '36px',
+    border: '1px solid var(--glass-border)',
+    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.4)', width: '100%', maxWidth: 300,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    minHeight: 220, paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 72,
+    minHeight: 240, paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 80,
   },
-  img:      { width: 160, height: 160, objectFit: 'contain' },
-  emoji:    { fontSize: 100, lineHeight: 1 },
+  img:      { width: 180, height: 180, objectFit: 'contain', filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
+  emoji:    { fontSize: 130, lineHeight: 1, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
   wordLabel: {
-    position: 'absolute', bottom: 40, left: 0, right: 0, textAlign: 'center',
-    fontSize: 'var(--font-lg)', fontWeight: 900, color: 'var(--text-primary)',
-    letterSpacing: 2, margin: 0,
+    position: 'absolute', bottom: 32, left: 0, right: 0, textAlign: 'center',
+    fontSize: 'var(--font-xl)', fontWeight: 900, color: '#fff',
+    letterSpacing: 6, margin: 0, textShadow: '0 4px 12px rgba(0,0,0,0.5)',
   },
   speakBtn: {
-    position: 'absolute', bottom: 8, right: 8,
-    background: 'var(--accent-yellow, #FFD600)', border: 'none',
-    borderRadius: '50%', width: 44, height: 44,
-    fontSize: 22, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+    position: 'absolute', bottom: 12, right: 12,
+    background: 'var(--accent-yellow)', border: 'none',
+    borderRadius: '50%', width: 50, height: 50,
+    fontSize: 26, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.4)', transition: 'transform 0.2s',
   },
   answerRow: {
-    display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'center',
-    padding: '12px 20px', borderRadius: 20, minWidth: 200, flexWrap: 'wrap',
-    transition: 'background 0.25s',
-    position: 'relative',
+    display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'center',
+    padding: '16px 24px', borderRadius: 28, minWidth: 220, flexWrap: 'wrap',
+    transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)', position: 'relative',
+    border: '1px solid var(--glass-border)',
+    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+    boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
   },
   slot: {
-    width: 52, height: 60, border: '3px solid var(--text-muted)',
-    borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: 'var(--bg-surface)',
+    width: 64, height: 72, border: 'none',
+    borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    background: 'rgba(255,255,255,0.15)', boxShadow: 'inset 0 6px 12px rgba(0,0,0,0.2)',
   },
-  slotLetter: { fontSize: 28, fontWeight: 900, color: 'var(--text-primary)' },
+  slotLetter: { fontSize: 40, fontWeight: 900, color: '#fff', textShadow: '0 2px 6px rgba(0,0,0,0.5)' },
   backBtn: {
-    background: 'none', border: 'none', fontSize: 28, cursor: 'pointer',
-    color: 'var(--text-secondary)', marginLeft: 4,
+    background: 'none', border: 'none', fontSize: 36, cursor: 'pointer',
+    color: '#fff', marginLeft: 8, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))',
   },
   tileGrid: {
-    display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', maxWidth: 400,
+    display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'center', maxWidth: 420,
   },
   tile: {
-    width: 64, height: 64, borderRadius: 16, border: 'none',
-    background: 'var(--accent-purple)', color: '#fff',
-    fontSize: 26, fontWeight: 900,
-    boxShadow: '0 4px 0 rgba(0,0,0,0.2)',
-    cursor: 'pointer', transition: 'opacity 0.15s, transform 0.1s',
+    width: 76, height: 76, borderRadius: 24, border: 'none',
+    background: 'var(--btn-blue-base)', color: '#fff',
+    fontSize: 36, fontWeight: 900,
+    boxShadow: '0 8px 0 var(--btn-blue-shade), 0 15px 25px rgba(0,0,0,0.3)',
+    cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   },
 };

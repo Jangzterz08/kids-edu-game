@@ -54,15 +54,29 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   }
 
   function getOptionStyle(opt) {
-    let bg = 'var(--bg-surface-alt)';
+    let bg = 'var(--glass-bg)';
+    let border = '1px solid var(--glass-border)';
+    let shadow = '0 8px 24px rgba(0,0,0,0.3)';
+
     if (selected) {
-      if (opt.correct) bg = 'var(--success)';
-      else if (selected?.word === opt.word) bg = 'var(--error)';
+      if (opt.correct) {
+        bg = 'var(--btn-green-base)';
+        border = '1px solid #fff';
+        shadow = '0 0 20px var(--btn-green-shade)';
+      } else if (selected?.word === opt.word) {
+        bg = 'var(--accent-red)';
+        border = '1px solid #fff';
+        shadow = '0 0 20px var(--accent-red)';
+      }
     }
     return {
       ...styles.option,
       background: bg,
-      color: selected && (opt.correct || selected.word === opt.word) ? '#fff' : 'var(--text-primary)',
+      border,
+      boxShadow: shadow,
+      color: '#fff',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
       animation: shake === opt.word ? 'shake 0.4s ease' : 'none',
     };
   }
@@ -130,23 +144,23 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
 const styles = {
   container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', position: 'relative' },
   sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
-  sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards' },
-  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 8 },
+  sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards', filter: 'drop-shadow(0 0 8px #FFF)' },
+  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 8, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
-  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0 },
+  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
   speakBtn: {
     background: 'none', border: 'none', cursor: 'pointer',
-    fontSize: 28, lineHeight: 1, padding: 4, borderRadius: 8,
-    flexShrink: 0,
+    fontSize: 32, lineHeight: 1, padding: 4, borderRadius: 8,
+    flexShrink: 0, filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4))',
+    transition: 'transform 0.2s'
   },
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
+  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 },
   option: {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-    padding: 16, borderRadius: 24, border: 'none', cursor: 'pointer',
-    transition: 'background 0.2s, transform 0.12s',
-    boxShadow: 'var(--shadow-card)', minHeight: 160,
-    justifyContent: 'center',
+    padding: 24, borderRadius: 28, cursor: 'pointer',
+    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    minHeight: 180, justifyContent: 'center',
   },
-  img: { width: 80, height: 80, objectFit: 'contain' },
-  fallbackEmoji: { fontSize: 56 },
+  img: { width: 90, height: 90, objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
+  fallbackEmoji: { fontSize: 64, filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
 };

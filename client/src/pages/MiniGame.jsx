@@ -91,14 +91,19 @@ export default function MiniGame() {
 
 const styles = {
   gameHeader: {
-    display: 'flex', alignItems: 'center', gap: 12, padding: '12px var(--space-xl)',
-    background: 'var(--bg-surface)', borderBottom: '2px solid var(--bg-surface-alt)',
+    display: 'flex', alignItems: 'center', gap: 16, padding: '14px 24px',
+    margin: '16px auto', maxWidth: 800,
+    background: 'var(--glass-bg)', 
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+    border: '1px solid var(--glass-border)', borderRadius: 30,
+    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
   },
-  modEmoji: { fontSize: 28 },
-  modTitle: { fontWeight: 900, fontSize: 'var(--font-base)', flex: 1 },
+  modEmoji: { fontSize: 32, filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.4))' },
+  modTitle: { fontWeight: 900, fontSize: 'var(--font-md)', flex: 1, textShadow: '0 2px 4px rgba(0,0,0,0.5)', color: '#fff' },
   gameBadge: {
-    background: 'var(--bg-surface-alt)', padding: '4px 14px', borderRadius: 20,
-    fontWeight: 700, fontSize: 'var(--font-sm)',
+    background: 'rgba(255, 255, 255, 0.15)', padding: '6px 16px', borderRadius: 20,
+    fontWeight: 800, fontSize: 'var(--font-sm)', color: '#fff',
+    border: '1px solid rgba(255,255,255,0.2)',
   },
-  gameCounter: { color: 'var(--text-secondary)', fontWeight: 700, fontSize: 'var(--font-sm)' },
+  gameCounter: { color: 'var(--text-secondary)', fontWeight: 800, fontSize: 'var(--font-sm)', letterSpacing: 1 },
 };
