@@ -8,11 +8,11 @@ export default function LessonCard({ lesson }) {
 
   return (
     <div className="glass-panel" style={styles.card}>
-      {/* Large symbol (letter/number/emoji) */}
-      {(letter || numeral) && (
+      {/* Large symbol (letter/number/emoji) IF no image */}
+      {!imageFile && (letter || numeral) && (
         <div style={styles.symbol}>{letter || numeral}</div>
       )}
-      {emoji && !letter && !numeral && !imageFile && (
+      {!imageFile && emoji && !letter && !numeral && (
         <div style={styles.symbolEmoji}>{emoji}</div>
       )}
 
@@ -48,7 +48,7 @@ export default function LessonCard({ lesson }) {
 const styles = {
   card: {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24,
-    padding: 'var(--space-2xl) var(--space-xl)', maxWidth: 460, margin: '0 auto',
+    padding: 'var(--space-xl)', maxWidth: 460, margin: '0 auto',
   },
   symbol: {
     fontSize: 120, fontWeight: 900, lineHeight: 1, color: 'var(--accent-cyan)',
@@ -56,11 +56,11 @@ const styles = {
   },
   symbolEmoji: { fontSize: 100, filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' },
   imageWrap: {
-    width: 240, height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center',
     background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)',
-    borderRadius: 40, overflow: 'hidden', boxShadow: 'inset 0 12px 24px rgba(0,0,0,0.2)',
+    borderRadius: 36, overflow: 'hidden', boxShadow: 'inset 0 12px 24px rgba(0,0,0,0.2)',
   },
-  image: { width: '100%', height: '100%', objectFit: 'contain', padding: 24, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.6))' },
+  image: { width: '100%', height: '100%', objectFit: 'contain', padding: 20, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.6))' },
   imageEmoji: { fontSize: 140, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.6))' },
   wordRow: { display: 'flex', alignItems: 'center', gap: 20 },
   word: { fontSize: 'var(--font-2xl)', fontWeight: 900, color: '#fff', textShadow: '0 4px 16px rgba(0,0,0,0.6)', letterSpacing: 2 },
