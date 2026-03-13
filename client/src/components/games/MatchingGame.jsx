@@ -134,24 +134,25 @@ const styles = {
   grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 },
   card: {
     aspect: '1', height: 120, borderRadius: 24, border: 'none',
-    background: 'var(--clay-bg-blue)', cursor: 'pointer',
+    background: 'var(--btn-blue-base)', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-    boxShadow: '0 8px 16px var(--clay-shadow-soft), inset 3px 3px 10px var(--clay-highlight), inset -3px -5px 10px var(--clay-shadow-soft)',
+    boxShadow: '0 8px 0 var(--btn-blue-shade), 0 15px 25px rgba(0, 0, 0, 0.4)',
   },
   cardFlipped: { 
-    background: 'var(--clay-bg-light)', 
-    boxShadow: '0 12px 24px var(--clay-shadow-hard), inset 4px 4px 12px var(--clay-highlight), inset -4px -6px 12px var(--clay-shadow-soft)', 
+    background: 'var(--glass-bg)', border: '2px solid rgba(255,255,255,0.6)', 
+    boxShadow: '0 0 20px rgba(255,255,255,0.2), 0 10px 20px rgba(0,0,0,0.4)', 
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
     transform: 'translateY(6px)'
   },
   cardMatched: { 
-    background: 'var(--accent-green)', 
-    boxShadow: '0 6px 12px var(--clay-shadow-soft), inset 4px 4px 12px rgba(255,255,255,0.6), inset -4px -6px 12px rgba(0,0,0,0.2)',
+    background: 'var(--btn-green-base)', border: '2px solid #fff',
+    boxShadow: '0 0 30px var(--btn-green-shade)',
     transform: 'translateY(8px)'
   },
-  cardBack: { fontSize: 'var(--font-2xl)', color: 'var(--accent-cyan)', fontWeight: 900, textShadow: '0 3px 0 rgba(0,0,0,0.2)' },
-  cardImg: { width: 80, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.4))' },
-  cardEmoji: { fontSize: 64, filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.4))' },
-  cardWord: { fontSize: 'var(--font-base)', fontWeight: 900, textAlign: 'center', padding: 8, color: 'var(--text-dark)', textShadow: 'none' },
+  cardBack: { fontSize: 'var(--font-2xl)', color: '#fff', fontWeight: 900, textShadow: '0 4px 8px rgba(0,0,0,0.5)' },
+  cardImg: { width: 80, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
+  cardEmoji: { fontSize: 64, filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.5))' },
+  cardWord: { fontSize: 'var(--font-base)', fontWeight: 900, textAlign: 'center', padding: 8, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
   dotsWrap: { transform: 'scale(0.6)' },
 };

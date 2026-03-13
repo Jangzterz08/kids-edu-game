@@ -17,15 +17,15 @@ export default function ModuleCard({ moduleSlug, serverMeta, progressData, compl
   return (
     <div
       className="glass-panel"
-      style={{ ...styles.card, background: mod.color || 'var(--forest-purple)' }}
+      style={styles.card}
       onClick={() => navigate(`/play/${mod.slug}`)}
       onMouseEnter={(e) => { 
         e.currentTarget.style.transform = 'translateY(-12px) scale(1.03)'; 
-        e.currentTarget.style.boxShadow = '0 24px 40px rgba(0,0,0,0.4), inset 4px 4px 12px rgba(255,255,255,0.6), inset -4px -6px 16px rgba(0,0,0,0.2)'; 
+        e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0, 229, 255, 0.3)'; 
       }}
       onMouseLeave={(e) => { 
         e.currentTarget.style.transform = ''; 
-        e.currentTarget.style.boxShadow = ''; // Returns to CSS class default
+        e.currentTarget.style.boxShadow = ''; 
       }}
     >
       <div style={styles.topRow}>
@@ -63,10 +63,10 @@ const styles = {
   },
   emoji: { 
     fontSize: 56, position: 'relative', zIndex: 2, 
-    filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.4))',
+    filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.5))',
     display: 'inline-block', animation: 'float-organic 5s infinite ease-in-out'
   },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, marginTop: 12, textShadow: '0 3px 0px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.3)', color: '#fff', letterSpacing: 1 },
-  sub: { fontSize: 'var(--font-sm)', color: 'rgba(255,255,255,0.9)', marginBottom: 8, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.4)' },
-  completedBadge: { fontSize: 24, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, marginTop: 12, textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
+  sub: { fontSize: 'var(--font-sm)', color: 'var(--text-secondary)', marginBottom: 8, fontWeight: 700 },
+  completedBadge: { fontSize: 24, filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.5))' },
 };
