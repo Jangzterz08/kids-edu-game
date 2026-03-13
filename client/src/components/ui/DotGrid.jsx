@@ -1,5 +1,7 @@
 import React from 'react';
 
+const SPACE_EMOJIS = ['⭐', '🪐', '🚀', '🌙', '☄️', '🛸', '🌟', '🌍', '👽', '🛰️'];
+
 export default function DotGrid({ count }) {
   if (count === 0) {
     return (
@@ -16,10 +18,15 @@ export default function DotGrid({ count }) {
   if (count <= 4) cols = 2;
   if (count === 1) cols = 1;
 
+  // Pick a consistent emoji for this specific number (so "3" is always the same emoji)
+  const emoji = SPACE_EMOJIS[count % SPACE_EMOJIS.length];
+
   return (
     <div style={{ ...styles.grid, gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
       {dots.map(i => (
-        <div key={i} style={styles.dot} />
+        <span key={i} style={styles.emojiItem}>
+          {emoji}
+        </span>
       ))}
     </div>
   );
@@ -43,12 +50,11 @@ const styles = {
     alignContent: 'center',
     justifyContent: 'center'
   },
-  dot: {
-    width: 28,
-    height: 28,
-    borderRadius: '50%',
-    background: '#fff',
-    boxShadow: '0 0 16px rgba(255,255,255,0.9), inset 0 0 8px rgba(0,0,0,0.3)',
-    animation: 'pulse-glow 2s infinite ease-in-out alternate'
+  emojiItem: {
+    fontSize: 38,
+    lineHeight: 1,
+    filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.5))',
+    animation: 'float-organic 4s infinite ease-in-out alternate',
+    display: 'inline-block'
   }
 };
