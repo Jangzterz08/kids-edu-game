@@ -47,12 +47,27 @@ Key Vercel env vars:
 - `VITE_SUPABASE_URL=https://efjbcsarporphqiuwuyw.supabase.co`
 - `VITE_SUPABASE_ANON_KEY` (anon key for efjbcsarporphqiuwuyw)
 
+## Adaptive Learning & Teacher Portal — Plan Approved (2026-03-13)
+
+Full plan at `.claude/plans/concurrent-munching-matsumoto.md`. Six phases:
+
+1. **Phase 1 — Schema Foundation:** Add `spellingScore`, `phonicsScore`, `difficultyLevel` to `LessonProgress`. New models: `ModuleDifficulty`, `ReviewSchedule`, `DailyChallenge`, `Classroom`. Add `role` to `User`. Fix scoring bug.
+2. **Phase 2 — Pretest + Adaptive Difficulty:** 6-question diagnostic quiz per module → places kid at easy/medium/hard. Difficulty config for all 5 game types. Real-time adjustment via rolling accuracy (last 5 games).
+3. **Phase 3 — Spaced Repetition:** Simplified SM-2 algorithm. Auto-schedules reviews. "Review" badge on KidHome with due-count.
+4. **Phase 4 — Mastery Gates:** 4 tiers (0/20/50/80 stars). Locked modules show lock icon + "Need X more stars".
+5. **Phase 5 — Daily Challenge + Boss Levels:** Daily special game (bonus 10 coins). 10-question end-of-module boss gauntlet (20 coins + badge).
+6. **Phase 6 — Teacher Portal:** Teacher accounts, classrooms with join codes, class analytics dashboard, per-student deep dive, assignments, CSV export.
+
+### Known bug (pre-existing)
+- `spellingScore` and `phonicsScore` NOT in Prisma schema → those game scores are silently lost. Fixed in Phase 1.
+- Unstaged WIP: `OddOneOutGame.jsx`, `PatternGame.jsx`, `logic.js` module, edits to `index.js` + `MiniGame.jsx`.
+
 ## Next Steps When We Return
 
-1. **Verify coins fix:** After Railway redeploy, play a game and check coins increment. If still 0, redeploy with "Clear build cache". If cache-busting comment didn't work, add `spellingScore`/`phonicsScore` fields to schema + update `progressSync.js` server-side `computeStars`.
-2. **Resend setup for digest:** Sign up at resend.com, verify domain, get API key, add `RESEND_API_KEY`, `DIGEST_FROM_EMAIL`, `CLIENT_URL` to Railway env vars.
-3. **Monetization:** Stripe Checkout + `isPremium` field on User. Freemium: 3 free modules; unlock all for $2.99–$4.99.
-4. **Interest theme personalization:** Ask theme on profile create (Dinosaurs, Space, Ocean). Swap module card backgrounds + celebration sounds.
+1. **Start Phase 1:** Run the Prisma schema migration (add new fields + models). Fix `progressSync.js` to handle all 5 scores.
+2. **Phase 2 (Adaptive Core):** Build `adaptiveDifficulty.js` service, pretest API + UI, update all 5 game components with difficulty props.
+3. **Verify coins fix:** If still broken, redeploy Railway with "Clear build cache".
+4. **Resend setup for digest:** Sign up at resend.com, verify domain, get API key, add `RESEND_API_KEY`, `DIGEST_FROM_EMAIL`, `CLIENT_URL` to Railway env vars.
 
 ## Key Files
 

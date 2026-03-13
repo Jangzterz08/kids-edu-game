@@ -10,8 +10,10 @@ import { foodPyramidModule }      from './modules/foodPyramid.js';
 import { emotionsModule }         from './modules/emotions.js';
 import { weatherModule }          from './modules/weather.js';
 import { daysOfWeekModule }       from './modules/daysOfWeek.js';
+import { logicModule }            from './modules/logic.js';
 
 export const MODULE_REGISTRY = [
+  logicModule, // Placed first so it shows prominently during development
   alphabetModule,
   numbersModule,
   shapesModule,

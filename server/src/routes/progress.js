@@ -64,15 +64,23 @@ router.get('/:kidId/stats', async (req, res, next) => {
 
     const allProgress = await prisma.lessonProgress.findMany({
       where: { kidId: kid.id },
-      select: { matchScore: true, traceScore: true, quizScore: true, starsEarned: true, updatedAt: true },
+      select: {
+        matchScore: true, traceScore: true, quizScore: true,
+        spellingScore: true, phonicsScore: true, patternScore: true, oddOneOutScore: true,
+        starsEarned: true, updatedAt: true,
+      },
     });
 
     const totalLessonsCompleted = allProgress.filter(p => p.starsEarned > 0).length;
 
     const avg = arr => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : null;
-    const matchScores = allProgress.filter(p => p.matchScore != null).map(p => p.matchScore);
-    const traceScores = allProgress.filter(p => p.traceScore != null).map(p => p.traceScore);
-    const quizScores  = allProgress.filter(p => p.quizScore  != null).map(p => p.quizScore);
+    const matchScores    = allProgress.filter(p => p.matchScore != null).map(p => p.matchScore);
+    const traceScores    = allProgress.filter(p => p.traceScore != null).map(p => p.traceScore);
+    const quizScores     = allProgress.filter(p => p.quizScore  != null).map(p => p.quizScore);
+    const spellingScores = allProgress.filter(p => p.spellingScore != null).map(p => p.spellingScore);
+    const phonicsScores  = allProgress.filter(p => p.phonicsScore != null).map(p => p.phonicsScore);
+    const patternScores  = allProgress.filter(p => p.patternScore != null).map(p => p.patternScore);
+    const oddOneOutScores = allProgress.filter(p => p.oddOneOutScore != null).map(p => p.oddOneOutScore);
 
     // Weekly activity — past 7 days by updatedAt
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -110,7 +118,11 @@ router.get('/:kidId/stats', async (req, res, next) => {
 
     res.json({
       summary: { totalStars: kid.totalStars, currentStreak: kid.currentStreak, totalLessonsCompleted },
-      gameAccuracy: { match: avg(matchScores), trace: avg(traceScores), quiz: avg(quizScores) },
+      gameAccuracy: {
+        match: avg(matchScores), trace: avg(traceScores), quiz: avg(quizScores),
+        spelling: avg(spellingScores), phonics: avg(phonicsScores),
+        pattern: avg(patternScores), oddOneOut: avg(oddOneOutScores),
+      },
       weeklyActivity,
       recommended,
     });

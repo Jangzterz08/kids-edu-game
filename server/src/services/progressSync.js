@@ -1,29 +1,32 @@
 const prisma = require('../lib/db');
 
+const SCORE_FIELDS = ['matchScore', 'traceScore', 'quizScore', 'spellingScore', 'phonicsScore', 'patternScore', 'oddOneOutScore'];
+
 function computeStars(entry) {
-  const { viewed, matchScore, traceScore, quizScore } = entry;
-  if (!viewed) return 0;
-  const allGames = [matchScore, traceScore, quizScore].filter(s => s !== null && s !== undefined);
-  if (allGames.length === 0) return 1;
-  const allPassed = allGames.every(s => s >= 80);
-  if (allPassed && allGames.length >= 2) return 3;
-  if (quizScore !== null && quizScore !== undefined && quizScore >= 60) return 2;
+  if (!entry.viewed) return 0;
+  const scores = SCORE_FIELDS.map(f => entry[f]).filter(s => s !== null && s !== undefined);
+  if (scores.length === 0) return 1;
+  const allPassed = scores.every(s => s >= 80);
+  if (allPassed && scores.length >= 2) return 3;
+  if (scores.some(s => s >= 60)) return 2;
   return 1;
 }
 
 async function upsertProgress(kidId, entry) {
-  const { lessonId, viewed, matchScore, traceScore, quizScore, attempts, completedAt } = entry;
+  const { lessonId, viewed, attempts, completedAt } = entry;
   const starsEarned = entry.starsEarned ?? computeStars(entry);
 
-  // Get existing record to avoid downgrading stars
   const existing = await prisma.lessonProgress.findUnique({
     where: { kidId_lessonId: { kidId, lessonId } },
   });
 
   const finalStars = Math.max(starsEarned, existing?.starsEarned ?? 0);
-  const finalMatch = maxScore(matchScore, existing?.matchScore);
-  const finalTrace = maxScore(traceScore, existing?.traceScore);
-  const finalQuiz = maxScore(quizScore, existing?.quizScore);
+
+  // Build score fields — keep best score for each game type
+  const scoreData = {};
+  for (const field of SCORE_FIELDS) {
+    scoreData[field] = maxScore(entry[field], existing?.[field]);
+  }
 
   const record = await prisma.lessonProgress.upsert({
     where: { kidId_lessonId: { kidId, lessonId } },
@@ -31,18 +34,14 @@ async function upsertProgress(kidId, entry) {
       kidId,
       lessonId,
       viewed: viewed ?? false,
-      matchScore: finalMatch,
-      traceScore: finalTrace,
-      quizScore: finalQuiz,
+      ...scoreData,
       starsEarned: finalStars,
       attempts: attempts ?? 1,
       completedAt: completedAt ? new Date(completedAt) : null,
     },
     update: {
       viewed: viewed ?? existing?.viewed ?? false,
-      matchScore: finalMatch,
-      traceScore: finalTrace,
-      quizScore: finalQuiz,
+      ...scoreData,
       starsEarned: finalStars,
       attempts: (existing?.attempts ?? 0) + (attempts ?? 1),
       completedAt: completedAt ? new Date(completedAt) : existing?.completedAt,
@@ -51,23 +50,18 @@ async function upsertProgress(kidId, entry) {
 
   // Update totalStars and coins on kid profile
   const starDelta = finalStars - (existing?.starsEarned ?? 0);
-  // 5 coins per new star. If already perfected (starDelta === 0), award 3 coins for playing again!
   const coinsDelta = starDelta > 0 ? starDelta * 5 : 3;
 
   if (starDelta > 0) {
     await prisma.kidProfile.update({
       where: { id: kidId },
-      data: {
-        totalStars: { increment: starDelta },
-      },
+      data: { totalStars: { increment: starDelta } },
     });
   }
   if (coinsDelta > 0) {
     await prisma.kidProfile.update({
       where: { id: kidId },
-      data: {
-        coins: { increment: coinsDelta },
-      },
+      data: { coins: { increment: coinsDelta } },
     });
   }
 
@@ -80,4 +74,4 @@ function maxScore(a, b) {
   return Math.max(a, b);
 }
 
-module.exports = { upsertProgress };
+module.exports = { upsertProgress, SCORE_FIELDS };
