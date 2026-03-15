@@ -2,8 +2,7 @@
 const { Resend } = require('resend');
 const prisma = require('../lib/db');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM   = process.env.DIGEST_FROM_EMAIL || 'KidsLearn <digest@kidslearn.app>';
+const FROM = process.env.DIGEST_FROM_EMAIL || 'KidsLearn <digest@kidslearn.app>';
 
 // ─── Query helpers ────────────────────────────────────────────────────────────
 
@@ -150,6 +149,7 @@ async function sendWeeklyDigests() {
     console.log('[digest] RESEND_API_KEY not set — skipping weekly digest');
     return;
   }
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   console.log('[digest] Starting weekly digest send…');
 
