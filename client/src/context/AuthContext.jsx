@@ -87,7 +87,7 @@ export function AuthProvider({ children }) {
     await supabase?.auth.signOut();
   }
 
-  const loading = session === undefined && !kidSession;
+  const loading = (session === undefined || (session !== null && user === null)) && !kidSession;
 
   return (
     <AuthContext.Provider value={{
