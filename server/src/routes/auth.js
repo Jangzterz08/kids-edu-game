@@ -12,7 +12,7 @@ router.post('/register', async (req, res, next) => {
     const user = await prisma.user.upsert({
       where: { supabaseAuthId: req.user.id },
       create: { supabaseAuthId: req.user.id, email: req.user.email, name: name || null, role: validRole },
-      update: { email: req.user.email, ...(name && { name }) },
+      update: { email: req.user.email, ...(name && { name }), ...(role && { role: validRole }) },
     });
     res.json(user);
   } catch (err) {
