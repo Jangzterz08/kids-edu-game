@@ -38,6 +38,14 @@ const requireAuth = async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
 
+    // Supabase sometimes omits email from getUser(); fall back to JWT claim
+    if (!user.email) {
+      try {
+        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+        user.email = payload.email;
+      } catch { /* ignore decode errors */ }
+    }
+
     req.user = user;
     next();
   } catch (err) {
