@@ -1,0 +1,104 @@
+.pl-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-xl);
+  padding-top: env(safe-area-inset-top);
+  height: calc(72px + env(safe-area-inset-top));
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.pl-logo        { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.pl-logo-emoji  { font-size: 28px; }
+.pl-logo-text   { font-size: var(--font-lg); font-weight: 900; color: #fff; text-shadow: 0 1px 6px rgba(0,80,120,0.3); }
+
+.pl-nav         { display: flex; align-items: center; gap: 6px; }
+
+.pl-nav-link {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.pl-nav-link:hover { background: rgba(255,255,255,0.15); }
+
+.pl-play-btn {
+  background: #22C55E;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: var(--font-sm);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+  white-space: nowrap;
+}
+
+.pl-signout-btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: var(--font-sm);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+}
+
+.pl-main { flex: 1; padding: var(--space-xl); }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .pl-header {
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
+    flex-wrap: wrap;
+    height: auto;
+    min-height: calc(56px + env(safe-area-inset-top));
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .pl-logo-text { font-size: var(--font-base); }
+  .pl-logo-emoji { font-size: 22px; }
+
+  .pl-nav { gap: 4px; flex-wrap: wrap; }
+
+  .pl-nav-link {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .pl-play-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .pl-signout-btn {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .pl-main { padding: 12px; }
+}
