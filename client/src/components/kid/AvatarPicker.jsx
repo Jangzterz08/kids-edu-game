@@ -29,11 +29,15 @@ export default function AvatarPicker({ value, onChange }) {
 const styles = {
   grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 },
   item: {
-    background: 'var(--bg-surface-alt)', border: '3px solid transparent',
+    background: 'rgba(255,255,255,0.4)', border: '3px solid transparent',
     borderRadius: 20, padding: 12, cursor: 'pointer',
     transition: 'border-color 0.15s, transform 0.15s',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
-  selected: { borderColor: 'var(--accent-blue)', transform: 'scale(1.1)', background: '#EFF6FF' },
+  selected: {
+    borderColor: '#3BBFE8', transform: 'scale(1.1)',
+    background: 'rgba(59,191,232,0.2)',
+    boxShadow: '0 4px 12px rgba(59,191,232,0.35)',
+  },
   emoji: { fontSize: 40 },
 };

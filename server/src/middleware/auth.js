@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const { verifyKidToken, decodeTokenType } = require('./kidAuth');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
@@ -14,6 +15,17 @@ const requireAuth = async (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
 
+    // Check if this is a kid JWT (issued by our server)
+    if (decodeTokenType(token) === 'kid') {
+      const payload = verifyKidToken(token);
+      if (!payload) {
+        return res.status(401).json({ error: 'Invalid or expired kid token' });
+      }
+      req.user = { id: payload.sub, type: 'kid' };
+      return next();
+    }
+
+    // Otherwise, validate as a Supabase JWT
     if (!supabase) {
       console.warn('[Auth] Supabase not configured — using mock user for development.');
       req.user = { id: 'mock-user-id', email: 'dev@kidsedu.app' };

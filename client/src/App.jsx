@@ -4,6 +4,7 @@ import { KidProvider } from './context/KidContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ParentLayout from './components/layout/ParentLayout';
 import KidLayout from './components/layout/KidLayout';
+import TeacherLayout from './components/layout/TeacherLayout';
 
 import Login           from './pages/Login';
 import KidSelect       from './pages/KidSelect';
@@ -14,6 +15,10 @@ import LessonPlayer    from './pages/LessonPlayer';
 import MiniGame        from './pages/MiniGame';
 import ModuleComplete  from './pages/ModuleComplete';
 import CoinStore       from './pages/CoinStore';
+import TeacherDashboard from './pages/TeacherDashboard';
+import ClassroomDetail  from './pages/ClassroomDetail';
+import KidLeaderboard   from './pages/KidLeaderboard';
+import ParentClassrooms from './pages/ParentClassrooms';
 import NotFound        from './pages/NotFound';
 
 export default function App() {
@@ -24,17 +29,29 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route element={<ParentLayout />}>
-                <Route path="/"          element={<KidSelect />} />
-                <Route path="/dashboard" element={<ParentDashboard />} />
+            {/* Teacher routes */}
+            <Route element={<ProtectedRoute requireRole="teacher" />}>
+              <Route element={<TeacherLayout />}>
+                <Route path="/teacher"                element={<TeacherDashboard />} />
+                <Route path="/teacher/classroom/:id"  element={<ClassroomDetail />} />
               </Route>
             </Route>
 
+            {/* Parent routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<ParentLayout />}>
+                <Route path="/"            element={<KidSelect />} />
+                <Route path="/dashboard"   element={<ParentDashboard />} />
+                <Route path="/classrooms"  element={<ParentClassrooms />} />
+              </Route>
+            </Route>
+
+            {/* Kid play routes */}
             <Route element={<ProtectedRoute requireKid />}>
               <Route element={<KidLayout />}>
                 <Route path="/play"                    element={<KidHome />} />
                 <Route path="/play/store"              element={<CoinStore />} />
+                <Route path="/play/leaderboard"        element={<KidLeaderboard />} />
                 <Route path="/play/:moduleSlug"        element={<ModuleIntro />} />
                 <Route path="/play/:moduleSlug/lesson" element={<LessonPlayer />} />
                 <Route path="/play/:moduleSlug/game"   element={<MiniGame />} />

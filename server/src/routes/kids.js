@@ -15,6 +15,12 @@ async function verifyKidOwnership(kidId, parentId) {
 // GET /api/kids
 router.get('/', async (req, res, next) => {
   try {
+    // Kid JWT — return just themselves
+    if (req.user.type === 'kid') {
+      const kid = await prisma.kidProfile.findUnique({ where: { id: req.user.id } });
+      return res.json({ kids: kid ? [kid] : [] });
+    }
+
     const parent = await getParent(req.user.id);
     if (!parent) return res.status(404).json({ error: 'Parent account not found' });
 
@@ -86,9 +92,15 @@ router.put('/:kidId', async (req, res, next) => {
 // POST /api/kids/:kidId/store/buy
 router.post('/:kidId/store/buy', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent account not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    let kid;
+    if (req.user.type === 'kid') {
+      if (req.user.id !== req.params.kidId) return res.status(403).json({ error: 'Forbidden' });
+      kid = await prisma.kidProfile.findUnique({ where: { id: req.user.id } });
+    } else {
+      const parent = await getParent(req.user.id);
+      if (!parent) return res.status(404).json({ error: 'Parent account not found' });
+      kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    }
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     const { itemId, price } = req.body;
@@ -125,6 +137,88 @@ router.delete('/:kidId', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+// --- Classroom endpoints ---
+
+// GET /api/kids/me/classrooms — kid's own classrooms (kid JWT auth)
+router.get('/me/classrooms', async (req, res, next) => {
+  try {
+    if (req.user.type !== 'kid') {
+      return res.status(403).json({ error: 'Kid auth required' });
+    }
+    const enrollments = await prisma.classroomStudent.findMany({
+      where: { kidId: req.user.id },
+      include: { classroom: { select: { id: true, name: true } } },
+    });
+    res.json({ classrooms: enrollments.map(e => e.classroom) });
+  } catch (err) { next(err); }
+});
+
+// GET /api/kids/:kidId/classrooms — parent views kid's classrooms
+router.get('/:kidId/classrooms', async (req, res, next) => {
+  try {
+    const parent = await getParent(req.user.id);
+    if (!parent) return res.status(404).json({ error: 'Parent account not found' });
+    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    const enrollments = await prisma.classroomStudent.findMany({
+      where: { kidId: kid.id },
+      include: {
+        classroom: {
+          select: { id: true, name: true, teacher: { select: { name: true } } },
+        },
+      },
+    });
+    res.json({ classrooms: enrollments.map(e => e.classroom) });
+  } catch (err) { next(err); }
+});
+
+// POST /api/kids/:kidId/join-classroom — parent enrolls kid via join code
+router.post('/:kidId/join-classroom', async (req, res, next) => {
+  try {
+    const parent = await getParent(req.user.id);
+    if (!parent) return res.status(404).json({ error: 'Parent account not found' });
+    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    const { joinCode } = req.body;
+    if (!joinCode) return res.status(400).json({ error: 'joinCode is required' });
+
+    const classroom = await prisma.classroom.findUnique({
+      where: { joinCode: joinCode.toUpperCase() },
+      select: { id: true, name: true, teacher: { select: { name: true } } },
+    });
+    if (!classroom) return res.status(404).json({ error: 'Classroom not found. Check the code and try again.' });
+
+    // Check if already enrolled
+    const existing = await prisma.classroomStudent.findUnique({
+      where: { classroomId_kidId: { classroomId: classroom.id, kidId: kid.id } },
+    });
+    if (existing) return res.status(400).json({ error: 'Already enrolled in this classroom' });
+
+    await prisma.classroomStudent.create({
+      data: { classroomId: classroom.id, kidId: kid.id },
+    });
+
+    res.json({ classroom });
+  } catch (err) { next(err); }
+});
+
+// DELETE /api/kids/:kidId/leave-classroom/:classroomId — parent removes kid from classroom
+router.delete('/:kidId/leave-classroom/:classroomId', async (req, res, next) => {
+  try {
+    const parent = await getParent(req.user.id);
+    if (!parent) return res.status(404).json({ error: 'Parent account not found' });
+    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    await prisma.classroomStudent.delete({
+      where: { classroomId_kidId: { classroomId: req.params.classroomId, kidId: kid.id } },
+    });
+    res.json({ success: true });
+  } catch (err) { next(err); }
 });
 
 module.exports = router;

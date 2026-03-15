@@ -2,84 +2,108 @@
 
 ## Quick Status Update
 
-Full-stack kids educational app. **Deployed and live** (migrated to new Supabase project 2026-03-12).
+Full-stack kids educational app. **All changes UNCOMMITTED locally** (deploy pending).
 
 - **Client:** `https://kids-edu-game.vercel.app` (Vercel, root=`client/`)
 - **Server:** `https://kids-edu-game-production.up.railway.app` (Railway, root=`server/`)
 - **Stack:** React + Vite / Express + Prisma 7 / Supabase PostgreSQL
-- **Supabase project:** `efjbcsarporphqiuwuyw` (Portfolio project, schema `kids_edu_game`)
-- **DB connection:** `aws-1-eu-west-1.pooler.supabase.com:5432` (session mode)
-- **12 modules, 117 lessons, 5 game types:** Matching, Quiz, Tracing, Spelling, Phonics
-- **Features:** Streak counter, module badges, mascot "Sunny", 147 audio MP3s, SpeakAlongButton (iOS fallback), coin economy, CoinStore (8 premium avatars), weekly email digest
+- **Supabase:** `efjbcsarporphqiuwuyw`, schema `kids_edu_game`, pooler `aws-1-eu-west-1.pooler.supabase.com:5432`
 
-## Supabase Migration (2026-03-12)
+## Ocean Mania Theme — COMPLETE (2026-03-15) — UNCOMMITTED
 
-Old project `srqlgkyunqnbimhfyypg` was paused (free tier limit). Migrated to Portfolio project `efjbcsarporphqiuwuyw`:
-- Created `kids_edu_game` schema (isolated from Portfolio's `public` schema)
-- Ran `prisma db push` + baselined 3 migrations with `prisma migrate resolve --applied`
-- Seeded 12 modules, 117 lessons
-- Updated all env files (client/.env, client/.env.production, server/.env)
-- Updated Railway + Vercel env vars
-- Disabled email confirmation in Supabase Auth settings
+Full visual redesign from dark space → bright ocean world. All screens updated.
 
-## Known Issue — Coins Not Awarding
+### Palette
+- Sky: `#8BD4F2`, Cyan: `#3BBFE8`, Sand: `#E8C87A/#D4A84B`, Coral: `#C87060`, Green: `#4CC860`
+- All glass surfaces: `rgba(255,255,255,0.35-0.45)` + `backdrop-filter:blur(16-20px)`
+- Text: deep ocean `#0A4A6E` / mid `#1A7A9A`; Font: **Fredoka**
 
-**Status:** Fix pushed (commit `7bc2a9c`), awaiting Railway redeploy verification.
+### CSS Variables updated (`index.css`)
+- `--glass-bg` → `rgba(255,255,255,0.38)` (was dark navy `rgba(4,40,90,0.45)`)
+- `--text-primary` → `#0A4A6E`, `--text-secondary` → `#1A7A9A`
+- `--shadow-*` → ocean-tinted (was heavy black shadows)
+- `--glass-pill` → bright white glass
 
-**Root cause:** Railway Docker cache served stale Prisma client without `coins`/`unlockedItems` fields. The `kidProfile.update({ coins: { increment } })` silently failed because Prisma client didn't know the field.
+### Components updated
+| File | Change |
+|------|--------|
+| `KidLayout.jsx` | Animated OceanScene: waves, seaweed, coral, fish, bubbles |
+| `OllieMascot.jsx` | NEW: CSS octopus mascot (8 wiggling tentacles) |
+| `OceanFish.jsx` | NEW: shared fish+bubbles overlay for Login & KidSelect |
+| `Login.jsx` | Ocean gradient bg, white glass card, forgot-password, OceanFish |
+| `RoleSelector.jsx` | Kid=orange, Parent=cyan, Teacher=green gradient cards |
+| `KidSelect.jsx` | Full ocean gradient bg, glass cards, OceanFish swimming behind |
+| `KidCard.jsx` | White glass, cyan active glow, ocean blue text |
+| `AddKidModal.jsx` | White glass modal, Fredoka labels |
+| `AvatarPicker.jsx` | Cyan selection state |
+| `KidHome.jsx` | White glass sidebar + panel, Ollie at bottom |
+| `ModuleIntro.jsx` | White glass card, ocean colors |
+| `MatchingGame.jsx` | White glass flip cards, lighter shadows, ocean text |
+| `PatternGame.jsx` | White glass pattern box, `🌊` title, ocean progress pill |
+| `OddOneOutGame.jsx` | White glass grid, `🦀` title, ocean progress pill |
+| `QuizGame.jsx` | Sea creature sparkle `🐠🐡🌟🐚` (was `✨⭐🌟💫`) |
+| `CelebrationModal.jsx` | Sea creature burst `🐠🐡🐚🌟🦀🐙⭐🎉`, ocean overlay |
+| `DotGrid.jsx` | `SEA_EMOJIS` (🐠🐡🐚🦀🐙…) replaced `SPACE_EMOJIS` (🚀🪐👽…) |
+| `index.css` | `swim` keyframe: baked `scaleX(-1)` so fish face swim direction |
 
-**Fix:** Added comment to `schema.prisma` to bust Docker layer cache. If coins still don't work after Railway auto-deploys, redeploy with **"Clear build cache"** checked.
+### TTS / sound fixes (`sound.js`)
+- `PHONETIC_MAP`: `cat`→`catt`, `bat`→`batt`, etc. to fix "cayt" mispronunciation
+- Voice priority: Ava/Karen first (Samantha last — she mispronounces short vowels)
+- Rate: `0.85`→`0.92`, pitch: `1.15`→`1.1`
 
-**Verify with:** `SELECT name, coins, "totalStars" FROM kids_edu_game."KidProfile"` — coins should increment when playing games.
+## Role-Based Login + Classroom System — UNCOMMITTED
+
+Kid/Parent/Teacher login, classroom leaderboards.
+
+### Server
+- Dual JWT: Kids use custom JWT (PIN), Parents/Teachers use Supabase JWT
+- `kidAuth.js`: sign/verify kid JWT. Needs `KID_JWT_SECRET` env var on Railway
+- `auth.js`: `/kid-lookup`, `/kid-login`, `/kid-set-pin` (public endpoints)
+- `classrooms.js`: CRUD, leaderboard (stars→streak), 6-char join codes
+- Schema: `pin String?` on `KidProfile` — **migration applied locally + on Supabase** ✓
+- Prisma client regenerated (`prisma generate` run) ✓ — kid login now works locally
+
+### Client
+- `PinKeypad.jsx`, `RoleSelector.jsx`, `SetPinModal.jsx`, `TeacherLayout.jsx`
+- `TeacherDashboard.jsx`, `ClassroomDetail.jsx`, `KidLeaderboard.jsx`, `ParentClassrooms.jsx`
+- `AuthContext`: `kidSession`, `signInAsKid()`, `signOutKid()`. Kid tokens in `sessionStorage`
+
+## Known Issue — Coins Show 0 in CoinStore
+
+**Status:** NOT FIXED. `CoinStore.jsx` + `progressSync.js` not yet investigated.
 
 ## Railway Deployment Notes
 
-Nixpacks v1.38.0 pins Node 22.11.0 — incompatible with Prisma 7. **Fix: `server/Dockerfile` using `node:24-slim`.** Do NOT remove the Dockerfile.
+- **DO NOT remove `server/Dockerfile`** (node:24-slim) — Nixpacks pins incompatible Node version
+- `KID_JWT_SECRET` must be added to Railway env vars before deploying
+- `prisma migrate deploy` runs automatically via `railway.toml`
 
-Key Railway env vars:
-- `DATABASE_URL=postgresql://postgres.efjbcsarporphqiuwuyw:I5CWRveZb2pnXzE0@aws-1-eu-west-1.pooler.supabase.com:5432/postgres?schema=kids_edu_game`
-- `SUPABASE_URL=https://efjbcsarporphqiuwuyw.supabase.co`
-- `SUPABASE_SERVICE_KEY` (service_role key for efjbcsarporphqiuwuyw)
-- `NODE_ENV=production`, `PORT=3002`, `ALLOWED_ORIGINS=https://kids-edu-game.vercel.app`
+Key Railway env vars: `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `NODE_ENV=production`, `PORT=3002`, `ALLOWED_ORIGINS=https://kids-edu-game.vercel.app`, **`KID_JWT_SECRET`**
 
-Key Vercel env vars:
-- `VITE_API_URL=https://kids-edu-game-production.up.railway.app`
-- `VITE_SUPABASE_URL=https://efjbcsarporphqiuwuyw.supabase.co`
-- `VITE_SUPABASE_ANON_KEY` (anon key for efjbcsarporphqiuwuyw)
-
-## Adaptive Learning & Teacher Portal — Plan Approved (2026-03-13)
-
-Full plan at `.claude/plans/concurrent-munching-matsumoto.md`. Six phases:
-
-1. **Phase 1 — Schema Foundation:** Add `spellingScore`, `phonicsScore`, `difficultyLevel` to `LessonProgress`. New models: `ModuleDifficulty`, `ReviewSchedule`, `DailyChallenge`, `Classroom`. Add `role` to `User`. Fix scoring bug.
-2. **Phase 2 — Pretest + Adaptive Difficulty:** 6-question diagnostic quiz per module → places kid at easy/medium/hard. Difficulty config for all 5 game types. Real-time adjustment via rolling accuracy (last 5 games).
-3. **Phase 3 — Spaced Repetition:** Simplified SM-2 algorithm. Auto-schedules reviews. "Review" badge on KidHome with due-count.
-4. **Phase 4 — Mastery Gates:** 4 tiers (0/20/50/80 stars). Locked modules show lock icon + "Need X more stars".
-5. **Phase 5 — Daily Challenge + Boss Levels:** Daily special game (bonus 10 coins). 10-question end-of-module boss gauntlet (20 coins + badge).
-6. **Phase 6 — Teacher Portal:** Teacher accounts, classrooms with join codes, class analytics dashboard, per-student deep dive, assignments, CSV export.
-
-### Known bug (pre-existing)
-- `spellingScore` and `phonicsScore` NOT in Prisma schema → those game scores are silently lost. Fixed in Phase 1.
-- Unstaged WIP: `OddOneOutGame.jsx`, `PatternGame.jsx`, `logic.js` module, edits to `index.js` + `MiniGame.jsx`.
+Key Vercel env vars: `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
 
 ## Next Steps When We Return
 
-1. **Start Phase 1:** Run the Prisma schema migration (add new fields + models). Fix `progressSync.js` to handle all 5 scores.
-2. **Phase 2 (Adaptive Core):** Build `adaptiveDifficulty.js` service, pretest API + UI, update all 5 game components with difficulty props.
-3. **Verify coins fix:** If still broken, redeploy Railway with "Clear build cache".
-4. **Resend setup for digest:** Sign up at resend.com, verify domain, get API key, add `RESEND_API_KEY`, `DIGEST_FROM_EMAIL`, `CLIENT_URL` to Railway env vars.
+1. **Commit everything** — 36+ modified + 10 new files. All uncommitted.
+2. **Add `KID_JWT_SECRET` to Railway** — required before kid login works in production.
+3. **Deploy** — push server → Railway auto-deploys; push client → Vercel auto-deploys.
+4. **Fix coins bug** — investigate `CoinStore.jsx` (how coins fetched) + `progressSync.js` (how awarded). Check DB: `SELECT name, coins FROM kids_edu_game."KidProfile"`.
+5. **Test kid login end-to-end** — parent adds kid → sets PIN → kid logs in via name + PIN.
+6. **Test classroom flow** — teacher creates classroom → parent joins → leaderboard shows.
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `client/src/data/modules/*.js` | One file per module; defines lessons + games arrays |
-| `client/src/components/games/` | MatchingGame, QuizGame, TracingGame, SpellingGame, PhonicsGame |
-| `client/src/components/lesson/SpeakAlongButton.jsx` | Mic + TypeItButton iOS fallback |
-| `client/src/pages/CoinStore.jsx` | Premium avatar store |
-| `client/src/pages/KidHome.jsx` | Home — streak/coin badges, module grid, Sunny mascot |
-| `client/src/pages/MiniGame.jsx` | Routes between all 5 game types |
+| `client/src/components/OllieMascot.jsx` | CSS octopus mascot |
+| `client/src/components/OceanFish.jsx` | Shared fish+bubble overlay (Login, KidSelect) |
+| `client/src/components/layout/KidLayout.jsx` | Full ocean scene animation |
+| `client/src/components/ui/DotGrid.jsx` | Sea creature counting grid for Numbers module |
+| `client/src/lib/sound.js` | TTS with phonetic corrections + voice priority |
+| `client/src/pages/Login.jsx` | Role selector + 3 login flows + forgot password |
+| `client/src/pages/KidSelect.jsx` | "Who's playing today?" — parent picks kid |
+| `server/src/middleware/kidAuth.js` | Kid JWT sign/verify |
+| `server/src/routes/classrooms.js` | Classroom CRUD + leaderboard |
 | `server/src/services/progressSync.js` | Upserts progress + awards coins |
-| `server/src/services/weeklyDigest.js` | Weekly email via Resend |
-| `server/Dockerfile` | Node 24-slim — do not remove |
-| `server/railway.toml` | Runs `prisma migrate deploy` before server start |
+| `server/Dockerfile` | Node 24-slim — DO NOT REMOVE |
+| `server/railway.toml` | Runs `prisma migrate deploy` on deploy |

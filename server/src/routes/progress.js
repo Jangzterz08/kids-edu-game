@@ -3,22 +3,52 @@ const router = express.Router();
 const prisma = require('../lib/db');
 const { upsertProgress } = require('../services/progressSync');
 
-async function getParent(supabaseId) {
-  return prisma.user.findUnique({ where: { supabaseAuthId: supabaseId } });
+// Multi-role kid access: kid JWT (own data), parent (own kids), teacher (enrolled students)
+async function resolveKidAccess(req, kidId) {
+  // Kid JWT — can only access own data
+  if (req.user.type === 'kid') {
+    if (req.user.id !== kidId) return null;
+    return prisma.kidProfile.findUnique({ where: { id: kidId } });
+  }
+
+  // Supabase user — parent or teacher
+  const dbUser = await prisma.user.findUnique({ where: { supabaseAuthId: req.user.id } });
+  if (!dbUser) return null;
+
+  if (dbUser.role === 'parent') {
+    const kid = await prisma.kidProfile.findUnique({ where: { id: kidId } });
+    return kid?.parentId === dbUser.id ? kid : null;
+  }
+
+  if (dbUser.role === 'teacher') {
+    // Teacher can view kids enrolled in their classrooms
+    const enrollment = await prisma.classroomStudent.findFirst({
+      where: { kidId, classroom: { teacherId: dbUser.id } },
+    });
+    return enrollment ? prisma.kidProfile.findUnique({ where: { id: kidId } }) : null;
+  }
+
+  return null;
 }
 
-async function verifyKidOwnership(kidId, parentId) {
+// Write access — only parent who owns the kid, or the kid themselves
+async function resolveWriteAccess(req, kidId) {
+  if (req.user.type === 'kid') {
+    if (req.user.id !== kidId) return null;
+    return prisma.kidProfile.findUnique({ where: { id: kidId } });
+  }
+
+  const dbUser = await prisma.user.findUnique({ where: { supabaseAuthId: req.user.id } });
+  if (!dbUser) return null;
+
   const kid = await prisma.kidProfile.findUnique({ where: { id: kidId } });
-  if (!kid || kid.parentId !== parentId) return null;
-  return kid;
+  return kid?.parentId === dbUser.id ? kid : null;
 }
 
 // GET /api/progress/:kidId — aggregated progress per module
 router.get('/:kidId', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    const kid = await resolveKidAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     const modules = await prisma.module.findMany({
@@ -57,9 +87,7 @@ router.get('/:kidId', async (req, res, next) => {
 // GET /api/progress/:kidId/stats — summary, accuracy, weekly activity, recommended
 router.get('/:kidId/stats', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    const kid = await resolveKidAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     const allProgress = await prisma.lessonProgress.findMany({
@@ -134,9 +162,7 @@ router.get('/:kidId/stats', async (req, res, next) => {
 // GET /api/progress/:kidId/module/:moduleSlug
 router.get('/:kidId/module/:moduleSlug', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    const kid = await resolveKidAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     const module = await prisma.module.findUnique({ where: { slug: req.params.moduleSlug } });
@@ -159,12 +185,10 @@ router.get('/:kidId/module/:moduleSlug', async (req, res, next) => {
   }
 });
 
-// POST /api/progress/:kidId/lesson/:lessonSlug
+// POST /api/progress/:kidId/lesson/:lessonSlug — write access (parent or kid themselves)
 router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    const kid = await resolveWriteAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     // Resolve slug → UUID (client sends slug, DB stores UUID)
@@ -195,12 +219,10 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
   }
 });
 
-// POST /api/progress/:kidId/sync — bulk offline sync
+// POST /api/progress/:kidId/sync — bulk offline sync (write access)
 router.post('/:kidId/sync', async (req, res, next) => {
   try {
-    const parent = await getParent(req.user.id);
-    if (!parent) return res.status(404).json({ error: 'Parent not found' });
-    const kid = await verifyKidOwnership(req.params.kidId, parent.id);
+    const kid = await resolveWriteAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     const { entries } = req.body;

@@ -141,7 +141,16 @@ export default function SpeakAlongButton({ word }) {
       rec.interimResults = false;
       rec.maxAlternatives = 5;
 
+      // Safety timeout — force reset if stuck listening after 8s
+      const safetyTimer = setTimeout(() => {
+        if (!resultGot.current) {
+          try { rec.abort(); } catch (_) {}
+          setStatus('idle');
+        }
+      }, 8000);
+
       rec.onresult = (e) => {
+        clearTimeout(safetyTimer);
         resultGot.current = true;
         const transcripts = Array.from(e.results[0]).map(r =>
           r.transcript.toLowerCase().trim()
@@ -151,10 +160,10 @@ export default function SpeakAlongButton({ word }) {
         setTimeout(() => setStatus('idle'), 2200);
       };
 
-      rec.onerror = () => setStatus('idle');
-      rec.onend   = () => { if (!resultGot.current) setStatus('idle'); };
+      rec.onerror = () => { clearTimeout(safetyTimer); setStatus('idle'); };
+      rec.onend   = () => { clearTimeout(safetyTimer); if (!resultGot.current) setStatus('idle'); };
 
-      try { rec.start(); } catch (_) { setStatus('idle'); }
+      try { rec.start(); } catch (_) { clearTimeout(safetyTimer); setStatus('idle'); }
     }, 1300);
   }
 

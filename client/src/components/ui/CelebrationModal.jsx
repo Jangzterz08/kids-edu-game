@@ -3,7 +3,7 @@ import StarBadge from '../modules/StarBadge';
 import Mascot from '../mascot/Mascot';
 
 const CONFETTI_COLORS = ['#FF5252','#FFD600','#4CAF50','#2979FF','#E91E8C','#FF9800','#9C27B0'];
-const BURST_EMOJIS   = ['⭐','🌟','🎊','💫','🎉','✨','🏆','❤️'];
+const BURST_EMOJIS   = ['🐠','🐡','🐚','🌟','🦀','🐙','⭐','🎉'];
 
 export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, onContinue }) {
   const canvasRef = useRef(null);
@@ -115,7 +115,7 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
 
 const styles = {
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(7, 9, 29, 0.85)',
+    position: 'fixed', inset: 0, background: 'rgba(0,60,100,0.6)',
     backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999,
   },

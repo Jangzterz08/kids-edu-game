@@ -89,7 +89,7 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
       {/* Sparkle burst on correct */}
       {sparkle && (
         <div style={styles.sparkleWrap}>
-          {['✨','⭐','🌟','💫'].map((e, i) => (
+          {['🐠','🐡','🌟','🐚'].map((e, i) => (
             <span
               key={i}
               style={{
@@ -153,9 +153,9 @@ const styles = {
   container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', position: 'relative' },
   sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
   sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards', filter: 'drop-shadow(0 0 8px #FFF)' },
-  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: 'var(--text-secondary)', marginBottom: 8, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: '#fff', marginBottom: 8, fontWeight: 700, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
   questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
-  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
+  question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
   speakBtn: {
     background: 'none', border: 'none', cursor: 'pointer',
     fontSize: 32, lineHeight: 1, padding: 4, borderRadius: 8,

@@ -16,26 +16,24 @@ export default function ModuleCard({ moduleSlug, serverMeta, progressData, compl
 
   return (
     <div
-      className="glass-panel"
       style={styles.card}
       onClick={() => navigate(`/play/${mod.slug}`)}
-      onMouseEnter={(e) => { 
-        e.currentTarget.style.transform = 'translateY(-12px) scale(1.03)'; 
-        e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0, 229, 255, 0.3)'; 
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-6px)';
+        e.currentTarget.style.boxShadow = '0 20px 40px rgba(99,102,241,0.15)';
       }}
-      onMouseLeave={(e) => { 
-        e.currentTarget.style.transform = ''; 
-        e.currentTarget.style.boxShadow = ''; 
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = '';
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.07)';
       }}
     >
       <div style={styles.topRow}>
-        <div style={styles.emojiContainer}>
-          <div style={styles.glowBehind}></div>
+        <div style={{ ...styles.iconWrap, background: (mod.color || '#6366F1') + '22' }}>
           <span style={styles.emoji}>{mod.iconEmoji}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {isCompleted && <span style={styles.completedBadge}>✅</span>}
-          <ProgressRing percent={pct} size={52} stroke={5} color="rgba(255,255,255,0.9)" />
+          <ProgressRing percent={pct} size={48} stroke={5} color="#6366F1" />
         </div>
       </div>
       <div style={styles.title}>{mod.title}</div>
@@ -47,26 +45,28 @@ export default function ModuleCard({ moduleSlug, serverMeta, progressData, compl
 
 const styles = {
   card: {
+    background: '#FFFFFF',
+    border: '1.5px solid #F1F5F9',
+    borderRadius: 20,
     padding: 'var(--space-lg)',
-    cursor: 'pointer', color: '#fff',
-    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    cursor: 'pointer',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.07)',
+    transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s',
     minHeight: 180,
     display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
     position: 'relative', overflow: 'hidden',
   },
-  topRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
-  emojiContainer: { position: 'relative' },
-  glowBehind: {
-    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-    width: 60, height: 60, background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
-    filter: 'blur(8px)', borderRadius: '50%',
+  topRow:  { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
+  iconWrap: {
+    width: 64, height: 64, borderRadius: 16,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
-  emoji: { 
-    fontSize: 56, position: 'relative', zIndex: 2, 
-    filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.5))',
-    display: 'inline-block', animation: 'float-organic 5s infinite ease-in-out'
+  emoji: {
+    fontSize: 40,
+    display: 'inline-block',
+    animation: 'float-soft 3s infinite ease-in-out',
   },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, marginTop: 12, textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
-  sub: { fontSize: 'var(--font-sm)', color: 'var(--text-secondary)', marginBottom: 8, fontWeight: 700 },
-  completedBadge: { fontSize: 24, filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.5))' },
+  title: { fontSize: 'var(--font-base)', fontWeight: 900, marginTop: 8, color: '#1E293B' },
+  sub:   { fontSize: 'var(--font-xs)', color: '#94A3B8', marginBottom: 8, fontWeight: 700 },
+  completedBadge: { fontSize: 22 },
 };

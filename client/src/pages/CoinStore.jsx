@@ -99,11 +99,11 @@ export default function CoinStore() {
           const isFlash   = flash?.id === item.id;
           const isBuying  = buying === item.id;
 
-          let cardBg = 'rgba(255,255,255,0.1)';
-          let border = '1px solid rgba(255,255,255,0.2)';
-          if (isOwned) { cardBg = 'rgba(76, 175, 80, 0.2)'; border = '1px solid rgba(76, 175, 80, 0.5)'; }
-          if (isFlash && flash.success) cardBg = 'rgba(255, 234, 0, 0.3)';
-          if (isFlash && !flash.success) cardBg = 'rgba(255, 23, 68, 0.3)';
+          let cardBg = '#FFFFFF';
+          let border = '1.5px solid #E2E8F0';
+          if (isOwned) { cardBg = '#F0FDF4'; border = '1.5px solid #86EFAC'; }
+          if (isFlash && flash.success)  { cardBg = '#FEFCE8'; border = '1.5px solid #FDE047'; }
+          if (isFlash && !flash.success) { cardBg = '#FFF1F2'; border = '1.5px solid #FECDD3'; }
 
           return (
             <div key={item.id} className="glass-panel" style={{ ...styles.card, background: cardBg, border }}>
@@ -146,48 +146,47 @@ export default function CoinStore() {
 }
 
 const styles = {
-  page: { padding: 'var(--space-xl)', maxWidth: 700, margin: '0 auto' },
+  page: { padding: 'var(--space-xl)', maxWidth: 720, margin: '0 auto' },
   header: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8, flexWrap: 'wrap' },
   backBtn: {
-    background: 'var(--bg-surface-alt)', border: 'none', borderRadius: 12,
+    background: '#F1F5F9', border: 'none', borderRadius: 12,
     padding: '8px 16px', fontWeight: 700, fontSize: 14, cursor: 'pointer',
-    color: 'var(--text-secondary)',
+    color: '#64748B', fontFamily: 'Nunito, sans-serif',
   },
   titleRow: { display: 'flex', alignItems: 'center', gap: 8, flex: 1 },
   titleEmoji: { fontSize: 32 },
-  title: { fontSize: 'var(--font-xl)', fontWeight: 900, margin: 0 },
+  title: { fontSize: 'var(--font-xl)', fontWeight: 900, margin: 0, color: '#1E293B' },
   coinPill: {
     display: 'flex', alignItems: 'center', gap: 6,
-    background: 'linear-gradient(135deg, #FFF9C4, #FFD600)',
-    border: '2px solid #F9A825', borderRadius: 20, padding: '8px 16px',
-    fontSize: 18, fontWeight: 900, color: '#5D4037',
+    background: '#FFFBEB', border: '2px solid #FDE68A',
+    borderRadius: 20, padding: '8px 18px',
+    fontSize: 18, fontWeight: 900, color: '#92400E',
   },
   coinNum: { fontSize: 22, fontWeight: 900 },
-  sub: { color: 'var(--text-secondary)', fontSize: 15, marginBottom: 24 },
-  grid: {
-    display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 16,
-  },
+  sub: { color: '#64748B', fontSize: 15, fontWeight: 600, marginBottom: 24 },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(148px, 1fr))', gap: 16 },
   card: {
-    borderRadius: 20, padding: '20px 12px', textAlign: 'center',
-    boxShadow: 'var(--shadow-card)', display: 'flex', flexDirection: 'column',
-    alignItems: 'center', gap: 10, transition: 'background 0.3s',
+    background: '#FFFFFF', borderRadius: 20, padding: '20px 12px', textAlign: 'center',
+    border: '1.5px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+    transition: 'all 0.2s',
   },
   emojiWrap: { position: 'relative', display: 'inline-flex' },
   itemEmoji: { fontSize: 56 },
   ownedBadge: {
     position: 'absolute', top: -4, right: -8,
-    background: '#4CAF50', color: '#fff', borderRadius: '50%',
+    background: '#22C55E', color: '#fff', borderRadius: '50%',
     width: 22, height: 22, display: 'flex', alignItems: 'center',
     justifyContent: 'center', fontWeight: 900, fontSize: 13,
   },
-  itemLabel: { fontSize: 15, fontWeight: 800, color: 'var(--text-primary)' },
+  itemLabel: { fontSize: 15, fontWeight: 800, color: '#1E293B' },
   btn: {
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-    border: 'none', borderRadius: 14, padding: '8px 16px',
-    fontWeight: 800, fontSize: 15, cursor: 'pointer', fontFamily: 'inherit',
+    border: 'none', borderRadius: 14, padding: '10px 16px',
+    fontWeight: 800, fontSize: 15, cursor: 'pointer', fontFamily: 'Nunito, sans-serif',
     width: '100%',
   },
-  btnBuy: { background: 'linear-gradient(135deg, #FFD600, #FF9800)', color: '#5D4037' },
-  btnLocked: { background: 'var(--bg-surface-alt)', color: 'var(--text-muted)', cursor: 'not-allowed', opacity: 0.6 },
-  btnUse: { background: 'linear-gradient(135deg, #4CAF50, #81C784)', color: '#fff' },
+  btnBuy:    { background: 'linear-gradient(135deg, #F59E0B, #F97316)', color: '#fff' },
+  btnLocked: { background: '#F1F5F9', color: '#94A3B8', cursor: 'not-allowed', opacity: 0.6 },
+  btnUse:    { background: 'linear-gradient(135deg, #22C55E, #16A34A)', color: '#fff' },
 };

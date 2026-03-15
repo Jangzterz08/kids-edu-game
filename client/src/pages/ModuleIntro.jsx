@@ -47,21 +47,26 @@ const styles = {
   bg: { minHeight: '100vh', padding: 'var(--space-2xl) var(--space-xl)' },
   card: {
     padding: '48px 32px', textAlign: 'center', maxWidth: 440, width: '100%',
+    background: 'rgba(255,255,255,0.45)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '2px solid rgba(255,255,255,0.7)',
+    boxShadow: '0 20px 60px rgba(0,80,120,0.2)',
     animation: 'bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   },
-  emoji: { 
-    fontSize: 100, marginBottom: 20, 
-    filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))',
-    animation: 'float-organic 5s infinite ease-in-out'
+  emoji: {
+    fontSize: 100, marginBottom: 20,
+    filter: 'drop-shadow(0 4px 18px rgba(59,191,232,0.35))',
+    animation: 'float-organic 5s infinite ease-in-out',
+    display: 'block',
   },
-  title: { fontSize: 'var(--font-2xl)', fontWeight: 900, marginBottom: 16, color: '#fff', textShadow: '0 4px 12px rgba(0,0,0,0.6)' },
-  sub: { fontSize: 'var(--font-lg)', color: 'var(--text-secondary)', marginBottom: 28, fontWeight: 800, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
-  pills: { display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 36, flexWrap: 'wrap' },
+  title: { fontSize: 'var(--font-2xl)', fontWeight: 700, marginBottom: 12, color: '#0A4A6E', textShadow: '0 1px 4px rgba(255,255,255,0.5)' },
+  sub:   { fontSize: 'var(--font-base)', color: '#1A7A9A', marginBottom: 28, fontWeight: 500 },
+  pills: { display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 36, flexWrap: 'wrap' },
   pill: {
-    background: 'rgba(255,255,255,0.15)', padding: '8px 18px', borderRadius: 24,
-    fontSize: 'var(--font-sm)', fontWeight: 800, color: '#fff',
-    border: '1px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(8px)',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.2)', textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+    background: 'rgba(59,191,232,0.15)', padding: '8px 18px', borderRadius: 24,
+    fontSize: 'var(--font-sm)', fontWeight: 700, color: '#0A6B8A',
+    border: '1.5px solid rgba(59,191,232,0.4)',
   },
   btn: { width: '100%', display: 'flex', justifyContent: 'center' },
 };

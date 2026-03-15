@@ -13,6 +13,7 @@ function getAudio(src) {
   return cache[src];
 }
 
+
 export function playSound(src) {
   if (muted) return;
   try {
@@ -22,22 +23,19 @@ export function playSound(src) {
   } catch (_) {}
 }
 
+
 // Pick the most child-friendly voice available
 function getKidsVoice() {
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return null;
 
-  // Prefer friendly-sounding female English voices
-  const preferred = ['Samantha', 'Karen', 'Moira', 'Tessa', 'Fiona', 'Victoria', 'Allison', 'Ava', 'Susan'];
+  const enVoices = voices.filter(v => v.lang.startsWith('en'));
+  const preferred = ['Google US English', 'Samantha', 'Karen', 'Moira', 'Tessa', 'Shelley', 'Sandy', 'Eddy', 'Reed', 'Daniel', 'Fred'];
   for (const name of preferred) {
-    const v = voices.find(v => v.name.includes(name) && v.lang.startsWith('en'));
+    const v = enVoices.find(v => v.name.includes(name));
     if (v) return v;
   }
-  // Fallback: any English female voice
-  const female = voices.find(v => v.lang.startsWith('en') && /female/i.test(v.name));
-  if (female) return female;
-  // Fallback: any English voice
-  return voices.find(v => v.lang.startsWith('en')) || voices[0];
+  return enVoices[0] || voices[0];
 }
 
 function toAudioFilename(text) {
@@ -54,10 +52,11 @@ export function speakWord(word) {
       const utter = new SpeechSynthesisUtterance(word);
       const voice = getKidsVoice();
       if (voice) utter.voice = voice;
-      utter.rate  = 0.78;
-      utter.pitch = 1.5;
+      utter.rate  = 1.1;
+      utter.pitch = 1.1;
       utter.volume = 1;
-      window.speechSynthesis.speak(utter);
+      // Chrome bug: must defer speak() after cancel()
+      setTimeout(() => window.speechSynthesis.speak(utter), 50);
     }
     if (window.speechSynthesis.getVoices().length > 0) speak();
     else window.speechSynthesis.onvoiceschanged = () => speak();
@@ -65,15 +64,23 @@ export function speakWord(word) {
 
   const src = toAudioFilename(word);
 
-  // If the audio has already errored (e.g. 404 cached), skip straight to TTS
-  if (cache[src]?.error) {
+  // Already know this file doesn't exist — go straight to TTS
+  if (cache[src]?.failed) {
     tryTTS();
     return;
   }
 
   const audio = getAudio(src);
-  // onerror fires if MP3 doesn't exist → fall back to TTS
-  audio.onerror = tryTTS;
+
+  let ttsTriggered = false;
+  const fallback = () => {
+    if (ttsTriggered) return;
+    ttsTriggered = true;
+    cache[src].failed = true;
+    tryTTS();
+  };
+
+  audio.onerror = fallback;
   audio.currentTime = 0;
-  audio.play().catch(tryTTS);
+  audio.play().catch(fallback);
 }

@@ -5,7 +5,7 @@ const AVATAR_EMOJIS = {
   butterfly: '🦋', dragon: '🐉', dino: '🦖', unicorn: '🦄',
 };
 
-export default function KidCard({ kid, onClick, active, onDelete }) {
+export default function KidCard({ kid, onClick, active, onDelete, onSetPin }) {
   return (
     <div
       style={{ ...styles.card, ...(active ? styles.active : {}) }}
@@ -14,6 +14,14 @@ export default function KidCard({ kid, onClick, active, onDelete }) {
       <div style={styles.avatar}>{AVATAR_EMOJIS[kid.avatarId] || '🐻'}</div>
       <div style={styles.name}>{kid.name}</div>
       <div style={styles.stars}>⭐ {kid.totalStars} stars</div>
+      {kid.pin ? (
+        <div style={styles.pinBadge}>🔑 PIN set</div>
+      ) : onSetPin ? (
+        <button
+          style={styles.pinBtn}
+          onClick={e => { e.stopPropagation(); onSetPin(kid); }}
+        >🔑 Set PIN</button>
+      ) : null}
       {onDelete && (
         <button
           style={styles.deleteBtn}
@@ -27,18 +35,38 @@ export default function KidCard({ kid, onClick, active, onDelete }) {
 
 const styles = {
   card: {
-    background: 'var(--bg-surface)', borderRadius: 24, padding: 24,
+    background: 'rgba(255,255,255,0.45)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    borderRadius: 28, padding: 24,
     textAlign: 'center', cursor: 'pointer', position: 'relative',
-    border: '3px solid transparent', transition: 'border-color 0.15s, transform 0.15s',
-    boxShadow: 'var(--shadow-card)',
+    border: '2px solid rgba(255,255,255,0.7)',
+    transition: 'transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.2s',
+    boxShadow: '0 8px 24px rgba(0,80,120,0.18)',
+    fontFamily: 'Fredoka, sans-serif',
   },
-  active: { borderColor: 'var(--accent-blue)', transform: 'scale(1.04)' },
+  active: {
+    borderColor: '#3BBFE8',
+    transform: 'scale(1.06) translateY(-4px)',
+    boxShadow: '0 16px 40px rgba(59,191,232,0.4)',
+  },
   avatar: { fontSize: 64, marginBottom: 8 },
-  name: { fontSize: 'var(--font-md)', fontWeight: 800, marginBottom: 4 },
-  stars: { fontSize: 'var(--font-sm)', color: 'var(--star-gold)', fontWeight: 700 },
+  name:   { fontSize: 'var(--font-md)', fontWeight: 700, marginBottom: 4, color: '#0A4A6E' },
+  stars:  { fontSize: 'var(--font-sm)', color: '#E8A030', fontWeight: 700 },
+  pinBadge: {
+    fontSize: 'var(--font-xs)', fontWeight: 700, color: '#2E9E40', marginTop: 4,
+  },
+  pinBtn: {
+    marginTop: 6,
+    background: 'rgba(59,191,232,0.15)',
+    border: '1.5px solid rgba(59,191,232,0.5)',
+    color: '#0A6B8A', padding: '4px 12px', borderRadius: 10,
+    fontWeight: 700, fontSize: 'var(--font-xs)', cursor: 'pointer',
+    fontFamily: 'Fredoka, sans-serif',
+  },
   deleteBtn: {
     position: 'absolute', top: 12, right: 12,
-    background: 'var(--error)', color: '#fff', border: 'none',
+    background: 'rgba(200,112,96,0.15)', color: '#C87060', border: 'none',
     width: 28, height: 28, borderRadius: '50%', fontSize: 14,
     cursor: 'pointer', fontWeight: 700,
   },

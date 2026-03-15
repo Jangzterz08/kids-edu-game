@@ -11,7 +11,7 @@ function shuffle(arr) {
 }
 
 const ROUNDS = 3;
-const AUTO_ADVANCE_THRESHOLD = 65;
+const AUTO_ADVANCE_THRESHOLD = 45;
 
 export default function TracingGame({ lessons, onComplete }) {
   const [queue]   = useState(() => shuffle(lessons).slice(0, Math.min(ROUNDS, lessons.length)));
@@ -121,7 +121,7 @@ export default function TracingGame({ lessons, onComplete }) {
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 2] > 150 && data[i] < 100) blue++;
     }
-    const pct = Math.min(100, Math.round((blue / (canvas.width * canvas.height * 0.15)) * 100));
+    const pct = Math.min(100, Math.round((blue / (canvas.width * canvas.height * 0.08)) * 100));
     setCoverage(pct);
     if (pct >= AUTO_ADVANCE_THRESHOLD && !done) {
       setDone(true);

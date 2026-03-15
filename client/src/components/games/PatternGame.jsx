@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { speakWord } from '../../lib/sound';
 
 export default function PatternGame({ lessons, onComplete }) {
@@ -11,6 +11,11 @@ export default function PatternGame({ lessons, onComplete }) {
   const [solved, setSolved]           = useState(false);
   const [locked, setLocked]           = useState(false);
   const [wrongIndexes, setWrongIndexes] = useState([]);
+
+  useEffect(() => {
+    const t = setTimeout(() => speakWord('What comes next?'), 350);
+    return () => clearTimeout(t);
+  }, [currentIndex]);
 
   if (patternLessons.length === 0) {
     return <div>No pattern data available.</div>;
@@ -25,7 +30,7 @@ export default function PatternGame({ lessons, onComplete }) {
     if (opt.correct) {
       setSolved(true);
       setLocked(true);
-      speakWord('Correct!'); // Or a specific positive chime
+      speakWord('Great job!');
       
       setTimeout(() => {
         if (currentIndex < patternLessons.length - 1) {
@@ -43,13 +48,16 @@ export default function PatternGame({ lessons, onComplete }) {
     } else {
       setMistakes(m => m + 1);
       setWrongIndexes(prev => [...prev, idx]);
-      speakWord('Try again');
+      speakWord('Oops! Try again!');
     }
   }
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>What comes next? 🤔</h2>
+      <div style={styles.titleRow}>
+        <h2 style={styles.title}>What comes next? 🌊</h2>
+        <button style={styles.speakerBtn} onClick={() => speakWord('What comes next?')} aria-label="Repeat question">🔊</button>
+      </div>
       
       {/* Pattern Display */}
       <div style={styles.patternBox}>
@@ -108,48 +116,52 @@ export default function PatternGame({ lessons, onComplete }) {
 
 const styles = {
   container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 32, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
-  
+  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
+  speakerBtn: { background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.5)', borderRadius: 12, fontSize: 22, cursor: 'pointer', padding: '4px 8px', flexShrink: 0 },
+
   patternBox: {
     display: 'flex', gap: 16, padding: '24px 32px',
     background: 'var(--glass-bg)', borderRadius: 24,
-    border: '2px solid rgba(255,255,255,0.4)',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+    border: '2px solid var(--glass-border)',
+    boxShadow: 'var(--glass-shadow)',
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
     marginBottom: 40,
     flexWrap: 'wrap', justifyContent: 'center'
   },
   sequenceItem: {
-    width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 48, filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.4))'
+    width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: 56,
   },
   questionMarkBox: {
-    background: 'rgba(0,0,0,0.2)', borderRadius: 16,
-    border: '3px dashed rgba(255,255,255,0.5)',
-    color: 'rgba(255,255,255,0.8)', fontSize: 40
+    background: 'rgba(59,191,232,0.15)', borderRadius: 20,
+    border: '3px dashed rgba(255,255,255,0.7)',
+    color: '#0A4A6E', fontSize: 44,
   },
   solvedBox: {
     background: 'var(--btn-green-base)', border: 'none',
-    boxShadow: '0 0 20px var(--btn-green-shade)'
+    boxShadow: '0 0 20px rgba(16,185,129,0.5)'
   },
-  
-  prompt: { fontSize: 'var(--font-base)', fontWeight: 800, color: 'var(--text-secondary)', marginBottom: 16, textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+
+  prompt: { fontSize: 'var(--font-base)', fontWeight: 700, color: '#fff', marginBottom: 16, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
   optionsBox: { display: 'flex', gap: 20, justifyContent: 'center' },
   optionButton: {
-    width: 80, height: 80, borderRadius: 24, border: 'none',
+    width: 100, height: 100, borderRadius: 28, border: 'none',
     background: 'var(--btn-blue-base)', cursor: 'pointer',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48,
-    boxShadow: '0 6px 0 var(--btn-blue-shade), 0 10px 20px rgba(0, 0, 0, 0.4)',
-    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 60,
+    boxShadow: '0 6px 0 var(--btn-blue-shade), 0 10px 20px rgba(0,80,120,0.25)',
+    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   },
-  optionWrong: { 
-    background: '#888', boxShadow: '0 4px 0 #555', transform: 'translateY(2px)', opacity: 0.5, cursor: 'not-allowed'
+  optionWrong: {
+    background: '#aaa', boxShadow: '0 4px 0 #888', transform: 'translateY(2px)', opacity: 0.5, cursor: 'not-allowed'
   },
   optionCorrect: {
-    background: 'var(--btn-green-base)', boxShadow: '0 0 30px var(--btn-green-shade)', transform: 'translateY(4px) scale(1.1)'
+    background: 'var(--btn-green-base)', boxShadow: '0 0 24px rgba(16,185,129,0.5)', transform: 'translateY(4px) scale(1.1)'
   },
-  
+
   progress: {
-    marginTop: 40, fontSize: 16, fontWeight: 800, color: 'var(--text-muted)',
-    background: 'rgba(0,0,0,0.2)', padding: '6px 16px', borderRadius: 20
+    marginTop: 40, fontSize: 16, fontWeight: 700, color: '#fff',
+    background: 'rgba(255,255,255,0.25)', padding: '6px 16px', borderRadius: 20,
+    border: '1px solid rgba(255,255,255,0.4)',
   }
 };

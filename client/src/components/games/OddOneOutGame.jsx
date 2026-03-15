@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { speakWord } from '../../lib/sound';
 
 export default function OddOneOutGame({ lessons, onComplete }) {
@@ -11,11 +11,17 @@ export default function OddOneOutGame({ lessons, onComplete }) {
   const [wrongIndexes, setWrongIndexes] = useState([]);
   const [solvedIndex, setSolvedIndex] = useState(null);
 
+  const currentLevel = oddOutLessons[currentIndex];
+
+  useEffect(() => {
+    const question = currentLevel?.question || 'Which one is different?';
+    const t = setTimeout(() => speakWord(question), 350);
+    return () => clearTimeout(t);
+  }, [currentIndex]);
+
   if (oddOutLessons.length === 0) {
     return <div>No odd-one-out data available.</div>;
   }
-
-  const currentLevel = oddOutLessons[currentIndex];
 
   function handleItemClick(opt, idx) {
     if (locked) return;
@@ -48,7 +54,10 @@ export default function OddOneOutGame({ lessons, onComplete }) {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Which one is different? 🕵️‍♂️</h2>
+      <div style={styles.titleRow}>
+        <h2 style={styles.title}>{currentLevel.question || 'Which one is different? 🦀'}</h2>
+        <button style={styles.speakerBtn} onClick={() => speakWord(currentLevel.question || 'Which one is different?')} aria-label="Repeat question">🔊</button>
+      </div>
       
       <div style={styles.grid}>
         {currentLevel.items.map((opt, idx) => {
@@ -85,37 +94,41 @@ export default function OddOneOutGame({ lessons, onComplete }) {
 
 const styles = {
   container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 40, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' },
-  
+  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
+  speakerBtn: { background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.5)', borderRadius: 12, fontSize: 22, cursor: 'pointer', padding: '4px 8px', flexShrink: 0 },
+
   grid: {
     display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24,
     padding: '32px',
     background: 'var(--glass-bg)', borderRadius: 32,
-    border: '2px solid rgba(255,255,255,0.4)',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+    border: '2px solid var(--glass-border)',
+    boxShadow: 'var(--glass-shadow)',
+    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
     marginBottom: 40
   },
-  
+
   itemCard: {
-    width: 120, height: 120, borderRadius: 24, border: 'none',
+    width: 130, height: 130, borderRadius: 28, border: 'none',
     background: 'var(--btn-blue-base)', cursor: 'pointer',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 64,
-    boxShadow: '0 8px 0 var(--btn-blue-shade), 0 10px 20px rgba(0, 0, 0, 0.4)',
-    transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72,
+    boxShadow: '0 8px 0 var(--btn-blue-shade), 0 10px 20px rgba(0,80,120,0.25)',
+    transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   },
-  itemWrong: { 
-    background: '#888', boxShadow: '0 4px 0 #555', transform: 'translateY(4px)', opacity: 0.5, cursor: 'not-allowed'
+  itemWrong: {
+    background: '#aaa', boxShadow: '0 4px 0 #888', transform: 'translateY(4px)', opacity: 0.5, cursor: 'not-allowed'
   },
   itemCorrect: {
-    background: 'var(--btn-green-base)', boxShadow: '0 0 40px var(--btn-green-shade)', transform: 'scale(1.15) translateY(-8px)',
+    background: 'var(--btn-green-base)', boxShadow: '0 0 32px rgba(16,185,129,0.5)', transform: 'scale(1.15) translateY(-8px)',
     zIndex: 10
   },
   itemFade: {
     opacity: 0.3, transform: 'scale(0.9)'
   },
-  
+
   progress: {
-    marginTop: 20, fontSize: 16, fontWeight: 800, color: 'var(--text-muted)',
-    background: 'rgba(0,0,0,0.2)', padding: '6px 16px', borderRadius: 20
+    marginTop: 20, fontSize: 16, fontWeight: 700, color: '#fff',
+    background: 'rgba(255,255,255,0.25)', padding: '6px 16px', borderRadius: 20,
+    border: '1px solid rgba(255,255,255,0.4)',
   }
 };

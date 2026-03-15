@@ -27,6 +27,7 @@ model KidProfile {
   name        String
   avatarId    String   @default("bear")
   ageGroup    String?
+  pin         String?  // bcrypt hash of 4-6 digit PIN for kid direct login
   totalStars       Int       @default(0)
   currentStreak    Int       @default(0)
   lastActivityDate DateTime?

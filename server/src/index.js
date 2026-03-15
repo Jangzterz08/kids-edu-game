@@ -9,7 +9,7 @@ const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-  : ['http://localhost:5173', 'http://localhost:4173'];
+  : ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:3001', 'http://localhost:3000'];
 
 app.use(cors({
   origin: (origin, cb) => {
@@ -29,12 +29,18 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Public kid auth endpoints (no requireAuth)
+const { kidLookupHandler, kidLoginHandler } = require('./routes/auth');
+app.post('/api/auth/kid-lookup', kidLookupHandler);
+app.post('/api/auth/kid-login', kidLoginHandler);
+
 // Protected routes
 app.use('/api/auth', requireAuth, require('./routes/auth'));
 app.use('/api/kids', requireAuth, require('./routes/kids'));
 app.use('/api/modules', requireAuth, require('./routes/modules'));
 app.use('/api/progress', requireAuth, require('./routes/progress'));
 app.use('/api/achievements', requireAuth, require('./routes/achievements'));
+app.use('/api/classrooms',   requireAuth, require('./routes/classrooms'));
 
 // Error handler
 app.use((err, req, res, next) => {
