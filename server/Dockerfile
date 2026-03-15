@@ -11,6 +11,7 @@ RUN npm ci --omit=dev
 
 # Copy prisma schema and generate client (always fresh)
 COPY prisma ./prisma
+COPY prisma.config.ts ./
 RUN npx prisma generate
 
 # Copy source
