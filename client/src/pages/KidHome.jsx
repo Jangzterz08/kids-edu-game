@@ -84,19 +84,19 @@ export default function KidHome() {
   const overallPct = Math.round((earnedModuleSlugs.size / MODULE_REGISTRY.length) * 100);
 
   return (
-    <div style={s.wrapper}>
+    <div style={s.wrapper} className="kidhome-wrapper">
 
       {/* ── LEFT SIDEBAR ── */}
-      <aside style={s.sidebar}>
-        <div style={s.kidProfile}>
+      <aside style={s.sidebar} className="kidhome-sidebar">
+        <div style={s.kidProfile} className="kidhome-sidebar-profile">
           <div style={s.kidAvatar}>{AVATAR_EMOJIS[activeKid?.avatarId] || '🐻'}</div>
           <div style={s.kidName}>{activeKid?.name}</div>
           <div style={s.kidStars}>⭐ {activeKid?.totalStars || 0} stars</div>
         </div>
 
-        <div style={s.divider} />
+        <div style={s.divider} className="kidhome-sidebar-divider" />
 
-        <nav style={s.categoryNav}>
+        <nav style={s.categoryNav} className="kidhome-sidebar-nav">
           {CATEGORIES.map(cat => {
             const count = cat.slugs ? cat.slugs.length : MODULE_REGISTRY.length;
             const isActive = activeCategory === cat.id;
@@ -104,11 +104,12 @@ export default function KidHome() {
               <button
                 key={cat.id}
                 style={{ ...s.catItem, ...(isActive ? s.catItemActive : {}) }}
+                className={`kidhome-cat-item cat-item-hover`}
                 onClick={() => setActiveCategory(cat.id)}
               >
                 <span style={s.catEmoji}>{cat.emoji}</span>
-                <span style={s.catLabel}>{cat.label}</span>
-                <span style={{ ...s.catCount, ...(isActive ? s.catCountActive : {}) }}>
+                <span style={s.catLabel} className="kidhome-cat-label">{cat.label}</span>
+                <span style={{ ...s.catCount, ...(isActive ? s.catCountActive : {}) }} className="kidhome-cat-count">
                   {count}
                 </span>
               </button>
@@ -117,13 +118,13 @@ export default function KidHome() {
         </nav>
 
         {/* Ollie mascot at bottom of sidebar */}
-        <div style={s.mascotWrap}>
+        <div style={s.mascotWrap} className="kidhome-mascot">
           <OllieMascot size={0.75} message="Let's go! 🌊" />
         </div>
       </aside>
 
       {/* ── MAIN CONTENT ── */}
-      <main style={s.main}>
+      <main style={s.main} className="kidhome-main">
         <div style={s.mainHeader}>
           <h1 style={s.pageTitle}>{activeCat?.emoji} {activeCat?.label}</h1>
           <p style={s.pageSubtitle}>
@@ -131,7 +132,7 @@ export default function KidHome() {
           </p>
         </div>
 
-        <div style={s.moduleGrid}>
+        <div style={s.moduleGrid} className="kidhome-module-grid">
           {visibleModules.map(mod => {
             const prog  = progBySlug[mod.slug];
             const total = mod.lessons.length;
@@ -144,6 +145,7 @@ export default function KidHome() {
               <div
                 key={mod.slug}
                 style={{ ...s.moduleCard, background: cardGradient(mod.color) }}
+                className="module-card-hover"
                 onClick={() => navigate(`/play/${mod.slug}`)}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
@@ -169,6 +171,7 @@ export default function KidHome() {
 
                 <button
                   style={s.cardBtn}
+                  className="card-btn-hover"
                   onClick={e => { e.stopPropagation(); navigate(`/play/${mod.slug}`); }}
                 >
                   {btnLabel}
@@ -180,10 +183,10 @@ export default function KidHome() {
       </main>
 
       {/* ── RIGHT PANEL ── */}
-      <aside style={s.rightPanel}>
+      <aside style={s.rightPanel} className="kidhome-right-panel">
 
         {/* Streak */}
-        <div style={s.widget}>
+        <div style={s.widget} className="kidhome-widget">
           <div style={s.widgetTitle}>🔥 Streak</div>
           <div style={s.streakRow}>
             <span style={s.streakNum}>{streak}</span>
@@ -197,12 +200,12 @@ export default function KidHome() {
         </div>
 
         {/* Coins */}
-        <div style={s.widget}>
+        <div style={s.widget} className="kidhome-widget">
           <div style={s.widgetTitle}>🪙 Coins</div>
           <div style={s.coinRow}>
             <span style={s.coinNum}>{coins}</span>
           </div>
-          <button style={s.storeBtn} onClick={() => navigate('/play/store')}>
+          <button style={s.storeBtn} className="store-btn-hover" onClick={() => navigate('/play/store')}>
             Visit Store →
           </button>
         </div>
@@ -215,7 +218,7 @@ export default function KidHome() {
         )}
 
         {/* Overall Progress */}
-        <div style={s.widget}>
+        <div style={s.widget} className="kidhome-widget">
           <div style={s.widgetTitle}>📊 Overall</div>
           <div style={s.progressRow}>
             <span style={s.progressBig}>{earnedModuleSlugs.size}</span>
@@ -229,7 +232,7 @@ export default function KidHome() {
 
         {/* Badges */}
         {completedModules.length > 0 && (
-          <div style={s.widget}>
+          <div style={s.widget} className="kidhome-widget">
             <div style={s.widgetTitle}>🏅 Badges</div>
             <div style={s.badgesGrid}>
               {completedModules.map(m => (
