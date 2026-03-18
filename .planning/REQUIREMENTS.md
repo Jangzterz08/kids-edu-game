@@ -93,13 +93,43 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-01–SEC-06 | Phase 1 | Pending |
-| POL-01–POL-09 | Phase 2 | Pending |
-| PERF-01–PERF-04 | Phase 3 | Pending |
-| MON-01–MON-06 | Phase 4 | Pending |
-| SCH-01–SCH-06 | Phase 5 | Pending |
-| ADL-01–ADL-03 | Phase 6 | Pending |
-| OBS-01–OBS-03 | Phase 7 | Pending |
+| SEC-01 | Phase 1 — Security Hardening | Pending |
+| SEC-02 | Phase 1 — Security Hardening | Pending |
+| SEC-03 | Phase 1 — Security Hardening | Pending |
+| SEC-04 | Phase 1 — Security Hardening | Pending |
+| SEC-05 | Phase 1 — Security Hardening | Pending |
+| SEC-06 | Phase 1 — Security Hardening | Pending |
+| POL-01 | Phase 2 — Polish & UX | Pending |
+| POL-02 | Phase 2 — Polish & UX | Pending |
+| POL-03 | Phase 2 — Polish & UX | Pending |
+| POL-04 | Phase 2 — Polish & UX | Pending |
+| POL-05 | Phase 2 — Polish & UX | Pending |
+| POL-06 | Phase 2 — Polish & UX | Pending |
+| POL-07 | Phase 2 — Polish & UX | Pending |
+| POL-08 | Phase 2 — Polish & UX | Pending |
+| POL-09 | Phase 2 — Polish & UX | Pending |
+| PERF-01 | Phase 3 — Performance | Pending |
+| PERF-02 | Phase 3 — Performance | Pending |
+| PERF-03 | Phase 3 — Performance | Pending |
+| PERF-04 | Phase 3 — Performance | Pending |
+| MON-01 | Phase 4 — Parent Subscriptions | Pending |
+| MON-02 | Phase 4 — Parent Subscriptions | Pending |
+| MON-03 | Phase 4 — Parent Subscriptions | Pending |
+| MON-04 | Phase 4 — Parent Subscriptions | Pending |
+| MON-05 | Phase 4 — Parent Subscriptions | Pending |
+| MON-06 | Phase 4 — Parent Subscriptions | Pending |
+| SCH-01 | Phase 5 — School Licensing | Pending |
+| SCH-02 | Phase 5 — School Licensing | Pending |
+| SCH-03 | Phase 5 — School Licensing | Pending |
+| SCH-04 | Phase 5 — School Licensing | Pending |
+| SCH-05 | Phase 5 — School Licensing | Pending |
+| SCH-06 | Phase 5 — School Licensing | Pending |
+| ADL-01 | Phase 6 — Adaptive Learning | Pending |
+| ADL-02 | Phase 6 — Adaptive Learning | Pending |
+| ADL-03 | Phase 6 — Adaptive Learning | Pending |
+| OBS-01 | Phase 7 — Analytics & Observability | Pending |
+| OBS-02 | Phase 7 — Analytics & Observability | Pending |
+| OBS-03 | Phase 7 — Analytics & Observability | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
@@ -108,4 +138,4 @@
 
 ---
 *Requirements defined: 2026-03-18*
-*Last updated: 2026-03-18 after initialization*
+*Last updated: 2026-03-18 — traceability expanded to individual rows after roadmap creation*
