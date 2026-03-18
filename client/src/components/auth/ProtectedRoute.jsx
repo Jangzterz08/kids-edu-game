@@ -8,15 +8,15 @@ export default function ProtectedRoute({ requireKid = false, requireRole = null 
 
   if (loading) return <div style={styles.loading}>Loading...</div>;
 
-  // No Supabase session → login (check before kidSession so teachers can access their routes)
-  if (!session) return <Navigate to="/login" replace />;
-
-  // Kid direct session (PIN login) — only allow play routes if no Supabase role
+  // Kid direct session (PIN login) — must check BEFORE !session, kids have no Supabase session
   if (kidSession && user?.role !== 'teacher') {
     if (requireRole === 'teacher') return <Navigate to="/play" replace />;
     if (requireRole === 'parent') return <Navigate to="/play" replace />;
     return <Outlet />;
   }
+
+  // No Supabase session → login
+  if (!session) return <Navigate to="/login" replace />;
 
   // Role-based guards
   if (requireRole === 'teacher' && user?.role !== 'teacher') return <Navigate to="/" replace />;

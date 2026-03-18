@@ -1,7 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function PinKeypad({ length = 4, onSubmit, loading, error }) {
   const [digits, setDigits] = useState('');
+
+  // Auto-clear digits when an error comes back so kid can retry immediately
+  useEffect(() => {
+    if (error) setDigits('');
+  }, [error]);
 
   function handleDigit(d) {
     if (digits.length >= length) return;
