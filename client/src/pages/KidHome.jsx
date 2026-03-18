@@ -4,6 +4,7 @@ import { useKid } from '../context/KidContext';
 import { MODULE_REGISTRY } from '../data/index';
 import { api } from '../lib/api';
 import OllieMascot from '../components/OllieMascot';
+import StarBadge from '../components/modules/StarBadge';
 
 const AVATAR_EMOJIS = {
   bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
@@ -139,6 +140,7 @@ export default function KidHome() {
             const done  = prog?.lessonsCompleted ?? 0;
             const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
             const isCompleted = earnedModuleSlugs.has(mod.slug);
+            const moduleStars = prog?.starsEarned ?? 0;
             const btnLabel = pct === 0 ? 'Start →' : pct === 100 ? 'Replay →' : 'Continue →';
 
             return (
@@ -156,7 +158,11 @@ export default function KidHome() {
                   e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.3)';
                 }}
               >
-                {isCompleted && <div style={s.completedBadge}>✅</div>}
+                {isCompleted && (
+                  <div style={s.completedBadge}>
+                    <StarBadge stars={moduleStars} size="sm" />
+                  </div>
+                )}
 
                 <div style={s.cardIconWrap}>
                   <span style={s.cardEmoji}>{mod.iconEmoji}</span>
@@ -324,7 +330,7 @@ const s = {
     display: 'flex', flexDirection: 'column', gap: 9,
     position: 'relative',
   },
-  completedBadge: { position: 'absolute', top: 10, right: 10, fontSize: 18 },
+  completedBadge: { position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.25)', borderRadius: 20, padding: '3px 6px' },
   cardIconWrap: {
     width: 68, height: 68, borderRadius: 18,
     display: 'flex', alignItems: 'center', justifyContent: 'center',

@@ -9,9 +9,10 @@ import OceanFish from '../components/OceanFish';
 
 export default function KidSelect() {
   const { kids, setKids, selectKid, refreshKids } = useKid();
-  const [showAdd, setShowAdd] = useState(false);
-  const [pinKid, setPinKid]   = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd]       = useState(false);
+  const [pinKid, setPinKid]         = useState(null);
+  const [loading, setLoading]       = useState(true);
+  const [confirmKid, setConfirmKid] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +20,13 @@ export default function KidSelect() {
   }, []);
 
   async function handleDelete(kid) {
-    if (!confirm(`Remove ${kid.name}? This deletes all their progress.`)) return;
-    await api.delete(`/api/kids/${kid.id}`);
+    setConfirmKid(kid);
+  }
+
+  async function confirmDelete() {
+    if (!confirmKid) return;
+    await api.delete(`/api/kids/${confirmKid.id}`);
+    setConfirmKid(null);
     refreshKids();
   }
 
@@ -71,6 +77,23 @@ export default function KidSelect() {
             onSaved={() => { setPinKid(null); refreshKids(); }}
           />
         )}
+        {confirmKid && (
+          <div style={styles.confirmOverlay}>
+            <div style={styles.confirmBox}>
+              <div style={{ fontSize: 48, marginBottom: 8 }}>🗑️</div>
+              <p style={styles.confirmTitle}>Remove {confirmKid.name}?</p>
+              <p style={styles.confirmSub}>This deletes all their progress and can't be undone.</p>
+              <div style={styles.confirmBtns}>
+                <button className="kid-btn ghost" style={{ flex: 1 }} onClick={() => setConfirmKid(null)}>
+                  Cancel
+                </button>
+                <button className="kid-btn pink" style={{ flex: 1 }} onClick={confirmDelete}>
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -108,4 +131,25 @@ const styles = {
   },
   addIcon:  { fontSize: 56, color: '#fff', textShadow: '0 2px 8px rgba(0,80,120,0.3)' },
   addLabel: { fontSize: 'var(--font-md)', fontWeight: 700, color: '#fff', fontFamily: 'Fredoka, sans-serif', textShadow: '0 1px 4px rgba(0,80,120,0.3)' },
+  confirmOverlay: {
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,60,100,0.55)',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    zIndex: 200,
+  },
+  confirmBox: {
+    background: 'rgba(255,255,255,0.5)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '2px solid rgba(255,255,255,0.7)',
+    borderRadius: 28, padding: '36px 32px',
+    maxWidth: 360, width: '90%', textAlign: 'center',
+    boxShadow: '0 20px 60px rgba(0,80,120,0.25)',
+    animation: 'bounce-in 0.35s cubic-bezier(0.175,0.885,0.32,1.275)',
+  },
+  confirmTitle: { fontSize: 'var(--font-lg)', fontWeight: 700, color: '#0A4A6E', marginBottom: 8, fontFamily: 'Fredoka, sans-serif' },
+  confirmSub:   { fontSize: 'var(--font-sm)', color: '#1A7A9A', marginBottom: 28, lineHeight: 1.5 },
+  confirmBtns:  { display: 'flex', gap: 12 },
 };

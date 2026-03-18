@@ -26,8 +26,12 @@ export default function KidCard({ kid, onClick, active, onDelete, onSetPin }) {
         <button
           style={styles.deleteBtn}
           onClick={e => { e.stopPropagation(); onDelete(kid); }}
-          title="Remove kid"
-        >✕</button>
+          aria-label={`Remove ${kid.name}`}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" width="12" height="12" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       )}
     </div>
   );
@@ -67,7 +71,7 @@ const styles = {
   deleteBtn: {
     position: 'absolute', top: 12, right: 12,
     background: 'rgba(200,112,96,0.15)', color: '#C87060', border: 'none',
-    width: 28, height: 28, borderRadius: '50%', fontSize: 14,
-    cursor: 'pointer', fontWeight: 700,
+    width: 28, height: 28, borderRadius: '50%',
+    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
 };

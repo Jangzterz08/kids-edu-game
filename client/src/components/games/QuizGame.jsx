@@ -3,6 +3,12 @@ import { buildQuizOptions } from '../../data/index';
 import { speakWord } from '../../lib/sound';
 import DotGrid from '../ui/DotGrid';
 
+const COMBO_MSGS = {
+  2: { text: '2 in a row!',  emoji: '🌟', color: '#F59E0B' },
+  3: { text: '3 in a row!',  emoji: '🔥', color: '#F97316' },
+  5: { text: '5 in a row!',  emoji: '🏆', color: '#10B981' },
+};
+
 export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   const [qIdx, setQIdx]           = useState(0);
   const [selected, setSelected]   = useState(null);
@@ -10,6 +16,8 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
   const [shake, setShake]         = useState(null);
   const [sparkle, setSparkle]     = useState(false);
   const [imgErrors, setImgErrors] = useState({});
+  const [combo, setCombo]         = useState(0);
+  const [comboToast, setComboToast] = useState(null); // { text, emoji, color }
 
   const questions = useMemo(() => lessons.map(l => ({
     lesson: l,
@@ -35,10 +43,21 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
       setCorrect(c => c + 1);
       setSparkle(true);
       setTimeout(() => setSparkle(false), 700);
+      // Combo tracking
+      setCombo(prev => {
+        const next = prev + 1;
+        const msg = COMBO_MSGS[next];
+        if (msg) {
+          setComboToast(msg);
+          setTimeout(() => setComboToast(null), 1400);
+        }
+        return next;
+      });
       setTimeout(advance, 900);
     } else {
       speakWord('Try again!');
       setShake(option.word);
+      setCombo(0);
       setTimeout(() => setShake(null), 500);
       setTimeout(advance, 1400);
     }
@@ -105,11 +124,22 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
         </div>
       )}
 
+      {/* Combo streak toast */}
+      {comboToast && (
+        <div style={{ ...styles.comboToast, borderColor: comboToast.color, boxShadow: `0 8px 32px ${comboToast.color}55` }}>
+          <span style={{ fontSize: 32 }}>{comboToast.emoji}</span>
+          <span style={{ ...styles.comboText, color: comboToast.color }}>{comboToast.text}</span>
+        </div>
+      )}
+
       {/* Question with tap-to-repeat speaker */}
       <div style={styles.questionRow}>
         <h2 style={styles.question}>Which one is <strong>{q.lesson.word}</strong>?</h2>
-        <button style={styles.speakBtn} onClick={() => speakWord(q.lesson.word)} title="Hear the word">
-          🔊
+        <button style={styles.speakBtn} onClick={() => speakWord(q.lesson.word)} aria-label="Hear the word">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="28" height="28" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
         </button>
       </div>
 
@@ -154,6 +184,17 @@ const styles = {
   sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
   sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards', filter: 'drop-shadow(0 0 8px #FFF)' },
   progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: '#fff', marginBottom: 8, fontWeight: 700, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
+  comboToast: {
+    position: 'absolute', top: 64, left: '50%', transform: 'translateX(-50%)',
+    display: 'flex', alignItems: 'center', gap: 10,
+    background: 'rgba(255,255,255,0.92)', borderRadius: 40,
+    padding: '10px 24px', border: '2.5px solid',
+    backdropFilter: 'blur(8px)',
+    animation: 'bounce-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275)',
+    whiteSpace: 'nowrap', zIndex: 20,
+    boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+  },
+  comboText: { fontSize: 'var(--font-md)', fontWeight: 800, fontFamily: 'Fredoka, sans-serif' },
   questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
   question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
   speakBtn: {

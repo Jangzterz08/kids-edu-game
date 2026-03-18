@@ -5,7 +5,7 @@ import Mascot from '../mascot/Mascot';
 const CONFETTI_COLORS = ['#FF5252','#FFD600','#4CAF50','#2979FF','#E91E8C','#FF9800','#9C27B0'];
 const BURST_EMOJIS   = ['🐠','🐡','🐚','🌟','🦀','🐙','⭐','🎉'];
 
-export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, onContinue }) {
+export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, onContinue, onReplay }) {
   const canvasRef = useRef(null);
   const [burst, setBurst] = useState([]);
 
@@ -105,9 +105,16 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
             <span style={styles.coinText}>+{coinsEarned} coins earned!</span>
           </div>
         )}
-        <button className="kid-btn green" onClick={onContinue} style={{ width: '100%' }}>
-          Keep Going!
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <button className="kid-btn green" onClick={onContinue} style={{ width: '100%' }}>
+            Keep Going!
+          </button>
+          {onReplay && (
+            <button className="kid-btn ghost" onClick={onReplay} style={{ width: '100%' }}>
+              Play Again
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -338,6 +338,18 @@ body {
   50%       { transform: scale(1.05); }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Login input focus ─── */
+.login-input:focus {
+  border-color: var(--primary) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.25);
+}
+
 /* ─── Hover states for inline-styled interactive cards ─── */
 .card-btn-hover:hover   { background: rgba(255,255,255,0.32) !important; }
 .store-btn-hover:hover  { background: rgba(255,200,50,0.35) !important; }

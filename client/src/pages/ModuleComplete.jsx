@@ -43,6 +43,7 @@ export default function ModuleComplete() {
       moduleName={mod?.title || moduleSlug}
       coinsEarned={coinsEarned}
       onContinue={() => navigate('/play')}
+      onReplay={() => navigate(`/play/${moduleSlug}/lesson`)}
     />
   );
 }

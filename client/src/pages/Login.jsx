@@ -6,6 +6,13 @@ import RoleSelector from '../components/auth/RoleSelector';
 import PinKeypad from '../components/auth/PinKeypad';
 import OceanFish from '../components/OceanFish';
 
+const Spinner = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" style={{ animation: 'spin 0.7s linear infinite' }} aria-label="Loading">
+    <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.35)" strokeWidth="3" fill="none"/>
+    <path d="M12 3a9 9 0 0 1 9 9" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none"/>
+  </svg>
+);
+
 const AVATAR_EMOJIS = {
   bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
   dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
@@ -150,12 +157,12 @@ export default function Login() {
               <form onSubmit={handleForgotSubmit} style={styles.form}>
                 <p style={styles.forgotHint}>Enter your email and we'll send you a link to reset your password.</p>
                 <input
-                  style={styles.input} type="email" placeholder="Email address"
+                  style={styles.input} className="login-input" type="email" placeholder="Email address"
                   value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} required autoFocus
                 />
                 {error && <p style={styles.error}>{error}</p>}
                 <button type="submit" disabled={loading} className="kid-btn" style={{ width: '100%' }}>
-                  {loading ? '...' : 'Send Reset Link'}
+                  {loading ? <Spinner /> : 'Send Reset Link'}
                 </button>
               </form>
             )}
@@ -183,16 +190,16 @@ export default function Login() {
             <form onSubmit={handleSubmit} style={styles.form}>
               {mode === 'signup' && (
                 <input
-                  style={styles.input} type="text" placeholder="Your name"
+                  style={styles.input} className="login-input" type="text" placeholder="Your name"
                   value={name} onChange={e => setName(e.target.value)}
                 />
               )}
               <input
-                style={styles.input} type="email" placeholder="Email address"
+                style={styles.input} className="login-input" type="email" placeholder="Email address"
                 value={email} onChange={e => setEmail(e.target.value)} required
               />
               <input
-                style={styles.input} type="password" placeholder="Password"
+                style={styles.input} className="login-input" type="password" placeholder="Password"
                 value={password} onChange={e => setPass(e.target.value)} required
                 minLength={6}
               />
@@ -207,7 +214,7 @@ export default function Login() {
               )}
               {error && <p style={styles.error}>{error}</p>}
               <button type="submit" disabled={loading} className="kid-btn" style={{ width: '100%' }}>
-                {loading ? '...' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+                {loading ? <Spinner /> : mode === 'signin' ? 'Sign In' : 'Create Account'}
               </button>
             </form>
             <button onClick={handleBack} style={styles.backBtn}>← Back</button>
@@ -220,13 +227,13 @@ export default function Login() {
             <div style={styles.roleTag}>🎮 Kid Login</div>
             <form onSubmit={handleKidNameSubmit} style={styles.form}>
               <input
-                style={styles.input} type="text" placeholder="What's your name?"
+                style={styles.input} className="login-input" type="text" placeholder="What's your name?"
                 value={kidName} onChange={e => setKidName(e.target.value)}
                 autoFocus
               />
               {error && <p style={styles.error}>{error}</p>}
               <button type="submit" disabled={loading} className="kid-btn" style={{ width: '100%' }}>
-                {loading ? '...' : 'Next'}
+                {loading ? <Spinner /> : 'Next'}
               </button>
             </form>
             <button onClick={handleBack} style={styles.backBtn}>← Back</button>
