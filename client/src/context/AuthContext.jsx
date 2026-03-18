@@ -43,11 +43,12 @@ export function AuthProvider({ children }) {
     api.post('/api/auth/register', { email: session.user?.email }).then(setUser).catch(console.error);
   }, [session?.access_token]);
 
-  async function signInWithEmail(email, password) {
+  async function signInWithEmail(email, password, role = null) {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     // Pass email explicitly — getUser() sometimes omits it on server side
-    const u = await api.post('/api/auth/register', { email });
+    // Pass role only if explicitly provided (signup scenario via login page)
+    const u = await api.post('/api/auth/register', { email, ...(role && { role }) });
     setUser(u);
     return u;
   }

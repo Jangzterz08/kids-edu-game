@@ -75,7 +75,7 @@ export default function Login() {
     setLoading(true);
     try {
       if (mode === 'signin') {
-        const u = await signInWithEmail(email, password);
+        const u = await signInWithEmail(email, password, role);
         navigate(u.role === 'teacher' ? '/teacher' : '/');
       } else {
         const u = await signUpWithEmail(email, password, name, role);
