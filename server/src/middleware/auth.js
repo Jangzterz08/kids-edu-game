@@ -41,8 +41,8 @@ const requireAuth = async (req, res, next) => {
     // Supabase sometimes omits email from getUser(); fall back to JWT claim
     if (!user.email) {
       try {
-        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-        user.email = payload.email;
+        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+        user.email = payload.email || payload.email_claim || payload.user_metadata?.email;
       } catch { /* ignore decode errors */ }
     }
 

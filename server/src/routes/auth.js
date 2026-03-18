@@ -9,10 +9,16 @@ router.post('/register', async (req, res, next) => {
   try {
     const { name, role } = req.body;
     const validRole = role === 'teacher' ? 'teacher' : 'parent';
+
+    const email = req.user.email;
+    if (!email) {
+      return res.status(400).json({ error: 'Unable to resolve email from auth token. Please sign out and sign in again.' });
+    }
+
     const user = await prisma.user.upsert({
       where: { supabaseAuthId: req.user.id },
-      create: { supabaseAuthId: req.user.id, email: req.user.email, name: name || null, role: validRole },
-      update: { email: req.user.email, ...(name && { name }), ...(role && { role: validRole }) },
+      create: { supabaseAuthId: req.user.id, email, name: name || null, role: validRole },
+      update: { email, ...(name && { name }), ...(role && { role: validRole }) },
     });
     res.json(user);
   } catch (err) {
