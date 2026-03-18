@@ -55,8 +55,9 @@ export function AuthProvider({ children }) {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     // Wait briefly for auth state to propagate, then register with role
+    // Pass email explicitly — getUser() on fresh accounts sometimes omits it
     await new Promise(r => setTimeout(r, 500));
-    const u = await api.post('/api/auth/register', { name, role });
+    const u = await api.post('/api/auth/register', { name, role, email });
     setUser(u);
     return u;
   }

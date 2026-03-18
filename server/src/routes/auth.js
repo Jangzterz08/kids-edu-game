@@ -7,10 +7,11 @@ const { signKidToken } = require('../middleware/kidAuth');
 // POST /api/auth/register — upsert User row after Supabase signup
 router.post('/register', async (req, res, next) => {
   try {
-    const { name, role } = req.body;
+    const { name, role, email: bodyEmail } = req.body;
     const validRole = role === 'teacher' ? 'teacher' : 'parent';
 
-    const email = req.user.email;
+    // getUser() on fresh Supabase accounts sometimes omits email — fall back to body
+    const email = req.user.email || bodyEmail;
     if (!email) {
       return res.status(400).json({ error: 'Unable to resolve email from auth token. Please sign out and sign in again.' });
     }
