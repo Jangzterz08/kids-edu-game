@@ -37,6 +37,18 @@ export function getLesson(moduleSlug, lessonSlug) {
   return mod?.lessons.find(l => l.slug === lessonSlug);
 }
 
+// Deterministic daily challenge module — cycles through all modules day by day
+const DAILY_MODULE_SLUGS = [
+  'logic', 'alphabet', 'numbers', 'shapes', 'colors',
+  'animals', 'body-parts', 'manners', 'household',
+  'food-pyramid', 'emotions', 'weather', 'days-of-week',
+];
+export function getDailyChallengeSlug() {
+  const start = new Date(new Date().getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((Date.now() - start.getTime()) / 86400000);
+  return DAILY_MODULE_SLUGS[dayOfYear % DAILY_MODULE_SLUGS.length];
+}
+
 // Fill quiz options for a lesson using 3 random wrong answers from same module
 export function buildQuizOptions(moduleSlug, lessonSlug) {
   const mod = getModule(moduleSlug);

@@ -41,6 +41,7 @@ app.use('/api/modules', requireAuth, require('./routes/modules'));
 app.use('/api/progress', requireAuth, require('./routes/progress'));
 app.use('/api/achievements', requireAuth, require('./routes/achievements'));
 app.use('/api/classrooms',   requireAuth, require('./routes/classrooms'));
+app.use('/api/daily-challenge', requireAuth, require('./routes/dailyChallenge'));
 
 // Error handler
 app.use((err, req, res, next) => {

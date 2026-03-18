@@ -1,10 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useKid } from '../context/KidContext';
-import { MODULE_REGISTRY } from '../data/index';
+import { MODULE_REGISTRY, getModule } from '../data/index';
 import { api } from '../lib/api';
 import OllieMascot from '../components/OllieMascot';
 import StarBadge from '../components/modules/StarBadge';
+
+function getOllieMessage(streak, earnedCount, totalCount, dailyDone) {
+  const hour = new Date().getHours();
+  if (dailyDone) return 'Challenge done! 🏆';
+  if (streak >= 14) return `${streak} days! Legendary! 🔥`;
+  if (streak >= 7) return `${streak} day streak! Amazing! 🔥`;
+  if (streak >= 3) return `${streak} days in a row! ⭐`;
+  if (earnedCount === totalCount && totalCount > 0) return 'All modules done! 🎉';
+  if (earnedCount === 0) {
+    if (hour < 12) return 'Good morning! 🌅';
+    if (hour < 17) return 'Ready to learn? 🎓';
+    return 'Evening session! 🌙';
+  }
+  if (hour < 12) return 'Good morning! 🌅';
+  if (hour < 17) return 'Keep going! 💪';
+  return 'Learning tonight! 🌙';
+}
 
 const AVATAR_EMOJIS = {
   bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
@@ -46,6 +63,7 @@ export default function KidHome() {
   const [coins, setCoins]               = useState(activeKid?.coins || 0);
   const [hasClassroom, setHasClassroom] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [dailyChallenge, setDailyChallenge] = useState(null);
 
   useEffect(() => {
     if (!activeKid) return;
@@ -69,6 +87,9 @@ export default function KidHome() {
         setCoins(kid.coins || 0);
       }
     });
+    api.get(`/api/daily-challenge/${activeKid.id}`)
+      .then(d => setDailyChallenge(d))
+      .catch(() => {});
   }, [activeKid?.id]);
 
   const progBySlug = progressData.reduce((acc, p) => { acc[p.moduleSlug] = p; return acc; }, {});
@@ -120,7 +141,10 @@ export default function KidHome() {
 
         {/* Ollie mascot at bottom of sidebar */}
         <div style={s.mascotWrap} className="kidhome-mascot">
-          <OllieMascot size={0.75} message="Let's go! 🌊" />
+          <OllieMascot
+            size={0.75}
+            message={getOllieMessage(streak, earnedModuleSlugs.size, MODULE_REGISTRY.length, !!dailyChallenge?.completedAt)}
+          />
         </div>
       </aside>
 
@@ -190,6 +214,39 @@ export default function KidHome() {
 
       {/* ── RIGHT PANEL ── */}
       <aside style={s.rightPanel} className="kidhome-right-panel">
+
+        {/* Daily Challenge */}
+        {dailyChallenge && (() => {
+          const mod = getModule(dailyChallenge.moduleSlug);
+          const done = !!dailyChallenge.completedAt;
+          return (
+            <div
+              style={{
+                ...s.widget,
+                background: done ? 'rgba(16,172,132,0.18)' : 'rgba(255,107,157,0.14)',
+                border: done ? '1.5px solid rgba(16,172,132,0.4)' : '1.5px solid rgba(255,107,157,0.4)',
+                cursor: done ? 'default' : 'pointer',
+              }}
+              onClick={() => !done && navigate('/play/daily')}
+            >
+              <div style={s.widgetTitle}>⚡ Daily Challenge</div>
+              {done ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 22 }}>✅</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#059669' }}>+20 🪙 earned!</span>
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <span style={{ fontSize: 26 }}>{mod?.iconEmoji || '🎮'}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0A4A6E' }}>{mod?.title}</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#FF6B9D', fontWeight: 700 }}>+20 🪙 bonus • Tap to play!</div>
+                </>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Streak */}
         <div style={s.widget} className="kidhome-widget">

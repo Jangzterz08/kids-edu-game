@@ -20,8 +20,9 @@ const CoinStore       = lazy(() => import('./pages/CoinStore'));
 const TeacherDashboard = lazy(() => import('./pages/TeacherDashboard'));
 const ClassroomDetail  = lazy(() => import('./pages/ClassroomDetail'));
 const KidLeaderboard   = lazy(() => import('./pages/KidLeaderboard'));
-const ParentClassrooms = lazy(() => import('./pages/ParentClassrooms'));
-const NotFound        = lazy(() => import('./pages/NotFound'));
+const ParentClassrooms  = lazy(() => import('./pages/ParentClassrooms'));
+const DailyChallenge    = lazy(() => import('./pages/DailyChallenge'));
+const NotFound          = lazy(() => import('./pages/NotFound'));
 
 // Ocean-themed loading fallback — matches app theme, no white flash
 function OceanLoader() {
@@ -70,6 +71,7 @@ export default function App() {
                 <Route element={<KidLayout />}>
                   <Route path="/play"                    element={<KidHome />} />
                   <Route path="/play/store"              element={<CoinStore />} />
+                  <Route path="/play/daily"              element={<DailyChallenge />} />
                   <Route path="/play/leaderboard"        element={<KidLeaderboard />} />
                   <Route path="/play/:moduleSlug"        element={<ModuleIntro />} />
                   <Route path="/play/:moduleSlug/lesson" element={<LessonPlayer />} />

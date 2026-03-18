@@ -88,6 +88,7 @@ model LessonProgress {
   phonicsScore   Int?
   patternScore   Int?
   oddOneOutScore Int?
+  scrambleScore  Int?
   difficultyLevel String   @default("medium") // easy | medium | hard
   starsEarned    Int       @default(0)
   completedAt    DateTime?

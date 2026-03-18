@@ -5,7 +5,7 @@ import Mascot from '../mascot/Mascot';
 const CONFETTI_COLORS = ['#FF5252','#FFD600','#4CAF50','#2979FF','#E91E8C','#FF9800','#9C27B0'];
 const BURST_EMOJIS   = ['🐠','🐡','🐚','🌟','🦀','🐙','⭐','🎉'];
 
-export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, onContinue, onReplay }) {
+export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarned = 0, dailyBonus = 0, onContinue, onReplay }) {
   const canvasRef = useRef(null);
   const [burst, setBurst] = useState([]);
 
@@ -105,6 +105,12 @@ export default function CelebrationModal({ stars = 3, moduleName = '', coinsEarn
             <span style={styles.coinText}>+{coinsEarned} coins earned!</span>
           </div>
         )}
+        {dailyBonus > 0 && (
+          <div style={styles.dailyBanner}>
+            <span>⚡</span>
+            <span style={styles.dailyText}>Daily Challenge bonus: +{dailyBonus} 🪙</span>
+          </div>
+        )}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <button className="kid-btn green" onClick={onContinue} style={{ width: '100%' }}>
             Keep Going!
@@ -152,4 +158,11 @@ const styles = {
   },
   coinIcon: { fontSize: 40, filter: 'drop-shadow(0 0 12px rgba(255,234,0,0.8))' },
   coinText: { fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.6)', letterSpacing: 1 },
+  dailyBanner: {
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+    background: 'rgba(255,107,157,0.2)', border: '1.5px solid rgba(255,107,157,0.5)',
+    borderRadius: 20, padding: '12px 20px', marginBottom: 20,
+    animation: 'bounce-in 0.5s 0.3s ease both',
+  },
+  dailyText: { fontSize: 16, fontWeight: 800, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)' },
 };

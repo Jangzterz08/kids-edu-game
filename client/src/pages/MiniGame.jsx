@@ -10,6 +10,7 @@ import SpellingGame from '../components/games/SpellingGame';
 import PhonicsGame from '../components/games/PhonicsGame';
 import PatternGame from '../components/games/PatternGame';
 import OddOneOutGame from '../components/games/OddOneOutGame';
+import WordScramble from '../components/games/WordScramble';
 
 export default function MiniGame() {
   const { moduleSlug }          = useParams();
@@ -43,6 +44,7 @@ export default function MiniGame() {
     if (gameType === 'phonics')   update.phonicsScore    = score;
     if (gameType === 'pattern')   update.patternScore    = score;
     if (gameType === 'oddOneOut') update.oddOneOutScore  = score;
+    if (gameType === 'scramble')  update.scrambleScore   = score;
     await Promise.all(mod.lessons.map(lesson => recordLesson(lesson.slug, update).catch(() => {})));
 
     if (gameIdx < games.length - 1) {
@@ -74,7 +76,8 @@ export default function MiniGame() {
            game === 'spelling' ? '🔤 Spell' : 
            game === 'phonics' ? '🔊 Phonics' : 
            game === 'pattern' ? '🔁 Pattern' : 
-           game === 'oddOneOut' ? '❓ Odd One Out' : 
+           game === 'oddOneOut' ? '❓ Odd One Out' :
+           game === 'scramble' ? '🔀 Scramble' :
            '❓ Quiz'}
         </span>
         <span style={styles.gameCounter}>{gameIdx + 1}/{games.length}</span>
@@ -100,6 +103,9 @@ export default function MiniGame() {
       )}
       {game === 'oddOneOut' && (
         <OddOneOutGame lessons={mod.lessons} onComplete={handleGameComplete} />
+      )}
+      {game === 'scramble' && (
+        <WordScramble lessons={mod.lessons} onComplete={handleGameComplete} />
       )}
     </div>
   );
