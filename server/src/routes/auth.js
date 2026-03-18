@@ -16,11 +16,24 @@ router.post('/register', async (req, res, next) => {
       return res.status(400).json({ error: 'Unable to resolve email from auth token. Please sign out and sign in again.' });
     }
 
-    const user = await prisma.user.upsert({
-      where: { supabaseAuthId: req.user.id },
-      create: { supabaseAuthId: req.user.id, email, name: name || null, role: validRole },
-      update: { email, ...(name && { name }), ...(role && { role: validRole }) },
-    });
+    let user;
+    try {
+      user = await prisma.user.upsert({
+        where: { supabaseAuthId: req.user.id },
+        create: { supabaseAuthId: req.user.id, email, name: name || null, role: validRole },
+        update: { email, ...(name && { name }), ...(role && { role: validRole }) },
+      });
+    } catch (upsertErr) {
+      // Email already taken by a prior account — claim it by updating supabaseAuthId
+      if (upsertErr.code === 'P2002') {
+        user = await prisma.user.update({
+          where: { email },
+          data: { supabaseAuthId: req.user.id, ...(name && { name }), ...(role && { role: validRole }) },
+        });
+      } else {
+        throw upsertErr;
+      }
+    }
     res.json(user);
   } catch (err) {
     next(err);
