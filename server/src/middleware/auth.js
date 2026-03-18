@@ -42,8 +42,14 @@ const requireAuth = async (req, res, next) => {
     if (!user.email) {
       try {
         const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
-        user.email = payload.email || payload.email_claim || payload.user_metadata?.email;
-      } catch { /* ignore decode errors */ }
+        console.log('[Auth] getUser returned no email. JWT payload keys:', Object.keys(payload));
+        console.log('[Auth] user_metadata:', JSON.stringify(user.user_metadata));
+        console.log('[Auth] identities:', JSON.stringify(user.identities));
+        user.email = payload.email || payload.email_claim || payload.user_metadata?.email
+          || user.user_metadata?.email || user.identities?.[0]?.identity_data?.email;
+      } catch (e) {
+        console.error('[Auth] JWT decode failed:', e.message);
+      }
     }
 
     req.user = user;
