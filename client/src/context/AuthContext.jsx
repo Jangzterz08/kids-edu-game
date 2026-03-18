@@ -39,14 +39,15 @@ export function AuthProvider({ children }) {
   // Register / upsert user row when session is present
   useEffect(() => {
     if (!session) { setUser(null); return; }
-    api.post('/api/auth/register', {}).then(setUser).catch(console.error);
+    // Pass email from session as fallback for server-side getUser() quirks
+    api.post('/api/auth/register', { email: session.user?.email }).then(setUser).catch(console.error);
   }, [session?.access_token]);
 
   async function signInWithEmail(email, password) {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    // Return the user row (with role) for redirect logic
-    const u = await api.post('/api/auth/register', {});
+    // Pass email explicitly — getUser() sometimes omits it on server side
+    const u = await api.post('/api/auth/register', { email });
     setUser(u);
     return u;
   }
