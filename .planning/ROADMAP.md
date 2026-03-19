@@ -26,7 +26,7 @@ KidsLearn is a deployed educational game for kids aged 3–8. The product works 
   3. A kid or classroom name containing HTML tags is stored and rendered escaped — no raw HTML appears in email digests
   4. Starting the server in production without Supabase env vars throws a startup error and refuses to serve traffic
   5. Two simultaneous coin-purchase requests from the same kid cannot both succeed for the same item
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 01-01-PLAN.md — Test infrastructure + server-side price validation (SEC-01) + rate limiting (SEC-02)
 - [ ] 01-02-PLAN.md — HTML sanitization (SEC-03) + startup guard (SEC-04) + Prisma transaction (SEC-05) + body destructuring (SEC-06)
@@ -104,7 +104,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Hardening | 0/2 | Planning complete | - |
+| 1. Security Hardening | 1/2 | In Progress|  |
 | 2. Polish & UX | 0/TBD | Not started | - |
 | 3. Performance | 0/TBD | Not started | - |
 | 4. Parent Subscriptions | 0/TBD | Not started | - |
