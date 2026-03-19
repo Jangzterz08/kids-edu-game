@@ -9,10 +9,10 @@
 
 - [x] **SEC-01**: Server validates item prices server-side (canonical price map keyed by itemId), never trusting client-supplied price
 - [x] **SEC-02**: Rate limiting on kid-login (10 req/min per IP) and kid-lookup endpoints via express-rate-limit
-- [ ] **SEC-03**: Kid and classroom names sanitized (HTML entity escape) before storage and rendering in email digests
-- [ ] **SEC-04**: Server throws startup error in production if Supabase env vars are absent (no silent mock-user fallback)
-- [ ] **SEC-05**: `unlockedItems` coin purchase wrapped in Prisma transaction to prevent lost-update race condition
-- [ ] **SEC-06**: `req.body` destructured to known fields before DB upsert in progress route
+- [x] **SEC-03**: Kid and classroom names sanitized (HTML entity escape) before storage and rendering in email digests
+- [x] **SEC-04**: Server throws startup error in production if Supabase env vars are absent (no silent mock-user fallback)
+- [x] **SEC-05**: `unlockedItems` coin purchase wrapped in Prisma transaction to prevent lost-update race condition
+- [x] **SEC-06**: `req.body` destructured to known fields before DB upsert in progress route
 
 ### Polish
 
@@ -95,10 +95,10 @@
 |-------------|-------|--------|
 | SEC-01 | Phase 1 — Security Hardening | Complete |
 | SEC-02 | Phase 1 — Security Hardening | Complete |
-| SEC-03 | Phase 1 — Security Hardening | Pending |
-| SEC-04 | Phase 1 — Security Hardening | Pending |
-| SEC-05 | Phase 1 — Security Hardening | Pending |
-| SEC-06 | Phase 1 — Security Hardening | Pending |
+| SEC-03 | Phase 1 — Security Hardening | Complete |
+| SEC-04 | Phase 1 — Security Hardening | Complete |
+| SEC-05 | Phase 1 — Security Hardening | Complete |
+| SEC-06 | Phase 1 — Security Hardening | Complete |
 | POL-01 | Phase 2 — Polish & UX | Pending |
 | POL-02 | Phase 2 — Polish & UX | Pending |
 | POL-03 | Phase 2 — Polish & UX | Pending |

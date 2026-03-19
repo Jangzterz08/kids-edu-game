@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-security-hardening/01-01-PLAN.md
-last_updated: "2026-03-19T03:59:27.212Z"
+stopped_at: Completed 01-security-hardening/01-02-PLAN.md
+last_updated: "2026-03-19T04:10:00Z"
 progress:
   total_phases: 7
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 ## Current Position
 
-Phase: 01 (security-hardening) — EXECUTING
-Plan: 1 of 2
+Phase: 01 (security-hardening) — COMPLETE
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Plan: 1 of 2
 
 *Updated after each plan completion*
 | Phase 01-security-hardening P01 | 12 | 2 tasks | 9 files |
+| Phase 01-security-hardening P02 | 7 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,10 @@ From PROJECT.md Key Decisions table:
 - [Phase 01-security-hardening]: Use vi.spyOn(global.prisma) not vi.mock() for CJS server tests: Vitest mocks ESM imports but cannot intercept CJS require() at runtime
 - [Phase 01-security-hardening]: STORE_ITEMS canonical price map in kids.js (not DB table): static config, no migration needed
 - [Phase 01-security-hardening]: express-rate-limit 8.3.1 with trust proxy:1 on kid auth endpoints (10 req/min) for Railway reverse proxy compatibility
+- [Phase 01-security-hardening P02]: he.escape() via esc() helper in weeklyDigest.js for HTML entity encoding of all user-supplied strings
+- [Phase 01-security-hardening P02]: Startup guard throws at module load time (not runtime) when SUPABASE_URL or SUPABASE_SERVICE_KEY missing in production
+- [Phase 01-security-hardening P02]: Prisma interactive transaction ($transaction async callback) wraps coin purchase for race-safe read-modify-write
+- [Phase 01-security-hardening P02]: req.body allowlist destructuring in progress route instead of ...req.body spread
 
 ### Pending Todos
 
@@ -75,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-19T03:59:27.210Z
-Stopped at: Completed 01-security-hardening/01-01-PLAN.md
+Last session: 2026-03-19T04:10:00Z
+Stopped at: Completed 01-security-hardening/01-02-PLAN.md
 Resume file: None
