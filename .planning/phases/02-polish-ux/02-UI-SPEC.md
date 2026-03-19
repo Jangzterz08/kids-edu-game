@@ -28,11 +28,13 @@ created: 2026-03-19
 
 No shadcn detected (`components.json` absent). Stack is React 19 + Vite 7, no Tailwind. The existing CSS custom property system is the design system. This phase does not introduce shadcn — it would conflict with the established inline-style + CSS variable pattern used throughout every component.
 
+Note: Fredoka is loaded via Google Fonts at weights 400–700. Weight 700 is available in the font file but is not a declared in-use weight for Phase 2 UI components. Declared in-use weights are 400 and 600 only.
+
 ---
 
 ## Spacing Scale
 
-Declared values (all multiples of 4):
+Declared values (all multiples of 4, drawn from standard set {4, 8, 16, 24, 32, 48, 64}):
 
 | Token | Value | Usage |
 |-------|-------|-------|
@@ -40,7 +42,7 @@ Declared values (all multiples of 4):
 | sm | 8px | Compact element spacing, offline banner internal padding |
 | md | 16px | Default element spacing, toast internal padding |
 | lg | 24px | Section padding, card inner padding |
-| xl | 40px | Layout gaps between major UI sections |
+| xl | 48px | Layout gaps between major UI sections |
 | 2xl | 64px | Page-level spacing |
 
 **Source:** `--space-xs` through `--space-2xl` in `client/src/index.css:96–101`.
@@ -50,6 +52,7 @@ Exceptions:
 - `--btn-height: 72px` — existing large button height for primary game CTAs, preserved as-is (source: `client/src/index.css:81`).
 - PWA install prompt bottom offset: 24px from viewport bottom edge (`position: fixed; bottom: 24px`) — matches pattern in RESEARCH.md.
 - Offline banner: 0px offset from top, full-width, 8px vertical padding only.
+- `--space-xl` existing token value in `client/src/index.css` is `40px` — this is an existing token preserved for backward compatibility with current component layout. The declared contract value is 48px; if the token is updated, use 48px. If the token is left at 40px for backward compatibility, document as an exception here and do not introduce new usages at 40px.
 
 ---
 
@@ -62,11 +65,12 @@ Font stack: `'Fredoka', 'Nunito', system-ui, sans-serif` — already set on `bod
 | Body | 18px | 400 | 1.5 | `--font-base` | Default prose, labels, button text |
 | Label | 16px | 400 | 1.4 | `--font-sm` | Secondary labels, metadata, offline banner body text |
 | Heading | 28px | 600 | 1.2 | `--font-lg` | Error fallback heading, modal titles |
-| Display | 36px | 700 | 1.1 | `--font-xl` | Error fallback emoji size (64px icon above heading) |
 
 **Source:** `--font-xs` through `--font-2xl` scale in `client/src/index.css:87–93`. Body `font-size: var(--font-base)` and `line-height: 1.5` confirmed at `client/src/index.css:111,114`.
 
-Weights in use: 400 (regular) and 600 (semibold). Weight 700 reserved for the error fallback heading only — this is the existing app pattern (Fredoka loaded at 400/500/600/700 in the Google Fonts import but the app primarily uses 400 and 600).
+Weights in use: 400 (regular) and 600 (semibold). These are the only two weights applied to Phase 2 UI components.
+
+Note on `--font-xl` (36px): This token exists in the CSS scale but is not assigned to any declared UI role in Phase 2. The error fallback screen uses a 64px emoji rendered as text content — the emoji's visual size is set via `font-size: 64px` directly on the emoji element, not through the type scale. The heading above it uses 28px / 600 (Heading role above).
 
 ---
 
@@ -98,7 +102,7 @@ New components introduced in Phase 2:
 
 | Component | Path | Phase Req | Notes |
 |-----------|------|-----------|-------|
-| `ErrorFallback` | `client/src/components/ui/ErrorFallback.jsx` | POL-02 | Ocean gradient background, Ollie octopus emoji (🐙), Fredoka font heading, "Try again" button |
+| `ErrorFallback` | `client/src/components/ui/ErrorFallback.jsx` | POL-02 | Ocean gradient background, Ollie octopus emoji (🐙) at 64px, Fredoka font heading at 28px/600, "Try again" button |
 | `OfflineBanner` | `client/src/components/ui/OfflineBanner.jsx` | POL-04 | Fixed top-0, full-width, `--accent-red` bg, white text, 18px Fredoka, 8px vertical padding |
 | `InstallPrompt` | `client/src/components/pwa/InstallPrompt.jsx` | POL-03 | Fixed bottom-24px, centered, `#6C5CE7` pill, dismiss button (✕), iOS variant shows "tap Share → Add" text |
 | `lib/avatars.js` | `client/src/lib/avatars.js` | POL-07 | Not a UI component — shared constant file, 16 emoji entries |
@@ -134,7 +138,7 @@ No new page-level routes. No new modals beyond ErrorFallback.
 | State | What the user sees |
 |-------|--------------------|
 | First visit | Nothing — prompt suppressed |
-| Second+ visit (Android Chrome) | Fixed pill at bottom: "Add KidsLearn to your home screen!" + "Install" button + ✕ dismiss |
+| Second+ visit (Android Chrome) | Fixed pill at bottom: "Add KidsLearn to your home screen!" + "Install App" button + ✕ dismiss |
 | Second+ visit (iOS Safari) | Fixed pill: "Tap Share then 'Add to Home Screen'" + ✕ dismiss (no programmatic install API) |
 | Already dismissed | Nothing — `localStorage.kl_pwa_dismissed` flag prevents repeat |
 | After install | Nothing — browser fires `appinstalled` event; prompt self-hides |
@@ -154,7 +158,7 @@ No new page-level routes. No new modals beyond ErrorFallback.
 | Element | Copy |
 |---------|------|
 | Primary CTA — Error recovery | "Try again" |
-| Primary CTA — PWA install (Android) | "Install" |
+| Primary CTA — PWA install (Android) | "Install App" |
 | PWA dismiss | "✕" (icon-only, aria-label="Dismiss") |
 | PWA install body | "Add KidsLearn to your home screen!" |
 | PWA install body (iOS) | "Tap Share then 'Add to Home Screen'" |
@@ -185,7 +189,9 @@ No new page-level routes. No new modals beyond ErrorFallback.
 | Image dimensions | 1200 × 630 px |
 | Image file | `client/public/og-image.png` |
 
-**Image design contract:** Ocean blue gradient background (`#3BBFE8` to `#0EA5E9`), KidsLearn wordmark in white Fredoka 700, Ollie octopus mascot emoji or asset centered, tagline "Fun games for kids" in white Fredoka 400 at 32px. No photography. The image should be visually recognizable as the same ocean theme a user sees in the app.
+**Image design contract:** Ocean blue gradient background (`#3BBFE8` to `#0EA5E9`), KidsLearn wordmark in white Fredoka 600, Ollie octopus mascot emoji or asset centered, tagline "Fun games for kids" in white Fredoka 400 at 32px. No photography. The image should be visually recognizable as the same ocean theme a user sees in the app.
+
+Note: The OG image itself may use Fredoka 700 for the wordmark as a static image asset (not a CSS declaration) — this does not affect the Phase 2 CSS type scale contract, which governs only live UI components.
 
 ---
 
