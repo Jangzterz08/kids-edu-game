@@ -1,8 +1,13 @@
 'use strict';
 const { Resend } = require('resend');
 const prisma = require('../lib/db');
+const he = require('he');
 
 const FROM = process.env.DIGEST_FROM_EMAIL || 'KidsLearn <digest@kidslearn.app>';
+
+function esc(str) {
+  return he.escape(str || '');
+}
 
 // ─── Query helpers ────────────────────────────────────────────────────────────
 
@@ -58,7 +63,7 @@ function buildEmailHtml(parentName, kidsStats) {
   const kidCards = kidsStats.map(({ kid, lessonsThisWeek, starsThisWeek, recommended }) => `
     <div style="background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
       <h2 style="margin:0 0 16px;font-size:22px;color:#1e293b;">
-        ${kid.name}
+        ${esc(kid.name) || 'Your child'}
         <span style="font-size:16px;color:#64748b;font-weight:400;margin-left:8px;">
           🔥 ${kid.currentStreak}-day streak
         </span>
@@ -95,7 +100,7 @@ function buildEmailHtml(parentName, kidsStats) {
     </div>
   `).join('');
 
-  const greeting = parentName ? `Hi ${parentName}` : 'Hi there';
+  const greeting = parentName ? `Hi ${esc(parentName)}` : 'Hi there';
   const anyActive = kidsStats.some(s => s.lessonsThisWeek > 0);
 
   return `<!DOCTYPE html>
@@ -169,7 +174,7 @@ async function sendWeeklyDigests() {
       await resend.emails.send({
         from: FROM,
         to:   parent.email,
-        subject: `📚 Weekly learning update for ${parent.kids.map(k => k.name).join(' & ')}`,
+        subject: `📚 Weekly learning update for ${parent.kids.map(k => esc(k.name) || 'Your child').join(' & ')}`,
         html,
       });
 
@@ -184,4 +189,4 @@ async function sendWeeklyDigests() {
   console.log(`[digest] Done — ${sent} sent, ${failed} failed`);
 }
 
-module.exports = { sendWeeklyDigests };
+module.exports = { sendWeeklyDigests, buildEmailHtml };

@@ -4,6 +4,12 @@ const { verifyKidToken, decodeTokenType } = require('./kidAuth');
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
+if (process.env.NODE_ENV === 'production' && (!supabaseUrl || !supabaseKey)) {
+  throw new Error(
+    '[Auth] SUPABASE_URL and SUPABASE_SERVICE_KEY are required in production. Server startup aborted.'
+  );
+}
+
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const requireAuth = async (req, res, next) => {
