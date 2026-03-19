@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/db');
 
+const STORE_ITEMS = {
+  frog:      { price: 30  },
+  chick:     { price: 40  },
+  hamster:   { price: 60  },
+  panda:     { price: 80  },
+  butterfly: { price: 100 },
+  dragon:    { price: 120 },
+  dino:      { price: 150 },
+  unicorn:   { price: 200 },
+};
+
 async function getParent(supabaseId) {
   return prisma.user.findUnique({ where: { supabaseAuthId: supabaseId } });
 }
@@ -103,8 +114,11 @@ router.post('/:kidId/store/buy', async (req, res, next) => {
     }
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
-    const { itemId, price } = req.body;
-    if (!itemId || price == null) return res.status(400).json({ error: 'itemId and price required' });
+    const { itemId } = req.body;
+    if (!itemId) return res.status(400).json({ error: 'itemId is required' });
+    const item = STORE_ITEMS[itemId];
+    if (!item) return res.status(400).json({ error: 'Unknown item' });
+    const price = item.price;
 
     const unlocked = JSON.parse(kid.unlockedItems || '[]');
     if (unlocked.includes(itemId)) return res.status(400).json({ error: 'Already unlocked' });

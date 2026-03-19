@@ -2,10 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
 const cron    = require('node-cron');
+const rateLimit = require('express-rate-limit');
 const { sendWeeklyDigests } = require('./services/weeklyDigest');
 const { requireAuth } = require('./middleware/auth');
 
 const app = express();
+app.set('trust proxy', 1);
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
@@ -29,10 +31,19 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Rate limiter for public kid auth endpoints (brute-force protection)
+const kidAuthLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
 // Public kid auth endpoints (no requireAuth)
 const { kidLookupHandler, kidLoginHandler } = require('./routes/auth');
-app.post('/api/auth/kid-lookup', kidLookupHandler);
-app.post('/api/auth/kid-login', kidLoginHandler);
+app.post('/api/auth/kid-lookup', kidAuthLimiter, kidLookupHandler);
+app.post('/api/auth/kid-login', kidAuthLimiter, kidLoginHandler);
 
 // Protected routes
 app.use('/api/auth', requireAuth, require('./routes/auth'));
