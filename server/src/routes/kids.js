@@ -120,19 +120,30 @@ router.post('/:kidId/store/buy', async (req, res, next) => {
     if (!item) return res.status(400).json({ error: 'Unknown item' });
     const price = item.price;
 
-    const unlocked = JSON.parse(kid.unlockedItems || '[]');
-    if (unlocked.includes(itemId)) return res.status(400).json({ error: 'Already unlocked' });
-    if (kid.coins < price) return res.status(400).json({ error: 'Not enough coins' });
+    const updated = await prisma.$transaction(async (tx) => {
+      const freshKid = await tx.kidProfile.findUnique({ where: { id: kid.id } });
+      if (!freshKid) throw Object.assign(new Error('Kid not found'), { status: 404 });
 
-    const updated = await prisma.kidProfile.update({
-      where: { id: kid.id },
-      data: {
-        coins: { decrement: price },
-        unlockedItems: JSON.stringify([...unlocked, itemId]),
-      },
+      const unlocked = (() => {
+        try { return JSON.parse(freshKid.unlockedItems || '[]'); }
+        catch { return []; }
+      })();
+
+      if (unlocked.includes(itemId)) throw Object.assign(new Error('Already unlocked'), { status: 400 });
+      if (freshKid.coins < price) throw Object.assign(new Error('Not enough coins'), { status: 400 });
+
+      return tx.kidProfile.update({
+        where: { id: freshKid.id },
+        data: {
+          coins: { decrement: price },
+          unlockedItems: JSON.stringify([...unlocked, itemId]),
+        },
+      });
     });
-    res.json({ coins: updated.coins, unlockedItems: JSON.parse(updated.unlockedItems) });
+
+    res.json({ coins: updated.coins, unlockedItems: JSON.parse(updated.unlockedItems || '[]') });
   } catch (err) {
+    if (err.status) return res.status(err.status).json({ error: err.message });
     next(err);
   }
 });

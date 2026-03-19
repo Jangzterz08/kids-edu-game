@@ -29,13 +29,28 @@ const MOCK_KID = {
 
 describe('SEC-01: Server-side price validation', () => {
   let findUniqueSpy;
-  let updateSpy;
+  let transactionSpy;
+  // txUpdateSpy captures the update call inside the transaction callback
+  let txUpdateSpy;
 
   beforeEach(() => {
     findUniqueSpy = vi.spyOn(prisma.kidProfile, 'findUnique');
-    updateSpy = vi.spyOn(prisma.kidProfile, 'update');
-    // Default: kid found
+    transactionSpy = vi.spyOn(prisma, '$transaction');
+    txUpdateSpy = vi.fn();
+
+    // Default: initial kid ownership check (outside tx) and fresh read (inside tx) both return MOCK_KID
     findUniqueSpy.mockResolvedValue(MOCK_KID);
+
+    // Default: transaction executes callback with tx mock
+    transactionSpy.mockImplementation(async (cb) => {
+      const txMock = {
+        kidProfile: {
+          findUnique: vi.fn().mockResolvedValue(MOCK_KID),
+          update: txUpdateSpy,
+        },
+      };
+      return cb(txMock);
+    });
   });
 
   afterEach(() => {
@@ -43,7 +58,7 @@ describe('SEC-01: Server-side price validation', () => {
   });
 
   it('POST /api/kids/:id/store/buy with price:0 deducts canonical price, not zero', async () => {
-    updateSpy.mockResolvedValue({
+    txUpdateSpy.mockResolvedValue({
       ...MOCK_KID,
       coins: 70,
       unlockedItems: '["frog"]',
@@ -56,7 +71,7 @@ describe('SEC-01: Server-side price validation', () => {
 
     expect(res.status).toBe(200);
     // Must use canonical price 30, NOT client-supplied 0
-    expect(updateSpy).toHaveBeenCalledWith(
+    expect(txUpdateSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           coins: { decrement: 30 },
@@ -87,7 +102,7 @@ describe('SEC-01: Server-side price validation', () => {
   });
 
   it('POST /api/kids/:id/store/buy ignores client-supplied price field entirely', async () => {
-    updateSpy.mockResolvedValue({
+    txUpdateSpy.mockResolvedValue({
       ...MOCK_KID,
       coins: 60,
       unlockedItems: '["chick"]',
@@ -100,7 +115,7 @@ describe('SEC-01: Server-side price validation', () => {
 
     expect(res.status).toBe(200);
     // Must use canonical price 40, not 9999
-    expect(updateSpy).toHaveBeenCalledWith(
+    expect(txUpdateSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           coins: { decrement: 40 },
