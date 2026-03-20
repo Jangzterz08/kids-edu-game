@@ -28,23 +28,23 @@ Kids learn and parents pay — every decision should make the learning loop more
 ### Active
 
 #### Security & Stability
-- [ ] **SEC-01**: Server validates item prices server-side, never trusting client-supplied price
-- [ ] **SEC-02**: Rate limiting on kid-login (10 req/min per IP) and kid-lookup endpoints
-- [ ] **SEC-03**: Input sanitization on name fields to prevent stored XSS in email digests
-- [ ] **SEC-04**: Supabase env var absence throws startup error in production (no silent mock-user fallback)
-- [ ] **SEC-05**: `unlockedItems` write wrapped in Prisma transaction to prevent race conditions
-- [ ] **SEC-06**: `req.body` destructured to known fields before DB upsert
+- [x] **SEC-01**: Server validates item prices server-side, never trusting client-supplied price — Validated in Phase 1: Security Hardening
+- [x] **SEC-02**: Rate limiting on kid-login (10 req/min per IP) and kid-lookup endpoints — Validated in Phase 1: Security Hardening
+- [x] **SEC-03**: Input sanitization on name fields to prevent stored XSS in email digests — Validated in Phase 1: Security Hardening
+- [x] **SEC-04**: Supabase env var absence throws startup error in production (no silent mock-user fallback) — Validated in Phase 1: Security Hardening
+- [x] **SEC-05**: `unlockedItems` write wrapped in Prisma transaction to prevent race conditions — Validated in Phase 1: Security Hardening
+- [x] **SEC-06**: `req.body` destructured to known fields before DB upsert — Validated in Phase 1: Security Hardening
 
 #### Polish
-- [ ] **POL-01**: Toast notification system for coin rewards, streak alerts, and errors
-- [ ] **POL-02**: React Error Boundary catches render crashes gracefully
-- [ ] **POL-03**: PWA install prompt nudges users to add to home screen
-- [ ] **POL-04**: Offline indicator banner when connectivity is lost
-- [ ] **POL-05**: Security headers in vercel.json (CSP, X-Frame-Options, etc.)
-- [ ] **POL-06**: OG meta tags + social preview image for link sharing
-- [ ] **POL-07**: Avatar map unified across all components (ParentDashboard shows wrong emoji for 8 avatars)
-- [ ] **POL-08**: `computeStars` logic consolidated to server-authoritative (client displays server value)
-- [ ] **POL-09**: Daily challenge slug sourced from server API (eliminate client/server duplication)
+- [x] **POL-01**: Toast notification system for coin rewards, streak alerts, and errors — Validated in Phase 2: Polish & UX
+- [x] **POL-02**: React Error Boundary catches render crashes gracefully — Validated in Phase 2: Polish & UX
+- [x] **POL-03**: PWA install prompt nudges users to add to home screen — Validated in Phase 2: Polish & UX
+- [x] **POL-04**: Offline indicator banner when connectivity is lost — Validated in Phase 2: Polish & UX
+- [x] **POL-05**: Security headers in vercel.json (CSP, X-Frame-Options, etc.) — Validated in Phase 2: Polish & UX
+- [x] **POL-06**: OG meta tags + social preview image for link sharing — Validated in Phase 2: Polish & UX
+- [x] **POL-07**: Avatar map unified across all components (ParentDashboard shows wrong emoji for 8 avatars) — Validated in Phase 2: Polish & UX
+- [x] **POL-08**: `computeStars` logic consolidated to server-authoritative (client displays server value) — Validated in Phase 2: Polish & UX
+- [x] **POL-09**: Daily challenge slug sourced from server API (eliminate client/server duplication) — Validated in Phase 2: Polish & UX
 
 #### Performance
 - [ ] **PERF-01**: `/api/kids/:id/home-summary` endpoint aggregates KidHome's 4 API calls into 1
