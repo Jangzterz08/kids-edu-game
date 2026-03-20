@@ -156,37 +156,45 @@ async function sendWeeklyDigests() {
   }
   const resend = new Resend(process.env.RESEND_API_KEY);
 
-  console.log('[digest] Starting weekly digest send…');
+  console.log('[digest] Starting weekly digest send...');
 
   const parents = await prisma.user.findMany({
     include: { kids: true },
   });
 
+  const activeParents = parents.filter(p => p.kids.length > 0);
+  const BATCH_SIZE = 10;
   let sent = 0, failed = 0;
 
-  for (const parent of parents) {
-    if (!parent.kids.length) continue;
+  for (let i = 0; i < activeParents.length; i += BATCH_SIZE) {
+    const batch = activeParents.slice(i, i + BATCH_SIZE);
 
-    try {
-      const kidsStats = await Promise.all(parent.kids.map(k => getKidWeeklyStats(k.id)));
-      const html = buildEmailHtml(parent.name, kidsStats);
+    const results = await Promise.allSettled(
+      batch.map(async (parent) => {
+        const kidsStats = await Promise.all(parent.kids.map(k => getKidWeeklyStats(k.id)));
+        const html = buildEmailHtml(parent.name, kidsStats);
+        await resend.emails.send({
+          from: FROM,
+          to: parent.email,
+          subject: `\u{1F4DA} Weekly learning update for ${parent.kids.map(k => esc(k.name) || 'Your child').join(' & ')}`,
+          html,
+        });
+        return parent.email;
+      })
+    );
 
-      await resend.emails.send({
-        from: FROM,
-        to:   parent.email,
-        subject: `📚 Weekly learning update for ${parent.kids.map(k => esc(k.name) || 'Your child').join(' & ')}`,
-        html,
-      });
-
-      sent++;
-      console.log(`[digest] Sent to ${parent.email}`);
-    } catch (err) {
-      failed++;
-      console.error(`[digest] Failed for ${parent.email}:`, err.message);
+    for (const result of results) {
+      if (result.status === 'fulfilled') {
+        sent++;
+        console.log(`[digest] Sent to ${result.value}`);
+      } else {
+        failed++;
+        console.error(`[digest] Failed:`, result.reason?.message);
+      }
     }
   }
 
   console.log(`[digest] Done — ${sent} sent, ${failed} failed`);
 }
 
-module.exports = { sendWeeklyDigests, buildEmailHtml };
+module.exports = { sendWeeklyDigests, buildEmailHtml, getKidWeeklyStats };

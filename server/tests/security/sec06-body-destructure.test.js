@@ -45,18 +45,32 @@ describe('SEC-06: req.body destructured to known fields', () => {
   let kidFindUniqueSpy;
   let lessonFindFirstSpy;
   let kidProfileUpdateSpy;
-  let lessonProgressFindUniqueSpy;
-  let lessonProgressUpsertSpy;
+  let transactionSpy;
+  let capturedTxUpsertArgs;
 
   beforeEach(() => {
+    capturedTxUpsertArgs = null;
+
     kidFindUniqueSpy = vi.spyOn(prisma.kidProfile, 'findUnique').mockResolvedValue(MOCK_KID);
     lessonFindFirstSpy = vi.spyOn(prisma.lesson, 'findFirst').mockResolvedValue(MOCK_LESSON);
     kidProfileUpdateSpy = vi.spyOn(prisma.kidProfile, 'update').mockResolvedValue(MOCK_KID);
-    lessonProgressFindUniqueSpy = vi.spyOn(prisma.lessonProgress, 'findUnique').mockResolvedValue(null);
-    lessonProgressUpsertSpy = vi.spyOn(prisma.lessonProgress, 'upsert').mockResolvedValue({
-      ...MOCK_PROGRESS,
-      starsEarned: 2,
-      coinsDelta: 10,
+
+    // Now that upsertProgress uses prisma.$transaction, spy on $transaction
+    // and capture the upsert args from inside the tx callback
+    transactionSpy = vi.spyOn(prisma, '$transaction').mockImplementation(async (cb) => {
+      const txMock = {
+        lessonProgress: {
+          findUnique: vi.fn().mockResolvedValue(null),
+          upsert: vi.fn().mockImplementation(async (args) => {
+            capturedTxUpsertArgs = args;
+            return { ...MOCK_PROGRESS, starsEarned: 2, coinsDelta: 10 };
+          }),
+        },
+        kidProfile: {
+          update: vi.fn().mockResolvedValue(MOCK_KID),
+        },
+      };
+      return cb(txMock);
     });
   });
 
@@ -77,9 +91,10 @@ describe('SEC-06: req.body destructured to known fields', () => {
       })
       .expect(200);
 
-    // The lessonProgress.upsert call should not contain evilField or kidId in data
-    expect(lessonProgressUpsertSpy).toHaveBeenCalledOnce();
-    const upsertCall = lessonProgressUpsertSpy.mock.calls[0][0];
+    expect(transactionSpy).toHaveBeenCalledOnce();
+    expect(capturedTxUpsertArgs).not.toBeNull();
+
+    const upsertCall = capturedTxUpsertArgs;
     expect(upsertCall.create).not.toHaveProperty('evilField');
     // The kid ID in the upsert should be the authenticated kid, not the body-injected 'other-id'
     expect(upsertCall.create.kidId).toBe(KID_ID);
@@ -107,8 +122,10 @@ describe('SEC-06: req.body destructured to known fields', () => {
       })
       .expect(200);
 
-    expect(lessonProgressUpsertSpy).toHaveBeenCalledOnce();
-    const upsertCall = lessonProgressUpsertSpy.mock.calls[0][0];
+    expect(transactionSpy).toHaveBeenCalledOnce();
+    expect(capturedTxUpsertArgs).not.toBeNull();
+
+    const upsertCall = capturedTxUpsertArgs;
     expect(upsertCall.create.matchScore).toBe(90);
     expect(upsertCall.create.traceScore).toBe(80);
     expect(upsertCall.create.quizScore).toBe(70);

@@ -90,14 +90,20 @@ router.get('/:kidId/stats', async (req, res, next) => {
     const kid = await resolveKidAccess(req, req.params.kidId);
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
-    const allProgress = await prisma.lessonProgress.findMany({
-      where: { kidId: kid.id },
-      select: {
-        matchScore: true, traceScore: true, quizScore: true,
-        spellingScore: true, phonicsScore: true, patternScore: true, oddOneOutScore: true,
-        starsEarned: true, updatedAt: true,
-      },
-    });
+    const [allProgress, modules] = await Promise.all([
+      prisma.lessonProgress.findMany({
+        where: { kidId: kid.id },
+        select: {
+          matchScore: true, traceScore: true, quizScore: true,
+          spellingScore: true, phonicsScore: true, patternScore: true, oddOneOutScore: true,
+          starsEarned: true, updatedAt: true,
+        },
+      }),
+      prisma.module.findMany({
+        orderBy: { sortOrder: 'asc' },
+        include: { lessons: { include: { progress: { where: { kidId: kid.id } } } } },
+      }),
+    ]);
 
     const totalLessonsCompleted = allProgress.filter(p => p.starsEarned > 0).length;
 
@@ -127,10 +133,6 @@ router.get('/:kidId/stats', async (req, res, next) => {
     const weeklyActivity = Object.values(weekMap);
 
     // Recommended: lowest-pct incomplete module
-    const modules = await prisma.module.findMany({
-      orderBy: { sortOrder: 'asc' },
-      include: { lessons: { include: { progress: { where: { kidId: kid.id } } } } },
-    });
     let recommended = null;
     let lowestPct = 1;
     for (const mod of modules) {
