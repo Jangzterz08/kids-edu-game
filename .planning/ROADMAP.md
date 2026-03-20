@@ -55,7 +55,7 @@ Plans:
   1. KidHome loads its full data (progress, achievements, classrooms, daily challenge) in a single network request rather than four
   2. Saving a lesson result triggers one DB transaction rather than 3–4 sequential round-trips
   3. The weekly digest cron completes without sequentially blocking on each parent — sends are batched
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 03-01-PLAN.md — Home-summary aggregated endpoint (PERF-01) + KidHome client update
 - [ ] 03-02-PLAN.md — Transaction-wrapped progress save (PERF-02) + parallel stats queries (PERF-03) + batched digest sends (PERF-04)
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 2/2 | Complete   | 2026-03-19 |
 | 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
-| 3. Performance | 0/2 | Not started | - |
+| 3. Performance | 1/2 | In Progress|  |
 | 4. Parent Subscriptions | 0/TBD | Not started | - |
 | 5. School Licensing | 0/TBD | Not started | - |
 | 6. Adaptive Learning | 0/TBD | Not started | - |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-polish-ux 02-03-PLAN.md
-last_updated: "2026-03-20T19:05:23.027Z"
+stopped_at: Completed 03-performance 03-01-PLAN.md
+last_updated: "2026-03-20T19:36:36.799Z"
 progress:
   total_phases: 7
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 6
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 02 — polish-ux
+**Current focus:** Phase 03 — performance
 
 ## Current Position
 
-Phase: 02 (polish-ux) — EXECUTING
-Plan: 2 of 3
+Phase: 03 (performance) — EXECUTING
+Plan: 1 of 2
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Plan: 2 of 3
 | Phase 02-polish-ux P01 | 3 | 2 tasks | 5 files |
 | Phase 02-polish-ux P02 | 3 | 2 tasks | 6 files |
 | Phase 02-polish-ux P03 | 4 | 2 tasks | 11 files |
+| Phase 03-performance P01 | 165 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 02-polish-ux]: Single AVATAR_EMOJIS constant in lib/avatars.js (16 entries, dino: 🦖) — all 7 consumers import from it
 - [Phase 02-polish-ux]: computeStars removed from MiniGame.jsx — server progressSync.js is sole authority on starsEarned
 - [Phase 02-polish-ux]: /today endpoint added before /:kidId in dailyChallenge.js to avoid Express route shadowing; ModuleComplete.jsx fetches slug from API
+- [Phase 03-performance]: Shared dailyChallengeUtils.js CJS module avoids duplicating DAILY_SLUGS array and pure functions across route files
+- [Phase 03-performance]: home-summary endpoint uses Promise.all for parallel DB queries; refreshKids removed from KidHome — kid stats served directly by aggregated endpoint
 
 ### Pending Todos
 
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:55:46.028Z
-Stopped at: Completed 02-polish-ux 02-03-PLAN.md
+Last session: 2026-03-20T19:36:36.797Z
+Stopped at: Completed 03-performance 03-01-PLAN.md
 Resume file: None
