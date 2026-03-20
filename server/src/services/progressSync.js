@@ -16,56 +16,59 @@ async function upsertProgress(kidId, entry) {
   const { lessonId, viewed, attempts, completedAt } = entry;
   const starsEarned = entry.starsEarned ?? computeStars(entry);
 
-  const existing = await prisma.lessonProgress.findUnique({
-    where: { kidId_lessonId: { kidId, lessonId } },
+  // --- Transaction: lesson upsert + stars/coins update (atomic) ---
+  const result = await prisma.$transaction(async (tx) => {
+    const existing = await tx.lessonProgress.findUnique({
+      where: { kidId_lessonId: { kidId, lessonId } },
+    });
+
+    const finalStars = Math.max(starsEarned, existing?.starsEarned ?? 0);
+
+    // Build score fields — keep best score for each game type
+    const scoreData = {};
+    for (const field of SCORE_FIELDS) {
+      scoreData[field] = maxScore(entry[field], existing?.[field]);
+    }
+
+    const record = await tx.lessonProgress.upsert({
+      where: { kidId_lessonId: { kidId, lessonId } },
+      create: {
+        kidId,
+        lessonId,
+        viewed: viewed ?? false,
+        ...scoreData,
+        starsEarned: finalStars,
+        attempts: attempts ?? 1,
+        completedAt: completedAt ? new Date(completedAt) : null,
+      },
+      update: {
+        viewed: viewed ?? existing?.viewed ?? false,
+        ...scoreData,
+        starsEarned: finalStars,
+        attempts: (existing?.attempts ?? 0) + (attempts ?? 1),
+        completedAt: completedAt ? new Date(completedAt) : existing?.completedAt,
+      },
+    });
+
+    // Update totalStars and coins on kid profile -- merged into single update
+    const starDelta = finalStars - (existing?.starsEarned ?? 0);
+    const coinsDelta = starDelta > 0 ? starDelta * 5 : 3;
+
+    const dataUpdate = {};
+    if (starDelta > 0) dataUpdate.totalStars = { increment: starDelta };
+    if (coinsDelta > 0) dataUpdate.coins = { increment: coinsDelta };
+
+    if (Object.keys(dataUpdate).length > 0) {
+      await tx.kidProfile.update({
+        where: { id: kidId },
+        data: dataUpdate,
+      });
+    }
+
+    return { ...record, coinsDelta };
   });
 
-  const finalStars = Math.max(starsEarned, existing?.starsEarned ?? 0);
-
-  // Build score fields — keep best score for each game type
-  const scoreData = {};
-  for (const field of SCORE_FIELDS) {
-    scoreData[field] = maxScore(entry[field], existing?.[field]);
-  }
-
-  const record = await prisma.lessonProgress.upsert({
-    where: { kidId_lessonId: { kidId, lessonId } },
-    create: {
-      kidId,
-      lessonId,
-      viewed: viewed ?? false,
-      ...scoreData,
-      starsEarned: finalStars,
-      attempts: attempts ?? 1,
-      completedAt: completedAt ? new Date(completedAt) : null,
-    },
-    update: {
-      viewed: viewed ?? existing?.viewed ?? false,
-      ...scoreData,
-      starsEarned: finalStars,
-      attempts: (existing?.attempts ?? 0) + (attempts ?? 1),
-      completedAt: completedAt ? new Date(completedAt) : existing?.completedAt,
-    },
-  });
-
-  // Update totalStars and coins on kid profile
-  const starDelta = finalStars - (existing?.starsEarned ?? 0);
-  const coinsDelta = starDelta > 0 ? starDelta * 5 : 3;
-
-  if (starDelta > 0) {
-    await prisma.kidProfile.update({
-      where: { id: kidId },
-      data: { totalStars: { increment: starDelta } },
-    });
-  }
-  if (coinsDelta > 0) {
-    await prisma.kidProfile.update({
-      where: { id: kidId },
-      data: { coins: { increment: coinsDelta } },
-    });
-  }
-
-  // Update daily streak — only increments once per day
+  // --- Streak update: non-critical, outside transaction ---
   try {
     const kidData = await prisma.kidProfile.findUnique({
       where: { id: kidId },
@@ -92,7 +95,7 @@ async function upsertProgress(kidId, entry) {
     console.error('[streak] Update failed:', streakErr.message);
   }
 
-  return { ...record, coinsDelta };
+  return result;
 }
 
 function maxScore(a, b) {
