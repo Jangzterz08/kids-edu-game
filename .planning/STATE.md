@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-security-hardening/01-02-PLAN.md
-last_updated: "2026-03-19T04:13:06.636Z"
+stopped_at: Completed 02-polish-ux 02-02-PLAN.md
+last_updated: "2026-03-20T18:44:29.224Z"
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 5
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 01 — security-hardening
+**Current focus:** Phase 02 — polish-ux
 
 ## Current Position
 
-Phase: 01 (security-hardening) — COMPLETE
-Plan: 2 of 2
+Phase: 02 (polish-ux) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -48,6 +48,8 @@ Plan: 2 of 2
 *Updated after each plan completion*
 | Phase 01-security-hardening P01 | 12 | 2 tasks | 9 files |
 | Phase 01-security-hardening P02 | 7 | 2 tasks | 9 files |
+| Phase 02-polish-ux P01 | 3 | 2 tasks | 5 files |
+| Phase 02-polish-ux P02 | 3 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -67,6 +69,10 @@ From PROJECT.md Key Decisions table:
 - [Phase 01-security-hardening P02]: Startup guard throws at module load time (not runtime) when SUPABASE_URL or SUPABASE_SERVICE_KEY missing in production
 - [Phase 01-security-hardening P02]: Prisma interactive transaction ($transaction async callback) wraps coin purchase for race-safe read-modify-write
 - [Phase 01-security-hardening P02]: req.body allowlist destructuring in progress route instead of ...req.body spread
+- [Phase 02-polish-ux]: sonner@2.0.7 + react-error-boundary@6.1.1 installed; toast calls in useProgress.js hook (not MiniGame.jsx); streakCount added to POST /lesson response
+- [Phase 02-polish-ux]: Duplicate streak update in progress route removed — upsertProgress in progressSync.js is single owner of streak logic
+- [Phase 02-polish-ux]: OfflineBanner and InstallPrompt mounted in App.jsx using React Fragment — avoids Router/Provider dependency while keeping always-rendered, conditionally-visible pattern
+- [Phase 02-polish-ux]: CSP connect-src in vercel.json scoped to Supabase wildcard + Railway URL — must update when new third-party APIs are added
 
 ### Pending Todos
 
@@ -80,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-19T04:10:00Z
-Stopped at: Completed 01-security-hardening/01-02-PLAN.md
+Last session: 2026-03-20T18:44:29.221Z
+Stopped at: Completed 02-polish-ux 02-02-PLAN.md
 Resume file: None

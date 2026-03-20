@@ -41,7 +41,11 @@ Plans:
   3. A parent visiting the app on the second visit on mobile sees a prompt to add it to their home screen
   4. A parent whose kid purchased a store avatar sees the correct avatar emoji in ParentDashboard (no fallback bear)
   5. Sharing a KidsLearn link on iMessage or Slack shows the correct preview image and title
-**Plans**: TBD
+**Plans:** 2/3 plans executed
+Plans:
+- [ ] 02-01-PLAN.md — Toast notifications (POL-01) + Error Boundary (POL-02)
+- [ ] 02-02-PLAN.md — PWA install prompt (POL-03) + Offline banner (POL-04) + Security headers (POL-05) + OG meta (POL-06)
+- [ ] 02-03-PLAN.md — Avatar unification (POL-07) + Server-side stars (POL-08) + Daily challenge endpoint (POL-09)
 
 ### Phase 3: Performance
 **Goal**: The app loads fast enough that no user experiences a noticeable wait on any main screen
@@ -105,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 2/2 | Complete   | 2026-03-19 |
-| 2. Polish & UX | 0/TBD | Not started | - |
+| 2. Polish & UX | 2/3 | In Progress|  |
 | 3. Performance | 0/TBD | Not started | - |
 | 4. Parent Subscriptions | 0/TBD | Not started | - |
 | 5. School Licensing | 0/TBD | Not started | - |
