@@ -49,7 +49,7 @@ function cardGradient(color) {
 }
 
 export default function KidHome() {
-  const { activeKid, refreshKids } = useKid();
+  const { activeKid } = useKid();
   const navigate = useNavigate();
   const [progressData, setProgressData] = useState([]);
   const [achievements, setAchievements] = useState([]);
@@ -61,28 +61,15 @@ export default function KidHome() {
 
   useEffect(() => {
     if (!activeKid) return;
-    api.get(`/api/progress/${activeKid.id}`)
-      .then(d => setProgressData(d.progress || []))
-      .catch(() => {});
-    api.get(`/api/achievements/${activeKid.id}`)
-      .then(d => setAchievements(d.achievements || []))
-      .catch(() => {});
-    api.get(`/api/kids/me/classrooms`)
-      .then(d => setHasClassroom((d.classrooms || []).length > 0))
-      .catch(() => {
-        api.get(`/api/kids/${activeKid.id}/classrooms`)
-          .then(d => setHasClassroom((d.classrooms || []).length > 0))
-          .catch(() => setHasClassroom(false));
-      });
-    refreshKids().then(kids => {
-      const kid = kids?.find(k => k.id === activeKid.id);
-      if (kid) {
-        setStreak(kid.currentStreak || 0);
-        setCoins(kid.coins || 0);
-      }
-    });
-    api.get(`/api/daily-challenge/${activeKid.id}`)
-      .then(d => setDailyChallenge(d))
+    api.get(`/api/kids/${activeKid.id}/home-summary`)
+      .then(data => {
+        setProgressData(data.progress || []);
+        setAchievements(data.achievements || []);
+        setHasClassroom((data.classrooms || []).length > 0);
+        setStreak(data.kid?.currentStreak || 0);
+        setCoins(data.kid?.coins || 0);
+        setDailyChallenge(data.dailyChallenge || null);
+      })
       .catch(() => {});
   }, [activeKid?.id]);
 
