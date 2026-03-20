@@ -33,7 +33,6 @@ export default function MiniGame() {
     // Record score for every lesson in the module (in parallel)
     const update = {
       viewed: true,
-      starsEarned: computeStars(newScores),
       attempts: 1,
       completedAt: new Date().toISOString(),
     };
@@ -52,15 +51,6 @@ export default function MiniGame() {
     } else {
       navigate(`/play/${moduleSlug}/done`, { state: { scores: newScores } });
     }
-  }
-
-  function computeStars(s) {
-    const vals = Object.values(s).filter(v => v !== undefined);
-    if (vals.length === 0) return 1;
-    const allGood = vals.every(v => v >= 80);
-    if (allGood && vals.length >= 2) return 3;
-    if (vals.some(v => v >= 60)) return 2;
-    return 1;
   }
 
   const game = games[gameIdx];

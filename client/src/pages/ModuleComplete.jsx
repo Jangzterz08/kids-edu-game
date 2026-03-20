@@ -1,6 +1,6 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getModule, getDailyChallengeSlug } from '../data/index';
+import { getModule } from '../data/index';
 import { useKid } from '../context/KidContext';
 import { api } from '../lib/api';
 import CelebrationModal from '../components/ui/CelebrationModal';
@@ -34,14 +34,16 @@ export default function ModuleComplete() {
       }).catch(() => {});
 
       // Auto-complete daily challenge if this is today's featured module
-      const todaySlug = getDailyChallengeSlug();
-      if (moduleSlug === todaySlug) {
-        api.post(`/api/daily-challenge/${activeKid.id}/complete`, {})
-          .then(result => {
-            if (result?.success) setDailyBonus(result.coinsEarned || 0);
-          })
-          .catch(() => {});
-      }
+      api.get('/api/daily-challenge/today')
+        .then(({ moduleSlug: todaySlug }) => {
+          if (moduleSlug === todaySlug) {
+            return api.post(`/api/daily-challenge/${activeKid.id}/complete`, {});
+          }
+        })
+        .then(result => {
+          if (result?.success) setDailyBonus(result.coinsEarned || 0);
+        })
+        .catch(() => {});
     }
     return () => clearTimeout(t);
   }, []);

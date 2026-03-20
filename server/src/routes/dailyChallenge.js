@@ -21,6 +21,11 @@ function getChallengeSlug() {
   return DAILY_SLUGS[dayOfYear % DAILY_SLUGS.length];
 }
 
+// GET /api/daily-challenge/today — returns today's challenge module slug (no kid-specific data)
+router.get('/today', (req, res) => {
+  res.json({ moduleSlug: getChallengeSlug() });
+});
+
 // GET /api/daily-challenge/:kidId — returns today's challenge + completion status
 router.get('/:kidId', async (req, res, next) => {
   try {
