@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/db');
+const { getChallengeSlug, todayDate } = require('../lib/dailyChallengeUtils');
 
 const STORE_ITEMS = {
   frog:      { price: 30  },
@@ -21,6 +22,27 @@ async function verifyKidOwnership(kidId, parentId) {
   const kid = await prisma.kidProfile.findUnique({ where: { id: kidId } });
   if (!kid || kid.parentId !== parentId) return null;
   return kid;
+}
+
+// Multi-role kid access: kid JWT (own data), parent (own kids), teacher (enrolled students)
+async function resolveKidAccess(req, kidId) {
+  if (req.user.type === 'kid') {
+    if (req.user.id !== kidId) return null;
+    return prisma.kidProfile.findUnique({ where: { id: kidId } });
+  }
+  const dbUser = await prisma.user.findUnique({ where: { supabaseAuthId: req.user.id } });
+  if (!dbUser) return null;
+  if (dbUser.role === 'parent') {
+    const kid = await prisma.kidProfile.findUnique({ where: { id: kidId } });
+    return kid?.parentId === dbUser.id ? kid : null;
+  }
+  if (dbUser.role === 'teacher') {
+    const enrollment = await prisma.classroomStudent.findFirst({
+      where: { kidId, classroom: { teacherId: dbUser.id } },
+    });
+    return enrollment ? prisma.kidProfile.findUnique({ where: { id: kidId } }) : null;
+  }
+  return null;
 }
 
 // GET /api/kids
@@ -71,6 +93,70 @@ router.post('/', async (req, res, next) => {
       },
     });
     res.status(201).json(kid);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/kids/:kidId/home-summary — aggregated KidHome data (single request replacing 5)
+router.get('/:kidId/home-summary', async (req, res, next) => {
+  try {
+    const kid = await resolveKidAccess(req, req.params.kidId);
+    if (!kid) return res.status(404).json({ error: 'Kid not found' });
+
+    const today = todayDate();
+
+    const [modules, achievements, enrollments, dailyChallenge] = await Promise.all([
+      prisma.module.findMany({
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          lessons: {
+            include: { progress: { where: { kidId: kid.id } } },
+            orderBy: { sortOrder: 'asc' },
+          },
+        },
+      }),
+      prisma.achievement.findMany({
+        where: { kidId: kid.id },
+        orderBy: { earnedAt: 'desc' },
+      }),
+      prisma.classroomStudent.findMany({
+        where: { kidId: kid.id },
+        include: { classroom: { select: { id: true, name: true } } },
+      }),
+      prisma.dailyChallenge.findUnique({
+        where: { kidId_date: { kidId: kid.id, date: today } },
+      }),
+    ]);
+
+    const progress = modules.map(mod => ({
+      moduleSlug: mod.slug,
+      title: mod.title,
+      iconEmoji: mod.iconEmoji,
+      lessonsTotal: mod.lessons.length,
+      lessonsCompleted: mod.lessons.filter(l => l.progress[0]?.starsEarned > 0).length,
+      starsEarned: mod.lessons.reduce((sum, l) => sum + (l.progress[0]?.starsEarned ?? 0), 0),
+      maxStars: mod.lessons.length * 3,
+    }));
+
+    res.json({
+      kid: {
+        id: kid.id,
+        name: kid.name,
+        avatarId: kid.avatarId,
+        totalStars: kid.totalStars,
+        currentStreak: kid.currentStreak,
+        coins: kid.coins,
+      },
+      progress,
+      achievements,
+      classrooms: enrollments.map(e => e.classroom),
+      dailyChallenge: {
+        moduleSlug: getChallengeSlug(),
+        completedAt: dailyChallenge?.completedAt || null,
+        coinsEarned: dailyChallenge?.coinsEarned || 0,
+      },
+    });
   } catch (err) {
     next(err);
   }
