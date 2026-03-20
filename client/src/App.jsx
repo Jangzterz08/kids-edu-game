@@ -6,6 +6,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import ParentLayout from './components/layout/ParentLayout';
 import KidLayout from './components/layout/KidLayout';
 import TeacherLayout from './components/layout/TeacherLayout';
+import OfflineBanner from './components/ui/OfflineBanner';
+import InstallPrompt from './components/pwa/InstallPrompt';
 
 // Route-level code splitting — each group loads as a separate chunk
 const Login           = lazy(() => import('./pages/Login'));
@@ -42,49 +44,53 @@ function OceanLoader() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <KidProvider>
-        <BrowserRouter>
-          <Suspense fallback={<OceanLoader />}>
-            <Routes>
-              <Route path="/login" element={<Login />} />
+    <>
+      <OfflineBanner />
+      <AuthProvider>
+        <KidProvider>
+          <BrowserRouter>
+            <Suspense fallback={<OceanLoader />}>
+              <Routes>
+                <Route path="/login" element={<Login />} />
 
-              {/* Teacher routes */}
-              <Route element={<ProtectedRoute requireRole="teacher" />}>
-                <Route element={<TeacherLayout />}>
-                  <Route path="/teacher"                element={<TeacherDashboard />} />
-                  <Route path="/teacher/classroom/:id"  element={<ClassroomDetail />} />
+                {/* Teacher routes */}
+                <Route element={<ProtectedRoute requireRole="teacher" />}>
+                  <Route element={<TeacherLayout />}>
+                    <Route path="/teacher"                element={<TeacherDashboard />} />
+                    <Route path="/teacher/classroom/:id"  element={<ClassroomDetail />} />
+                  </Route>
                 </Route>
-              </Route>
 
-              {/* Parent routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route element={<ParentLayout />}>
-                  <Route path="/"            element={<KidSelect />} />
-                  <Route path="/dashboard"   element={<ParentDashboard />} />
-                  <Route path="/classrooms"  element={<ParentClassrooms />} />
+                {/* Parent routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<ParentLayout />}>
+                    <Route path="/"            element={<KidSelect />} />
+                    <Route path="/dashboard"   element={<ParentDashboard />} />
+                    <Route path="/classrooms"  element={<ParentClassrooms />} />
+                  </Route>
                 </Route>
-              </Route>
 
-              {/* Kid play routes */}
-              <Route element={<ProtectedRoute requireKid />}>
-                <Route element={<KidLayout />}>
-                  <Route path="/play"                    element={<KidHome />} />
-                  <Route path="/play/store"              element={<CoinStore />} />
-                  <Route path="/play/daily"              element={<DailyChallenge />} />
-                  <Route path="/play/leaderboard"        element={<KidLeaderboard />} />
-                  <Route path="/play/:moduleSlug"        element={<ModuleIntro />} />
-                  <Route path="/play/:moduleSlug/lesson" element={<LessonPlayer />} />
-                  <Route path="/play/:moduleSlug/game"   element={<MiniGame />} />
-                  <Route path="/play/:moduleSlug/done"   element={<ModuleComplete />} />
+                {/* Kid play routes */}
+                <Route element={<ProtectedRoute requireKid />}>
+                  <Route element={<KidLayout />}>
+                    <Route path="/play"                    element={<KidHome />} />
+                    <Route path="/play/store"              element={<CoinStore />} />
+                    <Route path="/play/daily"              element={<DailyChallenge />} />
+                    <Route path="/play/leaderboard"        element={<KidLeaderboard />} />
+                    <Route path="/play/:moduleSlug"        element={<ModuleIntro />} />
+                    <Route path="/play/:moduleSlug/lesson" element={<LessonPlayer />} />
+                    <Route path="/play/:moduleSlug/game"   element={<MiniGame />} />
+                    <Route path="/play/:moduleSlug/done"   element={<ModuleComplete />} />
+                  </Route>
                 </Route>
-              </Route>
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </KidProvider>
-    </AuthProvider>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </KidProvider>
+      </AuthProvider>
+      <InstallPrompt />
+    </>
   );
 }
