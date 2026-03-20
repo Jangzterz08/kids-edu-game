@@ -47,10 +47,10 @@ Kids learn and parents pay — every decision should make the learning loop more
 - [x] **POL-09**: Daily challenge slug sourced from server API (eliminate client/server duplication) — Validated in Phase 2: Polish & UX
 
 #### Performance
-- [ ] **PERF-01**: `/api/kids/:id/home-summary` endpoint aggregates KidHome's 4 API calls into 1
-- [ ] **PERF-02**: `progressSync.upsertProgress` wrapped in single Prisma transaction (reduce 3–4 round-trips)
-- [ ] **PERF-03**: Stats endpoint reduced from 2 full-table scans to 1 query
-- [ ] **PERF-04**: Weekly digest batched with `Promise.allSettled` in groups of 10
+- [x] **PERF-01**: `/api/kids/:id/home-summary` endpoint aggregates KidHome's 4 API calls into 1 — Validated in Phase 3: Performance
+- [x] **PERF-02**: `progressSync.upsertProgress` wrapped in single Prisma transaction (reduce 3–4 round-trips) — Validated in Phase 3: Performance
+- [x] **PERF-03**: Stats endpoint parallelized via Promise.all (2 queries run concurrently) — Validated in Phase 3: Performance
+- [x] **PERF-04**: Weekly digest batched with `Promise.allSettled` in groups of 10 — Validated in Phase 3: Performance
 
 #### Monetization — Parent Subscriptions
 - [ ] **MON-01**: Freemium tier: first 3 modules free, remaining 10 require premium subscription
@@ -93,7 +93,7 @@ Kids learn and parents pay — every decision should make the learning loop more
 - Auth: Dual JWT — Supabase for adults, custom kid JWT for children
 - Content is static JS modules on client mirroring DB seed (13 modules, 117 lessons)
 - Adaptive learning schema already exists in DB (ModuleDifficulty, ReviewSchedule tables) but has zero application code — ready to be wired up
-- Zero test coverage currently exists
+- 27 tests across 10 files (security + performance) — Phase 1–3 coverage
 
 ## Constraints
 
@@ -114,4 +114,4 @@ Kids learn and parents pay — every decision should make the learning loop more
 | Security fixes before monetization | Can't charge money with a broken auth model | — Pending |
 
 ---
-*Last updated: 2026-03-18 after initialization*
+*Last updated: 2026-03-20 after Phase 3: Performance completion*
