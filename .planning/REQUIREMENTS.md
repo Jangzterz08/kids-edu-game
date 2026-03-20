@@ -29,9 +29,9 @@
 ### Performance
 
 - [x] **PERF-01**: `GET /api/kids/:id/home-summary` endpoint aggregates all KidHome data (progress, achievements, classrooms, daily challenge) into one response
-- [ ] **PERF-02**: `progressSync.upsertProgress` wrapped in single Prisma `$transaction` (reduce 3–4 sequential round-trips to 1)
-- [ ] **PERF-03**: Stats endpoint (`/api/progress/:kidId/stats`) refactored to single query (eliminate second full-table scan)
-- [ ] **PERF-04**: Weekly digest sends batched with `Promise.allSettled` in groups of 10 parents
+- [x] **PERF-02**: `progressSync.upsertProgress` wrapped in single Prisma `$transaction` (reduce 3–4 sequential round-trips to 1)
+- [x] **PERF-03**: Stats endpoint (`/api/progress/:kidId/stats`) refactored to single query (eliminate second full-table scan)
+- [x] **PERF-04**: Weekly digest sends batched with `Promise.allSettled` in groups of 10 parents
 
 ### Monetization — Parent Subscriptions
 
@@ -109,9 +109,9 @@
 | POL-08 | Phase 2 — Polish & UX | Complete |
 | POL-09 | Phase 2 — Polish & UX | Complete |
 | PERF-01 | Phase 3 — Performance | Complete |
-| PERF-02 | Phase 3 — Performance | Pending |
-| PERF-03 | Phase 3 — Performance | Pending |
-| PERF-04 | Phase 3 — Performance | Pending |
+| PERF-02 | Phase 3 — Performance | Complete |
+| PERF-03 | Phase 3 — Performance | Complete |
+| PERF-04 | Phase 3 — Performance | Complete |
 | MON-01 | Phase 4 — Parent Subscriptions | Pending |
 | MON-02 | Phase 4 — Parent Subscriptions | Pending |
 | MON-03 | Phase 4 — Parent Subscriptions | Pending |

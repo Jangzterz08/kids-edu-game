@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-performance 03-01-PLAN.md
-last_updated: "2026-03-20T19:36:36.799Z"
+stopped_at: Completed 03-performance 03-02-PLAN.md
+last_updated: "2026-03-20T19:37:52.967Z"
 progress:
   total_phases: 7
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -52,6 +52,7 @@ Plan: 1 of 2
 | Phase 02-polish-ux P02 | 3 | 2 tasks | 6 files |
 | Phase 02-polish-ux P03 | 4 | 2 tasks | 11 files |
 | Phase 03-performance P01 | 165 | 2 tasks | 5 files |
+| Phase 03-performance P02 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,10 @@ From PROJECT.md Key Decisions table:
 - [Phase 02-polish-ux]: /today endpoint added before /:kidId in dailyChallenge.js to avoid Express route shadowing; ModuleComplete.jsx fetches slug from API
 - [Phase 03-performance]: Shared dailyChallengeUtils.js CJS module avoids duplicating DAILY_SLUGS array and pure functions across route files
 - [Phase 03-performance]: home-summary endpoint uses Promise.all for parallel DB queries; refreshKids removed from KidHome — kid stats served directly by aggregated endpoint
+- [Phase 03-performance]: Streak update remains outside prisma.$transaction as non-critical best-effort — streak failure must not roll back the lesson save
+- [Phase 03-performance]: Two kidProfile.update calls (stars + coins) merged into one conditional update inside transaction using dataUpdate object
+- [Phase 03-performance]: Promise.allSettled for digest batch: individual send failures logged but do not abort the batch (BATCH_SIZE=10)
+- [Phase 03-performance]: sec06 test updated to spy on prisma.$transaction (not lessonProgress.upsert) since upsertProgress now wraps all DB writes in a transaction
 
 ### Pending Todos
 
@@ -93,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T19:36:36.797Z
-Stopped at: Completed 03-performance 03-01-PLAN.md
+Last session: 2026-03-20T19:37:52.965Z
+Stopped at: Completed 03-performance 03-02-PLAN.md
 Resume file: None
