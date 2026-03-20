@@ -40,8 +40,9 @@ Declared values (all multiples of 4, drawn from `--space-*` tokens in `client/sr
 | sm | 8px | Compact element spacing, plan picker card internal padding |
 | md | 16px | Default element spacing, subscription section card padding |
 | lg | 24px | Section padding, plan picker gap between cards |
-| xl | 40px | Layout gaps (existing token value — preserved for backward compatibility) |
 | 2xl | 64px | Page-level spacing |
+
+**Inherited token — not introduced in Phase 4:** `--space-xl` is `40px` in `client/src/index.css:100` (a Phase 2 token). This value is not a standard 8-point scale multiple. Phase 4 does not introduce any new usages of `--space-xl`; it is referenced only by the pre-existing `.page-center` and `.kid-btn` rules defined in Phase 2.
 
 **Source:** `--space-xs` through `--space-2xl` in `client/src/index.css`.
 
@@ -68,6 +69,8 @@ Font stack: `'Fredoka', 'Nunito', system-ui, sans-serif` — already set on `bod
 
 Weights in use: 400 (regular) and 600 (semibold). These are the only two weights applied to Phase 4 UI components.
 
+**Size gap note:** The 16px Label and 18px Body sizes are both intentionally present. 16px is used for compact metadata (billing dates, status pills, price secondary text) where space is constrained; 18px is used for prose-length copy (plan descriptions, banner body text) where readability at a relaxed line-height matters.
+
 ---
 
 ## Color
@@ -82,6 +85,8 @@ Ocean palette — all tokens already defined in `client/src/index.css:11–101`.
 | Destructive | `#EF4444` | `--accent-red` | `past_due` subscription status indicator, payment failed state text |
 
 **Accent reserved for:** "Best value" badge background on the annual plan picker card, and the active/trialing subscription status pill border. No other new UI in Phase 4 uses `--green` as accent.
+
+**`--primary` vs `--green` distinction:** `--primary` (`#0EA5E9`) is the interactive and brand accent — used for selection borders on plan picker cards, focus rings, CTAs, and the upgrade banner left-border. `--green` (`#10B981`) is the semantic success and recommendation accent — used exclusively for the "Best value" badge, the active status pill, and the "Save 33%" label. When in doubt: if the element communicates action or selection, use `--primary`; if it communicates a positive outcome or a recommended choice, use `--green`.
 
 **Locked ModuleCard overlay:** Uses `opacity: 0.45` on the entire card (established in CONTEXT.md specifics: "~40% opacity"). The lock icon itself is `🔒` rendered at `font-size: 20px` — no color override, emoji color is system-default.
 
@@ -150,7 +155,7 @@ Shown inline inside `SubscriptionSection` when parent clicks "Upgrade Now" (repl
 | Annual card | Glass panel, `--font-md` price display "$39.99/yr", `--font-sm` label "Billed annually", green "Best value" badge (top-right), `--font-xs` secondary "Save 33%" |
 | Unselected card | `border: 1.5px solid var(--glass-border)` |
 | Selected card | `border: 2px solid var(--primary)`, `background: rgba(14,165,233,0.12)` |
-| Confirm CTA | `.kid-btn` blue style, full-width, label: "Start Free Trial" (if still in trial window) or "Subscribe" (post-trial). Disabled until a plan card is selected. |
+| Confirm CTA | `.kid-btn` blue style, full-width, label: "Start Free Trial" (if still in trial window) or "Subscribe to Monthly Plan" / "Subscribe to Annual Plan" (post-trial, reflects selected plan). Disabled until a plan card is selected. |
 | Cancel/back | Ghost text link: "Maybe later" below the CTA — no button styling, `--text-secondary` color. |
 
 ### Subscription Management Section (MON-04)
@@ -169,7 +174,7 @@ Shown in `SubscriptionSection` when `subscriptionStatus === 'active'`.
 
 | Event | What happens |
 |-------|-------------|
-| Parent clicks "Subscribe" / "Start Free Trial" | Client POSTs to `/api/billing/checkout`, receives `{ url }`, executes `window.location.href = url` — full redirect to Stripe-hosted Checkout page |
+| Parent clicks "Subscribe to Monthly Plan" / "Subscribe to Annual Plan" / "Start Free Trial" | Client POSTs to `/api/billing/checkout`, receives `{ url }`, executes `window.location.href = url` — full redirect to Stripe-hosted Checkout page |
 | Checkout success | Stripe redirects to `/parent?checkout=success` — show `toast.success("Subscription activated! All modules unlocked.")` on mount if query param present |
 | Checkout cancel | Stripe redirects to `/parent?checkout=cancel` — show `toast("Checkout cancelled — you can upgrade any time.")` on mount if query param present |
 | Checkout session creation fails | `toast.error("Couldn't start checkout — please try again.")` — do not redirect |
@@ -191,7 +196,8 @@ Shown in `SubscriptionSection` when `subscriptionStatus === 'active'`.
 | Primary CTA — upgrade (trial active) | "Upgrade Now" |
 | Primary CTA — upgrade (no subscription) | "Upgrade Now" |
 | Primary CTA — checkout confirm (trial window open) | "Start Free Trial" |
-| Primary CTA — checkout confirm (post-trial) | "Subscribe" |
+| Primary CTA — checkout confirm (post-trial, monthly selected) | "Subscribe to Monthly Plan" |
+| Primary CTA — checkout confirm (post-trial, annual selected) | "Subscribe to Annual Plan" |
 | Primary CTA — billing portal | "Manage billing" |
 | Plan picker cancel | "Maybe later" |
 | Upgrade banner heading — trialing | "X days left in your free trial" |
