@@ -1,9 +1,4 @@
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-  frog: '🐸', chick: '🐥', hamster: '🐹', panda: '🐼',
-  butterfly: '🦋', dragon: '🐉', dino: '🦖', unicorn: '🦄',
-};
+import { AVATAR_EMOJIS } from '../../lib/avatars';
 
 export default function KidCard({ kid, onClick, active, onDelete, onSetPin }) {
   return (

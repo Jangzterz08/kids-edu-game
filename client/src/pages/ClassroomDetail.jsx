@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
+import { AVATAR_EMOJIS } from '../lib/avatars';
 import LeaderboardTable from '../components/classroom/LeaderboardTable';
 
 export default function ClassroomDetail() {
@@ -109,13 +110,6 @@ export default function ClassroomDetail() {
     </div>
   );
 }
-
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-  frog: '🐸', chick: '🐥', hamster: '🐹', panda: '🐼',
-  butterfly: '🦋', dragon: '🐉', dino: '🦕', unicorn: '🦄',
-};
 
 const styles = {
   center: { textAlign: 'center', padding: 60, fontSize: 'var(--font-md)', color: 'var(--text-secondary)' },

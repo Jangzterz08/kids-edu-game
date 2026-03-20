@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useKid } from '../context/KidContext';
 import { MODULE_REGISTRY, getModule } from '../data/index';
 import { api } from '../lib/api';
+import { AVATAR_EMOJIS } from '../lib/avatars';
 import OllieMascot from '../components/OllieMascot';
 import StarBadge from '../components/modules/StarBadge';
 
@@ -22,13 +23,6 @@ function getOllieMessage(streak, earnedCount, totalCount, dailyDone) {
   if (hour < 17) return 'Keep going! 💪';
   return 'Learning tonight! 🌙';
 }
-
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-  frog: '🐸', chick: '🐥', hamster: '🐹', panda: '🐼',
-  butterfly: '🦋', dragon: '🐉', dino: '🦖', unicorn: '🦄',
-};
 
 const CATEGORIES = [
   { id: 'all',      label: 'All Subjects', emoji: '⭐', slugs: null },

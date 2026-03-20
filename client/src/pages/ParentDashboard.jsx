@@ -2,13 +2,9 @@ import { useEffect, useState } from 'react';
 import { useKid } from '../context/KidContext';
 import { api } from '../lib/api';
 import { MODULE_REGISTRY } from '../data/index';
+import { AVATAR_EMOJIS } from '../lib/avatars';
 import StarBadge from '../components/modules/StarBadge';
 import ProgressRing from '../components/modules/ProgressRing';
-
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-};
 
 export default function ParentDashboard() {
   const { kids, refreshKids } = useKid();

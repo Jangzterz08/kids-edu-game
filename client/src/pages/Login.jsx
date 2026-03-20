@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
+import { AVATAR_EMOJIS } from '../lib/avatars';
 import RoleSelector from '../components/auth/RoleSelector';
 import PinKeypad from '../components/auth/PinKeypad';
 import OceanFish from '../components/OceanFish';
@@ -12,13 +13,6 @@ const Spinner = () => (
     <path d="M12 3a9 9 0 0 1 9 9" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none"/>
   </svg>
 );
-
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-  frog: '🐸', chick: '🐥', hamster: '🐹', panda: '🐼',
-  butterfly: '🦋', dragon: '🐉', dino: '🦕', unicorn: '🦄',
-};
 
 export default function Login() {
   const [role, setRole]         = useState(null);   // null | 'parent' | 'teacher' | 'kid'

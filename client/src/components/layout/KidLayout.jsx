@@ -3,11 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useKid } from '../../context/KidContext';
 import { useAuth } from '../../context/AuthContext';
 import { isMuted, setMuted } from '../../lib/sound';
-
-const AVATAR_EMOJIS = {
-  bear: '🐻', lion: '🦁', rabbit: '🐰', cat: '🐱',
-  dog: '🐶', owl: '🦉', fox: '🦊', penguin: '🐧',
-};
+import { AVATAR_EMOJIS } from '../../lib/avatars';
 
 function OceanScene() {
   const bubblesRef = useRef(null);

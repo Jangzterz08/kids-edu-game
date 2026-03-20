@@ -1,0 +1,18 @@
+export const AVATAR_EMOJIS = {
+  bear: '🐻',
+  lion: '🦁',
+  rabbit: '🐰',
+  cat: '🐱',
+  dog: '🐶',
+  owl: '🦉',
+  fox: '🦊',
+  penguin: '🐧',
+  frog: '🐸',
+  chick: '🐥',
+  hamster: '🐹',
+  panda: '🐼',
+  butterfly: '🦋',
+  dragon: '🐉',
+  dino: '🦖',
+  unicorn: '🦄',
+};
