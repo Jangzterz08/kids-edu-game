@@ -16,12 +16,12 @@
 
 ### Polish
 
-- [ ] **POL-01**: Toast notification system provides feedback for coin rewards, streak alerts, errors, and offline sync failures
-- [ ] **POL-02**: React Error Boundary catches render crashes and displays a friendly recovery screen instead of blank white page
-- [ ] **POL-03**: PWA install prompt nudges users to add KidsLearn to home screen (shown after 2nd visit)
-- [ ] **POL-04**: Offline indicator banner appears when connectivity is lost; dismisses on reconnect
-- [ ] **POL-05**: Security headers configured in vercel.json (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
-- [ ] **POL-06**: OG meta tags and social preview image (1200×630) configured for link sharing
+- [x] **POL-01**: Toast notification system provides feedback for coin rewards, streak alerts, errors, and offline sync failures
+- [x] **POL-02**: React Error Boundary catches render crashes and displays a friendly recovery screen instead of blank white page
+- [x] **POL-03**: PWA install prompt nudges users to add KidsLearn to home screen (shown after 2nd visit)
+- [x] **POL-04**: Offline indicator banner appears when connectivity is lost; dismisses on reconnect
+- [x] **POL-05**: Security headers configured in vercel.json (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
+- [x] **POL-06**: OG meta tags and social preview image (1200×630) configured for link sharing
 - [ ] **POL-07**: Avatar emoji map unified into shared constant used by KidHome, ParentDashboard, and all other consumers
 - [ ] **POL-08**: `computeStars` removed from client; client displays `starsEarned` returned by server API
 - [ ] **POL-09**: `/api/daily-challenge/today` endpoint serves daily slug so client does not compute it locally
@@ -99,12 +99,12 @@
 | SEC-04 | Phase 1 — Security Hardening | Complete |
 | SEC-05 | Phase 1 — Security Hardening | Complete |
 | SEC-06 | Phase 1 — Security Hardening | Complete |
-| POL-01 | Phase 2 — Polish & UX | Pending |
-| POL-02 | Phase 2 — Polish & UX | Pending |
-| POL-03 | Phase 2 — Polish & UX | Pending |
-| POL-04 | Phase 2 — Polish & UX | Pending |
-| POL-05 | Phase 2 — Polish & UX | Pending |
-| POL-06 | Phase 2 — Polish & UX | Pending |
+| POL-01 | Phase 2 — Polish & UX | Complete |
+| POL-02 | Phase 2 — Polish & UX | Complete |
+| POL-03 | Phase 2 — Polish & UX | Complete |
+| POL-04 | Phase 2 — Polish & UX | Complete |
+| POL-05 | Phase 2 — Polish & UX | Complete |
+| POL-06 | Phase 2 — Polish & UX | Complete |
 | POL-07 | Phase 2 — Polish & UX | Pending |
 | POL-08 | Phase 2 — Polish & UX | Pending |
 | POL-09 | Phase 2 — Polish & UX | Pending |
