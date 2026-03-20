@@ -22,9 +22,9 @@
 - [x] **POL-04**: Offline indicator banner appears when connectivity is lost; dismisses on reconnect
 - [x] **POL-05**: Security headers configured in vercel.json (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
 - [x] **POL-06**: OG meta tags and social preview image (1200×630) configured for link sharing
-- [ ] **POL-07**: Avatar emoji map unified into shared constant used by KidHome, ParentDashboard, and all other consumers
-- [ ] **POL-08**: `computeStars` removed from client; client displays `starsEarned` returned by server API
-- [ ] **POL-09**: `/api/daily-challenge/today` endpoint serves daily slug so client does not compute it locally
+- [x] **POL-07**: Avatar emoji map unified into shared constant used by KidHome, ParentDashboard, and all other consumers
+- [x] **POL-08**: `computeStars` removed from client; client displays `starsEarned` returned by server API
+- [x] **POL-09**: `/api/daily-challenge/today` endpoint serves daily slug so client does not compute it locally
 
 ### Performance
 
@@ -105,9 +105,9 @@
 | POL-04 | Phase 2 — Polish & UX | Complete |
 | POL-05 | Phase 2 — Polish & UX | Complete |
 | POL-06 | Phase 2 — Polish & UX | Complete |
-| POL-07 | Phase 2 — Polish & UX | Pending |
-| POL-08 | Phase 2 — Polish & UX | Pending |
-| POL-09 | Phase 2 — Polish & UX | Pending |
+| POL-07 | Phase 2 — Polish & UX | Complete |
+| POL-08 | Phase 2 — Polish & UX | Complete |
+| POL-09 | Phase 2 — Polish & UX | Complete |
 | PERF-01 | Phase 3 — Performance | Pending |
 | PERF-02 | Phase 3 — Performance | Pending |
 | PERF-03 | Phase 3 — Performance | Pending |

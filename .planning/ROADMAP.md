@@ -7,7 +7,7 @@ KidsLearn is a deployed educational game for kids aged 3–8. The product works 
 ## Phases
 
 - [x] **Phase 1: Security Hardening** - Fix auth and data vulnerabilities before any payment flows ship (completed 2026-03-19)
-- [ ] **Phase 2: Polish & UX** - Complete the pending production finish work for a professional feel
+- [x] **Phase 2: Polish & UX** - Complete the pending production finish work for a professional feel (completed 2026-03-20)
 - [ ] **Phase 3: Performance** - Reduce API round-trips and eliminate serial bottlenecks before monetization scale
 - [ ] **Phase 4: Parent Subscriptions** - Freemium gate + Stripe Checkout for individual family revenue
 - [ ] **Phase 5: School Licensing** - B2B Stripe seat licensing and school admin tooling
@@ -41,7 +41,7 @@ Plans:
   3. A parent visiting the app on the second visit on mobile sees a prompt to add it to their home screen
   4. A parent whose kid purchased a store avatar sees the correct avatar emoji in ParentDashboard (no fallback bear)
   5. Sharing a KidsLearn link on iMessage or Slack shows the correct preview image and title
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 02-01-PLAN.md — Toast notifications (POL-01) + Error Boundary (POL-02)
 - [ ] 02-02-PLAN.md — PWA install prompt (POL-03) + Offline banner (POL-04) + Security headers (POL-05) + OG meta (POL-06)
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 2/2 | Complete   | 2026-03-19 |
-| 2. Polish & UX | 2/3 | In Progress|  |
+| 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
 | 3. Performance | 0/TBD | Not started | - |
 | 4. Parent Subscriptions | 0/TBD | Not started | - |
 | 5. School Licensing | 0/TBD | Not started | - |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-polish-ux 02-01-PLAN.md
-last_updated: "2026-03-20T18:44:29.224Z"
+stopped_at: Completed 02-polish-ux 02-03-PLAN.md
+last_updated: "2026-03-20T18:55:46.031Z"
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -50,6 +50,7 @@ Plan: 2 of 3
 | Phase 01-security-hardening P02 | 7 | 2 tasks | 9 files |
 | Phase 02-polish-ux P01 | 3 | 2 tasks | 5 files |
 | Phase 02-polish-ux P02 | 3 | 2 tasks | 6 files |
+| Phase 02-polish-ux P03 | 4 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,9 @@ From PROJECT.md Key Decisions table:
 - [Phase 02-polish-ux]: Duplicate streak update in progress route removed — upsertProgress in progressSync.js is single owner of streak logic
 - [Phase 02-polish-ux]: OfflineBanner and InstallPrompt mounted in App.jsx using React Fragment — avoids Router/Provider dependency while keeping always-rendered, conditionally-visible pattern
 - [Phase 02-polish-ux]: CSP connect-src in vercel.json scoped to Supabase wildcard + Railway URL — must update when new third-party APIs are added
+- [Phase 02-polish-ux]: Single AVATAR_EMOJIS constant in lib/avatars.js (16 entries, dino: 🦖) — all 7 consumers import from it
+- [Phase 02-polish-ux]: computeStars removed from MiniGame.jsx — server progressSync.js is sole authority on starsEarned
+- [Phase 02-polish-ux]: /today endpoint added before /:kidId in dailyChallenge.js to avoid Express route shadowing; ModuleComplete.jsx fetches slug from API
 
 ### Pending Todos
 
@@ -86,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:44:29.221Z
-Stopped at: Completed 02-polish-ux 02-02-PLAN.md
+Last session: 2026-03-20T18:55:46.028Z
+Stopped at: Completed 02-polish-ux 02-03-PLAN.md
 Resume file: None
