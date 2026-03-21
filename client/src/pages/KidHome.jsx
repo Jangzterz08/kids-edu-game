@@ -61,6 +61,8 @@ export default function KidHome() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const [isPremium, setIsPremium] = useState(true); // default true to avoid flash of locked state during load
+  const [recommendations, setRecommendations] = useState([]);
+  const [reviewToday, setReviewToday] = useState([]);
 
   useEffect(() => {
     if (!activeKid) return;
@@ -73,6 +75,8 @@ export default function KidHome() {
         setCoins(data.kid?.coins || 0);
         setDailyChallenge(data.dailyChallenge || null);
         setIsPremium(data.isPremium ?? true);
+        setRecommendations(data.recommendations || []);
+        setReviewToday(data.reviewToday || []);
       })
       .catch(() => {});
   }, [activeKid?.id]);
@@ -141,6 +145,42 @@ export default function KidHome() {
             {visibleModules.length} subject{visibleModules.length !== 1 ? 's' : ''} · Pick one to start!
           </p>
         </div>
+
+        {recommendations.length > 0 && (
+          <div style={s.adlSection}>
+            <div style={s.adlSectionTitle}>{'⭐ Recommended for You'}</div>
+            <div style={s.adlCards}>
+              {recommendations.map(rec => (
+                <div
+                  key={rec.moduleSlug}
+                  style={s.adlCard}
+                  onClick={() => navigate(`/play/${rec.moduleSlug}`)}
+                >
+                  <div style={s.adlCardEmoji}>{rec.iconEmoji}</div>
+                  <div style={s.adlCardTitle}>{rec.title}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {reviewToday.length > 0 && (
+          <div style={s.adlSection}>
+            <div style={s.adlSectionTitle}>{'🔁 Review Today'}</div>
+            <div style={s.adlCards}>
+              {reviewToday.map(item => (
+                <div
+                  key={item.lessonId}
+                  style={s.adlCard}
+                  onClick={() => navigate(`/play/${item.moduleSlug}`)}
+                >
+                  <div style={s.adlCardEmoji}>{item.moduleIconEmoji}</div>
+                  <div style={s.adlCardTitle}>{item.lessonTitle}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div style={s.moduleGrid} className="kidhome-module-grid">
           {visibleModules.map(mod => {
@@ -368,6 +408,50 @@ const s = {
   // ── Main ──
   main: { flex: 1, overflowY: 'auto', padding: '28px 28px' },
   mainHeader: { marginBottom: 24 },
+
+  // ── Adaptive Learning sections ──
+  adlSection: {
+    marginBottom: '1.5rem',
+  },
+  adlSectionTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 600,
+    marginBottom: '0.75rem',
+    color: '#fff',
+    textShadow: '0 2px 8px rgba(0,80,120,0.4)',
+  },
+  adlCards: {
+    display: 'flex',
+    gap: '0.75rem',
+    overflowX: 'auto',
+    paddingBottom: '0.5rem',
+  },
+  adlCard: {
+    minWidth: '140px',
+    maxWidth: '160px',
+    padding: '1rem',
+    borderRadius: '12px',
+    background: 'rgba(255,255,255,0.28)',
+    border: '2px solid rgba(255,255,255,0.5)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    cursor: 'pointer',
+    textAlign: 'center',
+    flexShrink: 0,
+  },
+  adlCardEmoji: {
+    fontSize: '2rem',
+    marginBottom: '0.5rem',
+  },
+  adlCardTitle: {
+    fontSize: '0.85rem',
+    fontWeight: 600,
+    color: '#fff',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+  },
   pageTitle:    { fontSize: 26, fontWeight: 700, color: '#fff', margin: 0, textShadow: '0 2px 8px rgba(0,80,120,0.4)' },
   pageSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.85)', marginTop: 4, fontWeight: 500 },
   moduleGrid: {
