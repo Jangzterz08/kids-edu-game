@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-school-licensing plan 03
-last_updated: "2026-03-21T07:05:07.775Z"
+stopped_at: Completed 05-school-licensing plan 04
+last_updated: "2026-03-21T07:14:11.696Z"
 progress:
   total_phases: 7
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # Project State
@@ -60,6 +60,7 @@ Plan: 1 of 4
 | Phase 05-school-licensing P01 | 5 | 2 tasks | 6 files |
 | Phase 05-school-licensing P02 | 366 | 2 tasks | 9 files |
 | Phase 05-school-licensing P03 | 4 | 2 tasks | 4 files |
+| Phase 05-school-licensing P04 | 15 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -108,6 +109,7 @@ From PROJECT.md Key Decisions table:
 - [Phase 05-school-licensing]: School license check placed inside !isParentPremium branch — premium parents never incur the extra DB query
 - [Phase 05-school-licensing]: sendUpgradeNudge fires only when BOTH parent non-premium AND no school license — avoids spamming school-enrolled parents
 - [Phase 05-school-licensing]: mon01 tests needed classroomStudent.findFirst mock (null) in both beforeEach blocks — getKidSchoolLicense uses findFirst not findMany
+- [Phase 05-school-licensing]: SchoolDashboard placed inside teacher ProtectedRoute — non-admin teachers hit 403 from API and see error message rather than a separate route guard
 
 ### Pending Todos
 
@@ -121,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T07:05:07.772Z
-Stopped at: Completed 05-school-licensing plan 03
+Last session: 2026-03-21T07:14:11.693Z
+Stopped at: Completed 05-school-licensing plan 04
 Resume file: None

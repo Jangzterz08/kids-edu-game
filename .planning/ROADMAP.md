@@ -10,7 +10,7 @@ KidsLearn is a deployed educational game for kids aged 3–8. The product works 
 - [x] **Phase 2: Polish & UX** - Complete the pending production finish work for a professional feel (completed 2026-03-20)
 - [ ] **Phase 3: Performance** - Reduce API round-trips and eliminate serial bottlenecks before monetization scale
 - [x] **Phase 4: Parent Subscriptions** - Freemium gate + Stripe Checkout for individual family revenue (gap closure in progress) (completed 2026-03-21)
-- [ ] **Phase 5: School Licensing** - B2B Stripe seat licensing and school admin tooling
+- [x] **Phase 5: School Licensing** - B2B Stripe seat licensing and school admin tooling (completed 2026-03-21)
 - [ ] **Phase 6: Adaptive Learning** - Wire existing DB tables into live difficulty tracking and recommendations
 - [ ] **Phase 7: Analytics & Observability** - Sentry error tracking and enriched parent/teacher dashboards
 
@@ -87,7 +87,7 @@ Plans:
   3. Kids enrolled in a licensed school's classroom have all 13 modules unlocked regardless of their parent's subscription status
   4. A school admin can see seats used, renewal date, and download invoice history from their dashboard
   5. License expiry or non-renewal automatically revokes content access for the school's kids
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 Plans:
 - [ ] 05-01-PLAN.md — Prisma migration (School + SchoolTeacher) + schoolUtils.js + test scaffolds (SCH-01)
 - [ ] 05-02-PLAN.md — School billing routes + provisioning routes + webhook extension (SCH-02, SCH-03, SCH-06)
@@ -125,6 +125,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
 | 3. Performance | 1/2 | In Progress|  |
 | 4. Parent Subscriptions | 4/4 | Complete   | 2026-03-21 |
-| 5. School Licensing | 3/4 | In Progress|  |
+| 5. School Licensing | 4/4 | Complete   | 2026-03-21 |
 | 6. Adaptive Learning | 0/TBD | Not started | - |
 | 7. Analytics & Observability | 0/TBD | Not started | - |
