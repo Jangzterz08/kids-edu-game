@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-parent-subscriptions plan 04
-last_updated: "2026-03-21T05:37:58.263Z"
+stopped_at: Completed 05-school-licensing plan 01
+last_updated: "2026-03-21T06:38:42.849Z"
 progress:
   total_phases: 7
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 15
+  completed_plans: 12
 ---
 
 # Project State
@@ -19,11 +19,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 04 — parent-subscriptions
+**Current focus:** Phase 05 — school-licensing
 
 ## Current Position
 
-Phase: 04 (parent-subscriptions) — EXECUTING
+Phase: 05 (school-licensing) — EXECUTING
 Plan: 1 of 4
 
 ## Performance Metrics
@@ -57,6 +57,7 @@ Plan: 1 of 4
 | Phase 04-parent-subscriptions P02 | 9 | 2 tasks | 7 files |
 | Phase 04-parent-subscriptions P03 | 45 | 3 tasks | 3 files |
 | Phase 04-parent-subscriptions P04 | 3 | 2 tasks | 5 files |
+| Phase 05-school-licensing P01 | 5 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 04-parent-subscriptions]: Billing checkout accepts plan name (monthly/annual) not raw Stripe price ID; server maps to env vars internally
 - [Phase 04-parent-subscriptions]: isPremium defaults to true in KidHome to prevent flash of locked modules during initial API load
 - [Phase 04-parent-subscriptions]: Outcome-based testing for CJS/ESM mock boundary: verify prisma.user.update instead of Resend constructor mock when vi.mock cannot intercept require()
+- [Phase 05-school-licensing]: vi.spyOn in beforeEach (not module top-level) for Prisma spies in school tests — vi.restoreAllMocks() in afterEach destroys top-level spy references
+- [Phase 05-school-licensing]: getKidSchoolLicense uses single prisma.classroomStudent.findFirst with deep nested include to avoid N+1 queries on the kid->classroom->teacher->school chain
 
 ### Pending Todos
 
@@ -110,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T05:27:00.796Z
-Stopped at: Completed 04-parent-subscriptions plan 04
+Last session: 2026-03-21T06:38:42.847Z
+Stopped at: Completed 05-school-licensing plan 01
 Resume file: None
