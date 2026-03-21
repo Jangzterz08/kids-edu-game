@@ -70,6 +70,11 @@ app.use('/api/billing', requireAuth, require('./routes/billing'));
 app.use('/api/billing', requireAuth, require('./routes/schoolBilling'));
 app.use('/api/school', requireAuth, require('./routes/school'));
 
+const sessionsRoutes = require('./routes/sessions');
+app.use('/api/sessions', requireAuth, sessionsRoutes);
+const analyticsRoutes = require('./routes/analytics');
+app.use('/api/parent/analytics', requireAuth, analyticsRoutes);
+
 // Sentry error handler — must be before the custom error handler
 app.use(Sentry.expressErrorHandler());
 
