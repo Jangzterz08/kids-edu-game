@@ -7,6 +7,8 @@ import { AVATAR_EMOJIS } from '../lib/avatars';
 import OllieMascot from '../components/OllieMascot';
 import StarBadge from '../components/modules/StarBadge';
 
+const FREE_MODULE_SLUGS = ['alphabet', 'numbers', 'shapes'];
+
 function getOllieMessage(streak, earnedCount, totalCount, dailyDone) {
   const hour = new Date().getHours();
   if (dailyDone) return 'Challenge done! 🏆';
@@ -58,6 +60,7 @@ export default function KidHome() {
   const [hasClassroom, setHasClassroom] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [dailyChallenge, setDailyChallenge] = useState(null);
+  const [isPremium, setIsPremium] = useState(true); // default true to avoid flash of locked state during load
 
   useEffect(() => {
     if (!activeKid) return;
@@ -69,6 +72,7 @@ export default function KidHome() {
         setStreak(data.kid?.currentStreak || 0);
         setCoins(data.kid?.coins || 0);
         setDailyChallenge(data.dailyChallenge || null);
+        setIsPremium(data.isPremium ?? true);
       })
       .catch(() => {});
   }, [activeKid?.id]);
@@ -147,12 +151,21 @@ export default function KidHome() {
             const isCompleted = earnedModuleSlugs.has(mod.slug);
             const moduleStars = prog?.starsEarned ?? 0;
             const btnLabel = pct === 0 ? 'Start →' : pct === 100 ? 'Replay →' : 'Continue →';
+            const isLocked = !isPremium && !FREE_MODULE_SLUGS.includes(mod.slug);
 
             return (
               <div
                 key={mod.slug}
-                style={{ ...s.moduleCard, background: cardGradient(mod.color) }}
+                style={{
+                  ...s.moduleCard,
+                  background: cardGradient(mod.color),
+                  opacity: isLocked ? 0.45 : 1,
+                  pointerEvents: isLocked ? 'none' : 'auto',
+                  position: 'relative',
+                }}
                 className="module-card-hover"
+                aria-disabled={isLocked || undefined}
+                aria-label={isLocked ? `${mod.title} — requires premium subscription` : undefined}
                 onClick={() => navigate(`/play/${mod.slug}`)}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
@@ -163,6 +176,12 @@ export default function KidHome() {
                   e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.3)';
                 }}
               >
+                {isLocked && (
+                  <span style={{ position: 'absolute', top: 8, right: 8, fontSize: 20, zIndex: 1 }}>
+                    🔒
+                  </span>
+                )}
+
                 {isCompleted && (
                   <div style={s.completedBadge}>
                     <StarBadge stars={moduleStars} size="sm" />
