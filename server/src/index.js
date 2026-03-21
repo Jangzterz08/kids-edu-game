@@ -1,4 +1,12 @@
 require('dotenv').config();
+const Sentry = require('@sentry/node');
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV || 'development',
+  enabled: process.env.NODE_ENV === 'production',
+  tracesSampleRate: 0.1,
+  integrations: [Sentry.expressIntegration()],
+});
 const express = require('express');
 const cors    = require('cors');
 const cron    = require('node-cron');
@@ -62,6 +70,9 @@ app.use('/api/billing', requireAuth, require('./routes/billing'));
 app.use('/api/billing', requireAuth, require('./routes/schoolBilling'));
 app.use('/api/school', requireAuth, require('./routes/school'));
 
+// Sentry error handler — must be before the custom error handler
+app.use(Sentry.expressErrorHandler());
+
 // Error handler
 app.use((err, req, res, next) => {
   console.error('[Error]', err.message);
@@ -72,6 +83,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3002;
+
+process.on('unhandledRejection', (reason) => {
+  Sentry.captureException(reason);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Kids Edu API running on port ${PORT}`);
 });
