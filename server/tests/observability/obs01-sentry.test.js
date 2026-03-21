@@ -6,6 +6,9 @@ import supertest from 'supertest';
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb?schema=kids_edu_game';
 process.env.SENTRY_DSN = 'https://test@o0.ingest.sentry.io/0';
 process.env.NODE_ENV = 'production';
+// auth.js requires these in production — stub them so app loads
+process.env.SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_KEY = 'test-service-key';
 
 // Mock @sentry/node before app import.
 // Note: index.js uses CJS require() — vi.mock cannot intercept CJS require at runtime.
