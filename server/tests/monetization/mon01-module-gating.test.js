@@ -44,13 +44,15 @@ function buildParentUser(subscriptionStatus, trialEndsAt = null, subscriptionEnd
 }
 
 describe('MON-01: home-summary isPremium derivation', () => {
-  let kidFindUnique, userFindUnique, moduleFindMany, achievementFindMany, classroomStudentFindMany, dailyChallengeFindUnique;
+  let kidFindUnique, userFindUnique, moduleFindMany, achievementFindMany, classroomStudentFindMany, classroomStudentFindFirst, dailyChallengeFindUnique;
 
   beforeEach(() => {
     kidFindUnique = vi.spyOn(prisma.kidProfile, 'findUnique').mockResolvedValue(MOCK_KID);
     moduleFindMany = vi.spyOn(prisma.module, 'findMany').mockResolvedValue(MOCK_MODULES);
     achievementFindMany = vi.spyOn(prisma.achievement, 'findMany').mockResolvedValue([]);
     classroomStudentFindMany = vi.spyOn(prisma.classroomStudent, 'findMany').mockResolvedValue([]);
+    // getKidSchoolLicense uses findFirst — return null so school bypass does not apply
+    classroomStudentFindFirst = vi.spyOn(prisma.classroomStudent, 'findFirst').mockResolvedValue(null);
     dailyChallengeFindUnique = vi.spyOn(prisma.dailyChallenge, 'findUnique').mockResolvedValue(null);
     // Default: active parent
     userFindUnique = vi.spyOn(prisma.user, 'findUnique').mockResolvedValue(
@@ -140,7 +142,7 @@ describe('MON-01: Progress route module gating', () => {
     starsEarned: 1,
   };
 
-  let kidFindUnique, lessonFindFirst, userFindUnique, transactionSpy;
+  let kidFindUnique, lessonFindFirst, userFindUnique, classroomStudentFindFirst, transactionSpy;
 
   beforeEach(() => {
     // resolveWriteAccess + streak lookup both use kidProfile.findUnique
@@ -158,6 +160,9 @@ describe('MON-01: Progress route module gating', () => {
       subscriptionStatus: 'none',
       trialEndsAt: null,
     });
+
+    // getKidSchoolLicense uses classroomStudent.findFirst — return null so no school bypass
+    classroomStudentFindFirst = vi.spyOn(prisma.classroomStudent, 'findFirst').mockResolvedValue(null);
 
     // Mock transaction so upsertProgress doesn't hit DB
     transactionSpy = vi.spyOn(prisma, '$transaction').mockResolvedValue(MOCK_PROGRESS_RECORD);
