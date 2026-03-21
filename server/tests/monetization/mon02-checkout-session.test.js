@@ -53,33 +53,33 @@ describe('MON-02: Checkout session creation', () => {
     vi.restoreAllMocks();
   });
 
-  it('POST /api/billing/checkout with valid monthly priceId returns { url: string }', async () => {
+  it('POST /api/billing/checkout with valid monthly plan returns { url: string }', async () => {
     const res = await request
       .post('/api/billing/checkout')
       .set('Authorization', 'Bearer supabase-mock-token')
-      .send({ priceId: 'price_monthly_test' });
+      .send({ plan: 'monthly' });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('url');
     expect(typeof res.body.url).toBe('string');
   });
 
-  it('POST /api/billing/checkout with valid annual priceId returns { url: string }', async () => {
+  it('POST /api/billing/checkout with valid annual plan returns { url: string }', async () => {
     const res = await request
       .post('/api/billing/checkout')
       .set('Authorization', 'Bearer supabase-mock-token')
-      .send({ priceId: 'price_annual_test' });
+      .send({ plan: 'annual' });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('url');
     expect(typeof res.body.url).toBe('string');
   });
 
-  it('POST /api/billing/checkout with unknown priceId returns 400', async () => {
+  it('POST /api/billing/checkout with unknown plan returns 400', async () => {
     const res = await request
       .post('/api/billing/checkout')
       .set('Authorization', 'Bearer supabase-mock-token')
-      .send({ priceId: 'price_unknown_garbage' });
+      .send({ plan: 'enterprise_garbage' });
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
@@ -91,7 +91,7 @@ describe('MON-02: Checkout session creation', () => {
     const res = await request
       .post('/api/billing/checkout')
       .set('Authorization', 'Bearer supabase-mock-token')
-      .send({ priceId: 'price_monthly_test' });
+      .send({ plan: 'monthly' });
 
     expect(res.status).toBe(200);
     expect(checkoutCreate).toHaveBeenCalledWith(
