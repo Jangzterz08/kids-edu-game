@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-03-21T12:33:50.850Z"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-03-21T12:40:41.771Z"
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 17
-  completed_plans: 16
+  completed_plans: 17
 ---
 
 # Project State
@@ -62,6 +62,7 @@ Plan: 1 of 2
 | Phase 05-school-licensing P03 | 4 | 2 tasks | 4 files |
 | Phase 05-school-licensing P04 | 15 | 2 tasks | 2 files |
 | Phase 06 P01 | 12 | 2 tasks | 6 files |
+| Phase 06-adaptive-learning P02 | 277 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,7 @@ From PROJECT.md Key Decisions table:
 - [Phase 06-adaptive-learning]: SM-2 implemented as pure CJS function in server/src/lib/sm2.js — easiest to test and import with no external deps
 - [Phase 06-adaptive-learning]: ageGroup null/undefined falls back to 5-6 thresholds (medLow=60) — preserves backward compatibility with bulk sync callers
 - [Phase 06-adaptive-learning]: txMock pattern in integration tests must include moduleDifficulty, reviewSchedule, and lessonProgress.findMany after plan 06-01
+- [Phase 06-adaptive-learning]: reviewToday lastReviewedAt stripped from response after sort — internal sort key not needed by client
 
 ### Pending Todos
 
@@ -127,6 +129,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:33:50.848Z
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-03-21T12:40:41.768Z
+Stopped at: Completed 06-02-PLAN.md
 Resume file: None

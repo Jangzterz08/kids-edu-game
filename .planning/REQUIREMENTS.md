@@ -54,8 +54,8 @@
 ### Adaptive Learning
 
 - [x] **ADL-01**: `ModuleDifficulty` and `ReviewSchedule` tables (already migrated) wired to record difficulty level per kid per module based on score history
-- [ ] **ADL-02**: KidHome displays smart module recommendations derived from difficulty data (surface modules where kid scored 60–80%, not already mastered)
-- [ ] **ADL-03**: Review scheduler surfaces lessons below 60% score in a "Review Today" section on KidHome
+- [x] **ADL-02**: KidHome displays smart module recommendations derived from difficulty data (surface modules where kid scored 60–80%, not already mastered)
+- [x] **ADL-03**: Review scheduler surfaces lessons below 60% score in a "Review Today" section on KidHome
 
 ### Analytics & Observability
 
@@ -125,8 +125,8 @@
 | SCH-05 | Phase 5 — School Licensing | Complete |
 | SCH-06 | Phase 5 — School Licensing | Complete |
 | ADL-01 | Phase 6 — Adaptive Learning | Complete |
-| ADL-02 | Phase 6 — Adaptive Learning | Pending |
-| ADL-03 | Phase 6 — Adaptive Learning | Pending |
+| ADL-02 | Phase 6 — Adaptive Learning | Complete |
+| ADL-03 | Phase 6 — Adaptive Learning | Complete |
 | OBS-01 | Phase 7 — Analytics & Observability | Pending |
 | OBS-02 | Phase 7 — Analytics & Observability | Pending |
 | OBS-03 | Phase 7 — Analytics & Observability | Pending |
