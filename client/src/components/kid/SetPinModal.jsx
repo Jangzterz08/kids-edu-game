@@ -10,8 +10,8 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
 
   function handleEnter(e) {
     e.preventDefault();
-    if (!/^\d{4,6}$/.test(pin)) {
-      setError('PIN must be 4-6 digits');
+    if (!/^\d{4}$/.test(pin)) {
+      setError('PIN must be exactly 4 digits');
       return;
     }
     setError('');
@@ -46,7 +46,7 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
           <form onSubmit={handleEnter} style={styles.form}>
             <input
               style={styles.input} type="password" inputMode="numeric"
-              placeholder="Enter 4-6 digit PIN" maxLength={6}
+              placeholder="Enter 4-digit PIN" maxLength={4}
               value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, ''))}
               autoFocus
             />
@@ -60,7 +60,7 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
           <form onSubmit={handleConfirm} style={styles.form}>
             <input
               style={styles.input} type="password" inputMode="numeric"
-              placeholder="Confirm PIN" maxLength={6}
+              placeholder="Confirm PIN" maxLength={4}
               value={confirm} onChange={e => setConfirm(e.target.value.replace(/\D/g, ''))}
               autoFocus
             />

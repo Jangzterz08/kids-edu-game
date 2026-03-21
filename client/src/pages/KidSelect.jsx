@@ -5,12 +5,15 @@ import { api } from '../lib/api';
 import KidCard from '../components/kid/KidCard';
 import AddKidModal from '../components/kid/AddKidModal';
 import SetPinModal from '../components/kid/SetPinModal';
+import AvatarPicker from '../components/kid/AvatarPicker';
 import OceanFish from '../components/OceanFish';
 
 export default function KidSelect() {
   const { kids, setKids, selectKid, refreshKids } = useKid();
   const [showAdd, setShowAdd]       = useState(false);
   const [pinKid, setPinKid]         = useState(null);
+  const [picKid, setPicKid]         = useState(null);
+  const [picAvatar, setPicAvatar]   = useState('');
   const [loading, setLoading]       = useState(true);
   const [confirmKid, setConfirmKid] = useState(null);
   const navigate = useNavigate();
@@ -40,6 +43,13 @@ export default function KidSelect() {
     refreshKids();
   }
 
+  async function handleSavePic() {
+    if (!picKid) return;
+    await api.put(`/api/kids/${picKid.id}`, { avatarId: picAvatar });
+    setPicKid(null);
+    refreshKids();
+  }
+
   return (
     <div style={styles.page}>
       <OceanFish />
@@ -59,6 +69,7 @@ export default function KidSelect() {
                 onClick={() => handleSelect(kid)}
                 onDelete={handleDelete}
                 onSetPin={(k) => setPinKid(k)}
+                onSetPic={(k) => { setPicKid(k); setPicAvatar(k.avatarId || 'bear'); }}
               />
             ))}
             <button style={styles.addCard} onClick={() => setShowAdd(true)}>
@@ -76,6 +87,18 @@ export default function KidSelect() {
             onClose={() => setPinKid(null)}
             onSaved={() => { setPinKid(null); refreshKids(); }}
           />
+        )}
+        {picKid && (
+          <div style={styles.confirmOverlay} onClick={() => setPicKid(null)}>
+            <div style={styles.confirmBox} onClick={e => e.stopPropagation()}>
+              <p style={styles.confirmTitle}>Change {picKid.name}'s Avatar</p>
+              <AvatarPicker value={picAvatar} onChange={setPicAvatar} />
+              <div style={{ ...styles.confirmBtns, marginTop: 20 }}>
+                <button className="kid-btn ghost" style={{ flex: 1 }} onClick={() => setPicKid(null)}>Cancel</button>
+                <button className="kid-btn" style={{ flex: 1 }} onClick={handleSavePic}>Save</button>
+              </div>
+            </div>
+          </div>
         )}
         {confirmKid && (
           <div style={styles.confirmOverlay}>

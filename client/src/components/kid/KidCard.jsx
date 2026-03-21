@@ -1,12 +1,21 @@
 import { AVATAR_EMOJIS } from '../../lib/avatars';
 
-export default function KidCard({ kid, onClick, active, onDelete, onSetPin }) {
+export default function KidCard({ kid, onClick, active, onDelete, onSetPin, onSetPic }) {
   return (
     <div
       style={{ ...styles.card, ...(active ? styles.active : {}) }}
       onClick={onClick}
     >
-      <div style={styles.avatar}>{AVATAR_EMOJIS[kid.avatarId] || '🐻'}</div>
+      <div style={styles.avatarWrap}>
+        <div style={styles.avatar}>{AVATAR_EMOJIS[kid.avatarId] || '🐻'}</div>
+        {onSetPic && (
+          <button
+            style={styles.picBtn}
+            onClick={e => { e.stopPropagation(); onSetPic(kid); }}
+            aria-label="Change avatar"
+          >✏️</button>
+        )}
+      </div>
       <div style={styles.name}>{kid.name}</div>
       <div style={styles.stars}>⭐ {kid.totalStars} stars</div>
       {kid.pin ? (
@@ -49,7 +58,15 @@ const styles = {
     transform: 'scale(1.06) translateY(-4px)',
     boxShadow: '0 16px 40px rgba(59,191,232,0.4)',
   },
-  avatar: { fontSize: 64, marginBottom: 8 },
+  avatarWrap: { position: 'relative', display: 'inline-block', marginBottom: 8 },
+  avatar: { fontSize: 64, display: 'block' },
+  picBtn: {
+    position: 'absolute', bottom: -4, right: -4,
+    background: 'rgba(255,255,255,0.9)', border: '1.5px solid rgba(59,191,232,0.5)',
+    borderRadius: '50%', width: 24, height: 24,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: 12, cursor: 'pointer', lineHeight: 1,
+  },
   name:   { fontSize: 'var(--font-md)', fontWeight: 700, marginBottom: 4, color: '#0A4A6E' },
   stars:  { fontSize: 'var(--font-sm)', color: '#E8A030', fontWeight: 700 },
   pinBadge: {
