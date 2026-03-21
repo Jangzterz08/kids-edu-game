@@ -233,10 +233,10 @@ const scene = {
 };
 
 const styles = {
-  container: { minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' },
+  container: { height: '100dvh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' },
   header: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '0 24px', height: 72,
+    padding: '0 16px', height: 56, flexShrink: 0,
     background: 'rgba(91,200,236,0.55)',
     backdropFilter: 'blur(16px)',
     WebkitBackdropFilter: 'blur(16px)',
@@ -265,7 +265,7 @@ const styles = {
     width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center',
     transition: 'background 0.15s',
   },
-  main: { flex: 1, position: 'relative', zIndex: 1 },
+  main: { flex: 1, position: 'relative', zIndex: 1, overflowY: 'auto', height: 'calc(100dvh - 56px)' },
   confirmOverlay: {
     position: 'fixed', inset: 0,
     background: 'rgba(0,60,100,0.6)',
