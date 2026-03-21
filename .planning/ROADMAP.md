@@ -87,7 +87,12 @@ Plans:
   3. Kids enrolled in a licensed school's classroom have all 13 modules unlocked regardless of their parent's subscription status
   4. A school admin can see seats used, renewal date, and download invoice history from their dashboard
   5. License expiry or non-renewal automatically revokes content access for the school's kids
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 05-01-PLAN.md — Prisma migration (School + SchoolTeacher) + schoolUtils.js + test scaffolds (SCH-01)
+- [ ] 05-02-PLAN.md — School billing routes + provisioning routes + webhook extension (SCH-02, SCH-03, SCH-06)
+- [ ] 05-03-PLAN.md — Module gating bypass for school-licensed kids (SCH-04)
+- [ ] 05-04-PLAN.md — SchoolDashboard UI (SCH-05)
 
 ### Phase 6: Adaptive Learning
 **Goal**: KidHome surfaces personalized module recommendations and a review queue based on each kid's actual score history
@@ -120,6 +125,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
 | 3. Performance | 1/2 | In Progress|  |
 | 4. Parent Subscriptions | 4/4 | Complete   | 2026-03-21 |
-| 5. School Licensing | 0/TBD | Not started | - |
+| 5. School Licensing | 0/4 | Not started | - |
 | 6. Adaptive Learning | 0/TBD | Not started | - |
 | 7. Analytics & Observability | 0/TBD | Not started | - |
