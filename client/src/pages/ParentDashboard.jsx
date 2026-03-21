@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { useKid } from '../context/KidContext';
 import { api } from '../lib/api';
 import { MODULE_REGISTRY } from '../data/index';
@@ -13,10 +14,40 @@ export default function ParentDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Subscription state
+  const [subscription, setSubscription] = useState(null);
+  const [showPlanPicker, setShowPlanPicker] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
+
   useEffect(() => { refreshKids(); }, []);
+
+  // Detect checkout result from URL query params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('checkout') === 'success') {
+      toast.success('Subscription activated! All modules unlocked.');
+      window.history.replaceState({}, '', '/parent');
+    } else if (params.get('checkout') === 'cancel') {
+      toast('Checkout cancelled — you can upgrade any time.');
+      window.history.replaceState({}, '', '/parent');
+    }
+  }, []);
 
   useEffect(() => {
     if (kids.length > 0 && !selectedKid) setSelectedKid(kids[0]);
+  }, [kids]);
+
+  // Fetch subscription data from first kid's home-summary
+  useEffect(() => {
+    if (kids.length > 0) {
+      api.get(`/api/kids/${kids[0].id}/home-summary`)
+        .then(data => {
+          setSubscription(data?.subscription || null);
+        })
+        .catch(() => {});
+    }
   }, [kids]);
 
   useEffect(() => {
@@ -34,11 +65,64 @@ export default function ParentDashboard() {
       .finally(() => setLoading(false));
   }, [selectedKid?.id]);
 
+  async function handleManageBilling() {
+    setPortalLoading(true);
+    try {
+      const res = await api.get('/api/billing/portal');
+      window.open(res.url, '_blank');
+    } catch {
+      toast.error("Couldn't open billing portal — please try again.");
+    } finally { setPortalLoading(false); }
+  }
+
+  async function handleCheckout() {
+    setCheckoutLoading(true);
+    try {
+      const res = await api.post('/api/billing/checkout', { plan: selectedPlan });
+      window.location.href = res.url;
+    } catch {
+      toast.error("Couldn't start checkout — please try again.");
+      setCheckoutLoading(false);
+    }
+  }
+
   const progBySlug = progressData.reduce((acc, p) => { acc[p.moduleSlug] = p; return acc; }, {});
+
+  // Determine checkout button label
+  const isTrialing = subscription?.status === 'trialing';
+  let checkoutLabel = 'Subscribe';
+  if (isTrialing) {
+    checkoutLabel = 'Start Free Trial';
+  } else if (selectedPlan === 'monthly') {
+    checkoutLabel = 'Subscribe to Monthly Plan';
+  } else if (selectedPlan === 'annual') {
+    checkoutLabel = 'Subscribe to Annual Plan';
+  }
 
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>📊 Progress Dashboard</h1>
+
+      {/* Subscription Section */}
+      {kids.length > 0 && (
+        subscription === null ? (
+          // Loading skeleton
+          <div style={subStyles.skeleton} aria-hidden="true" />
+        ) : (
+          <SubscriptionSection
+            subscription={subscription}
+            showPlanPicker={showPlanPicker}
+            setShowPlanPicker={setShowPlanPicker}
+            selectedPlan={selectedPlan}
+            setSelectedPlan={setSelectedPlan}
+            checkoutLoading={checkoutLoading}
+            portalLoading={portalLoading}
+            handleManageBilling={handleManageBilling}
+            handleCheckout={handleCheckout}
+            checkoutLabel={checkoutLabel}
+          />
+        )
+      )}
 
       {/* Kid tabs */}
       <div style={styles.kidTabs}>
@@ -131,6 +215,187 @@ export default function ParentDashboard() {
   );
 }
 
+// ── SubscriptionSection ──────────────────────────────────────────────────────
+
+function SubscriptionSection({
+  subscription,
+  showPlanPicker,
+  setShowPlanPicker,
+  selectedPlan,
+  setSelectedPlan,
+  checkoutLoading,
+  portalLoading,
+  handleManageBilling,
+  handleCheckout,
+  checkoutLabel,
+}) {
+  const status = subscription?.status || 'none';
+
+  const STATUS_PILL_COLORS = {
+    trialing: { background: 'rgba(245,158,11,0.15)', color: 'var(--orange)' },
+    active:   { background: 'rgba(16,185,129,0.15)', color: 'var(--green)' },
+    canceled: { background: 'rgba(107,114,128,0.15)', color: '#6B7280' },
+    past_due: { background: 'rgba(239,68,68,0.15)', color: 'var(--accent-red)' },
+    none:     { background: 'rgba(107,114,128,0.15)', color: '#6B7280' },
+  };
+  const STATUS_LABELS = {
+    trialing: 'Free Trial',
+    active:   'Active',
+    canceled: 'Cancelled',
+    past_due: 'Payment issue',
+    none:     'Free plan',
+  };
+
+  const pillStyle = STATUS_PILL_COLORS[status] || STATUS_PILL_COLORS.none;
+  const pillLabel = STATUS_LABELS[status] || 'Free plan';
+
+  if (status === 'active') {
+    // Active subscriber — show plan management
+    const nextBilling = subscription.subscriptionEnd
+      ? new Date(subscription.subscriptionEnd).toLocaleDateString()
+      : '—';
+    return (
+      <div style={subStyles.section}>
+        <div style={subStyles.activeRow}>
+          <div>
+            <span style={subStyles.premiumHeading}>Premium Plan</span>
+            <span style={{ ...subStyles.pill, ...pillStyle }}>{pillLabel}</span>
+          </div>
+          <div style={subStyles.billingInfo}>
+            Next billing: {nextBilling}
+          </div>
+        </div>
+        <button
+          style={subStyles.ghostBtn}
+          aria-label="Manage billing -- opens Stripe Customer Portal in a new tab"
+          onClick={handleManageBilling}
+          disabled={portalLoading}
+        >
+          {portalLoading ? 'Opening portal...' : 'Manage billing'}
+        </button>
+      </div>
+    );
+  }
+
+  if (status === 'past_due') {
+    return (
+      <div
+        style={{ ...subStyles.banner, borderLeft: '4px solid var(--accent-red)' }}
+        role="alert"
+      >
+        <div style={subStyles.bannerHeading}>Payment issue — modules locked.</div>
+        <div style={subStyles.bannerBody}>Update your payment method to restore access.</div>
+        <button
+          style={{ ...subStyles.ghostBtn, marginTop: 'var(--space-md)' }}
+          onClick={handleManageBilling}
+          disabled={portalLoading}
+        >
+          {portalLoading ? 'Opening portal...' : 'Fix billing'}
+        </button>
+      </div>
+    );
+  }
+
+  // trialing, none, canceled — show upgrade banner + optional plan picker
+  const isTrialing = status === 'trialing';
+  let bannerHeading = 'Unlock all 13 modules.';
+  let bannerBody = 'Your kids are on the free plan — only 3 modules available.';
+
+  if (isTrialing && subscription?.trialEndsAt) {
+    const daysLeft = Math.max(1, Math.ceil((new Date(subscription.trialEndsAt) - Date.now()) / 86400000));
+    bannerHeading = `${daysLeft} days left in your free trial`;
+    bannerBody = 'Upgrade to unlock all 13 modules after your trial ends.';
+  }
+
+  return (
+    <div
+      style={{ ...subStyles.banner, borderLeft: '4px solid var(--primary)' }}
+      role="status"
+    >
+      <div style={subStyles.bannerHeading}>{bannerHeading}</div>
+      <div style={subStyles.bannerBody}>{bannerBody}</div>
+
+      {!showPlanPicker && (
+        <button
+          style={{ ...subStyles.ghostBtn, marginTop: 'var(--space-md)' }}
+          onClick={() => setShowPlanPicker(true)}
+        >
+          Upgrade Now
+        </button>
+      )}
+
+      {showPlanPicker && (
+        <div style={{ marginTop: 'var(--space-md)' }}>
+          <div
+            role="radiogroup"
+            aria-label="Choose your plan"
+            style={subStyles.planGrid}
+          >
+            {/* Monthly plan card */}
+            <div
+              role="radio"
+              aria-checked={selectedPlan === 'monthly'}
+              tabIndex={0}
+              style={{
+                ...subStyles.planCard,
+                ...(selectedPlan === 'monthly' ? subStyles.planCardSelected : {}),
+              }}
+              onClick={() => setSelectedPlan('monthly')}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setSelectedPlan('monthly'); }}
+            >
+              <div style={subStyles.planPrice}>$4.99 / month</div>
+              <div style={subStyles.planSub}>Billed monthly</div>
+            </div>
+
+            {/* Annual plan card */}
+            <div
+              role="radio"
+              aria-checked={selectedPlan === 'annual'}
+              tabIndex={0}
+              style={{
+                ...subStyles.planCard,
+                ...(selectedPlan === 'annual' ? subStyles.planCardSelected : {}),
+              }}
+              onClick={() => setSelectedPlan('annual')}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setSelectedPlan('annual'); }}
+            >
+              <span style={subStyles.badge}>Best value</span>
+              <div style={subStyles.planPrice}>$39.99 / year</div>
+              <div style={subStyles.planSub}>Billed annually</div>
+              <div style={{ color: 'var(--green)', fontWeight: 600, fontSize: 'var(--font-sm)', marginTop: 4 }}>
+                Save 33%
+              </div>
+            </div>
+          </div>
+
+          <button
+            style={{
+              ...subStyles.ghostBtn,
+              marginTop: 'var(--space-md)',
+              width: '100%',
+              opacity: !selectedPlan ? 0.5 : 1,
+              cursor: !selectedPlan ? 'not-allowed' : 'pointer',
+            }}
+            disabled={!selectedPlan || checkoutLoading}
+            onClick={handleCheckout}
+          >
+            {checkoutLoading ? 'Opening Stripe...' : checkoutLabel}
+          </button>
+
+          <div style={{ textAlign: 'center', marginTop: 'var(--space-sm)' }}>
+            <button
+              style={subStyles.maybeLaterBtn}
+              onClick={() => { setShowPlanPicker(false); }}
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Sub-components ──────────────────────────────────────────────────────────
 
 function Section({ title, children }) {
@@ -190,6 +455,127 @@ function AccuracyBar({ label, score, color }) {
     </div>
   );
 }
+
+// ── Subscription Styles ──────────────────────────────────────────────────────
+
+const subStyles = {
+  skeleton: {
+    height: 80,
+    background: 'rgba(255,255,255,0.2)',
+    borderRadius: 16,
+    marginBottom: 'var(--space-lg)',
+    animation: 'pulse-glow 1.5s ease-in-out infinite',
+  },
+  section: {
+    background: 'var(--glass-bg)',
+    borderRadius: 16,
+    padding: 'var(--space-md)',
+    marginBottom: 'var(--space-lg)',
+    backdropFilter: 'blur(10px)',
+  },
+  banner: {
+    background: 'var(--glass-bg)',
+    borderRadius: 12,
+    padding: 'var(--space-md)',
+    marginBottom: 'var(--space-lg)',
+    backdropFilter: 'blur(10px)',
+  },
+  bannerHeading: {
+    fontSize: 'var(--font-md)',
+    fontWeight: 600,
+    color: '#fff',
+    marginBottom: 4,
+  },
+  bannerBody: {
+    fontSize: 'var(--font-base)',
+    color: 'var(--text-secondary)',
+  },
+  activeRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 'var(--space-sm)',
+    marginBottom: 'var(--space-sm)',
+  },
+  premiumHeading: {
+    fontSize: 'var(--font-md)',
+    fontWeight: 600,
+    color: '#fff',
+    marginRight: 'var(--space-sm)',
+  },
+  pill: {
+    display: 'inline-block',
+    padding: '3px 10px',
+    borderRadius: 20,
+    fontSize: 'var(--font-sm)',
+    fontWeight: 600,
+  },
+  billingInfo: {
+    fontSize: 'var(--font-sm)',
+    color: 'var(--text-secondary)',
+  },
+  ghostBtn: {
+    background: 'rgba(255,255,255,0.2)',
+    border: '1px solid rgba(255,255,255,0.4)',
+    color: '#fff',
+    padding: '10px 20px',
+    borderRadius: 12,
+    minHeight: 44,
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    fontSize: 'var(--font-base)',
+    fontWeight: 600,
+  },
+  planGrid: {
+    display: 'flex',
+    gap: 'var(--space-md)',
+  },
+  planCard: {
+    flex: 1,
+    background: 'var(--glass-bg)',
+    borderRadius: 12,
+    padding: 'var(--space-md)',
+    border: '1.5px solid var(--glass-border)',
+    minHeight: 160,
+    position: 'relative',
+    cursor: 'pointer',
+  },
+  planCardSelected: {
+    border: '2px solid var(--primary)',
+    background: 'rgba(14,165,233,0.12)',
+  },
+  badge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    background: 'var(--green)',
+    color: '#fff',
+    padding: '2px 8px',
+    borderRadius: 8,
+    fontSize: 'var(--font-xs, 14px)',
+    fontWeight: 600,
+  },
+  planPrice: {
+    fontSize: 'var(--font-md)',
+    fontWeight: 600,
+    color: '#fff',
+    marginBottom: 4,
+  },
+  planSub: {
+    fontSize: 'var(--font-sm)',
+    color: 'var(--text-secondary)',
+  },
+  maybeLaterBtn: {
+    background: 'none',
+    border: 'none',
+    color: 'var(--text-secondary)',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    fontSize: 'var(--font-sm)',
+    padding: '4px 8px',
+  },
+};
 
 // ── Styles ──────────────────────────────────────────────────────────────────
 

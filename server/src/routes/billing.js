@@ -4,17 +4,20 @@ const prisma = require('../lib/db');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 
-const VALID_PRICE_IDS = [process.env.STRIPE_PRICE_MONTHLY, process.env.STRIPE_PRICE_ANNUAL];
-
 // POST /api/billing/checkout — create Stripe Checkout session
 router.post('/checkout', async (req, res, next) => {
   try {
     const dbUser = await prisma.user.findUnique({ where: { supabaseAuthId: req.user.id } });
     if (!dbUser) return res.status(404).json({ error: 'User not found' });
 
-    const { priceId } = req.body;
-    if (!priceId || !VALID_PRICE_IDS.includes(priceId)) {
-      return res.status(400).json({ error: 'Invalid price ID' });
+    const { plan } = req.body;
+    const PLAN_TO_PRICE = {
+      monthly: process.env.STRIPE_PRICE_MONTHLY,
+      annual: process.env.STRIPE_PRICE_ANNUAL,
+    };
+    const priceId = PLAN_TO_PRICE[plan];
+    if (!priceId) {
+      return res.status(400).json({ error: 'Invalid plan. Must be "monthly" or "annual".' });
     }
 
     // Compute remaining trial days for Stripe trial_period_days
