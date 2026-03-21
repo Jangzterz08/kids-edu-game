@@ -20,8 +20,9 @@ const MiniGame        = lazy(() => import('./pages/MiniGame'));
 const ModuleComplete  = lazy(() => import('./pages/ModuleComplete'));
 const CoinStore       = lazy(() => import('./pages/CoinStore'));
 const TeacherDashboard = lazy(() => import('./pages/TeacherDashboard'));
-const ClassroomDetail  = lazy(() => import('./pages/ClassroomDetail'));
-const SchoolDashboard  = lazy(() => import('./pages/SchoolDashboard'));
+const ClassroomDetail     = lazy(() => import('./pages/ClassroomDetail'));
+const ClassroomAnalytics  = lazy(() => import('./pages/ClassroomAnalytics'));
+const SchoolDashboard     = lazy(() => import('./pages/SchoolDashboard'));
 const KidLeaderboard   = lazy(() => import('./pages/KidLeaderboard'));
 const ParentClassrooms  = lazy(() => import('./pages/ParentClassrooms'));
 const ParentAnalytics   = lazy(() => import('./pages/ParentAnalytics'));
@@ -59,8 +60,9 @@ export default function App() {
                 <Route element={<ProtectedRoute requireRole="teacher" />}>
                   <Route element={<TeacherLayout />}>
                     <Route path="/teacher"                element={<TeacherDashboard />} />
-                    <Route path="/teacher/classroom/:id"  element={<ClassroomDetail />} />
-                    <Route path="/school"                 element={<SchoolDashboard />} />
+                    <Route path="/teacher/classroom/:id"              element={<ClassroomDetail />} />
+                    <Route path="/teacher/classroom/:id/analytics"  element={<ClassroomAnalytics />} />
+                    <Route path="/school"                            element={<SchoolDashboard />} />
                   </Route>
                 </Route>
 

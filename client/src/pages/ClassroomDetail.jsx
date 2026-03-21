@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import { AVATAR_EMOJIS } from '../lib/avatars';
 import LeaderboardTable from '../components/classroom/LeaderboardTable';
+import ClassroomAnalytics from './ClassroomAnalytics';
 
 export default function ClassroomDetail() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ export default function ClassroomDetail() {
   const [classroom, setClassroom] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading]     = useState(true);
-  const [tab, setTab]             = useState('leaderboard'); // 'leaderboard' | 'students'
+  const [tab, setTab]             = useState('leaderboard'); // 'leaderboard' | 'students' | 'analytics'
 
   useEffect(() => { loadData(); }, [id]);
 
@@ -82,6 +83,10 @@ export default function ClassroomDetail() {
           style={{ ...styles.tab, ...(tab === 'students' ? styles.tabActive : {}) }}
           onClick={() => setTab('students')}
         >👥 Students</button>
+        <button
+          style={{ ...styles.tab, ...(tab === 'analytics' ? styles.tabActive : {}) }}
+          onClick={() => setTab('analytics')}
+        >📊 Analytics</button>
       </div>
 
       {tab === 'leaderboard' && (
@@ -107,6 +112,8 @@ export default function ClassroomDetail() {
               ))}
             </div>
       )}
+
+      {tab === 'analytics' && <ClassroomAnalytics />}
     </div>
   );
 }
