@@ -4,6 +4,7 @@ const prisma = require('../lib/db');
 const { getChallengeSlug, todayDate } = require('../lib/dailyChallengeUtils');
 const { isParentPremium } = require('../lib/subscriptionUtils');
 const { getKidSchoolLicense } = require('../lib/schoolUtils');
+const { SCORE_FIELDS } = require('../services/progressSync');
 
 const STORE_ITEMS = {
   frog:      { price: 30  },
@@ -108,7 +109,7 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
 
     const today = todayDate();
 
-    const [modules, achievements, enrollments, dailyChallenge, parentUser] = await Promise.all([
+    const [modules, achievements, enrollments, dailyChallenge, parentUser, difficultyRows, dueSchedules] = await Promise.all([
       prisma.module.findMany({
         orderBy: { sortOrder: 'asc' },
         include: {
@@ -133,6 +134,20 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
         where: { id: kid.parentId },
         select: { subscriptionStatus: true, trialEndsAt: true, subscriptionEnd: true },
       }),
+      prisma.moduleDifficulty.findMany({
+        where: { kidId: kid.id },
+      }),
+      prisma.reviewSchedule.findMany({
+        where: { kidId: kid.id, dueDate: { lte: new Date() } },
+        include: {
+          lesson: {
+            include: {
+              module: { select: { slug: true, title: true, iconEmoji: true } },
+              progress: { where: { kidId: kid.id }, take: 1 },
+            },
+          },
+        },
+      }),
     ]);
 
     const progress = modules.map(mod => ({
@@ -144,6 +159,50 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
       starsEarned: mod.lessons.reduce((sum, l) => sum + (l.progress[0]?.starsEarned ?? 0), 0),
       maxStars: mod.lessons.length * 3,
     }));
+
+    // Recommendations: medium-band modules, fill with untried, cap at 3
+    const mediumSlugs = new Set(difficultyRows.filter(d => d.level === 'medium').map(d => d.moduleSlug));
+    const startedSlugs = new Set(modules.filter(m => m.lessons.some(l => l.progress.length > 0)).map(m => m.slug));
+
+    let recommendations = modules
+      .filter(m => mediumSlugs.has(m.slug))
+      .slice(0, 3)
+      .map(m => ({ moduleSlug: m.slug, title: m.title, iconEmoji: m.iconEmoji }));
+
+    if (recommendations.length < 3) {
+      const untried = modules
+        .filter(m => !startedSlugs.has(m.slug) && !mediumSlugs.has(m.slug))
+        .slice(0, 3 - recommendations.length)
+        .map(m => ({ moduleSlug: m.slug, title: m.title, iconEmoji: m.iconEmoji }));
+      recommendations = [...recommendations, ...untried];
+    }
+
+    // Review Today: due lessons sorted by lowest accuracy, cap at 3
+    const reviewToday = dueSchedules
+      .map(rs => {
+        const prog = rs.lesson.progress[0];
+        const scores = SCORE_FIELDS.map(f => prog?.[f]).filter(s => s != null);
+        const accuracy = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+        return {
+          lessonId: rs.lessonId,
+          lessonSlug: rs.lesson.slug,
+          lessonTitle: rs.lesson.title,
+          moduleSlug: rs.lesson.module.slug,
+          moduleTitle: rs.lesson.module.title,
+          moduleIconEmoji: rs.lesson.module.iconEmoji,
+          accuracy,
+          dueDate: rs.dueDate,
+          lastReviewedAt: rs.lastReviewedAt,
+        };
+      })
+      .sort((a, b) => {
+        if (a.accuracy !== b.accuracy) return a.accuracy - b.accuracy;
+        const aDate = a.lastReviewedAt ? new Date(a.lastReviewedAt) : new Date(0);
+        const bDate = b.lastReviewedAt ? new Date(b.lastReviewedAt) : new Date(0);
+        return aDate - bDate;
+      })
+      .slice(0, 3)
+      .map(({ lastReviewedAt, ...item }) => item); // strip internal sort field
 
     let isPremium = isParentPremium(parentUser);
     if (!isPremium) {
@@ -174,6 +233,8 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
         trialEndsAt: parentUser.trialEndsAt,
         subscriptionEnd: parentUser.subscriptionEnd,
       } : null,
+      recommendations,
+      reviewToday,
     });
   } catch (err) {
     next(err);

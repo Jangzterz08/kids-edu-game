@@ -53,6 +53,8 @@ describe('PERF-01: GET /api/kids/:kidId/home-summary', () => {
       trialEndsAt: null,
       subscriptionEnd: null,
     });
+    vi.spyOn(prisma.moduleDifficulty, 'findMany').mockResolvedValue([]);
+    vi.spyOn(prisma.reviewSchedule, 'findMany').mockResolvedValue([]);
   });
 
   afterEach(() => { vi.restoreAllMocks(); });

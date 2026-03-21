@@ -58,6 +58,8 @@ describe('MON-01: home-summary isPremium derivation', () => {
     userFindUnique = vi.spyOn(prisma.user, 'findUnique').mockResolvedValue(
       buildParentUser('active')
     );
+    vi.spyOn(prisma.moduleDifficulty, 'findMany').mockResolvedValue([]);
+    vi.spyOn(prisma.reviewSchedule, 'findMany').mockResolvedValue([]);
   });
 
   afterEach(() => { vi.restoreAllMocks(); });

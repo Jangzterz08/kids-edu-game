@@ -188,6 +188,8 @@ describe('SCH-04: Kids in licensed school get all modules unlocked', () => {
       classroomStudentFindFirst = vi.spyOn(prisma.classroomStudent, 'findFirst').mockResolvedValue(
         buildEnrollment('active')
       );
+      vi.spyOn(prisma.moduleDifficulty, 'findMany').mockResolvedValue([]);
+      vi.spyOn(prisma.reviewSchedule, 'findMany').mockResolvedValue([]);
     });
 
     afterEach(() => { vi.restoreAllMocks(); });
