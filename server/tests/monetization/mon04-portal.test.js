@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import supertest from 'supertest';
+import { createRequire } from 'module';
 
 // Set env vars before app load
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb?schema=kids_edu_game';
@@ -16,8 +17,10 @@ const { default: app } = await import('../../src/index.js');
 const request = supertest(app);
 const prisma = global.prisma;
 
-// Import stripe to spy on it
-const stripe = (await import('stripe')).default(process.env.STRIPE_SECRET_KEY);
+// Use CJS require to get the same billing module instance that index.js loaded
+const require = createRequire(import.meta.url);
+const billing = require('../../src/routes/billing.js');
+const stripe = billing.stripe;
 
 const PARENT_WITH_CUSTOMER = {
   id: 'parent-db-id',

@@ -24,6 +24,11 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+// Stripe webhook — must receive raw body BEFORE express.json() parses it
+const { webhookHandler } = require('./routes/billing');
+app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), webhookHandler);
+
 app.use(express.json());
 
 // Public
@@ -53,6 +58,7 @@ app.use('/api/progress', requireAuth, require('./routes/progress'));
 app.use('/api/achievements', requireAuth, require('./routes/achievements'));
 app.use('/api/classrooms',   requireAuth, require('./routes/classrooms'));
 app.use('/api/daily-challenge', requireAuth, require('./routes/dailyChallenge'));
+app.use('/api/billing', requireAuth, require('./routes/billing'));
 
 // Error handler
 app.use((err, req, res, next) => {
