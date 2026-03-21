@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-03-PLAN.md
-last_updated: "2026-03-21T20:06:08.769Z"
+stopped_at: Completed 07-04-PLAN.md
+last_updated: "2026-03-21T20:12:44.274Z"
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 22
-  completed_plans: 20
+  completed_plans: 22
 ---
 
 # Project State
@@ -66,6 +66,8 @@ Plan: 2 of 5
 | Phase 07-analytics-observability P02 | 12 | 2 tasks | 7 files |
 | Phase 07-analytics-observability P01 | 7 | 3 tasks | 9 files |
 | Phase 07-analytics-observability P03 | 18 | 1 tasks | 7 files |
+| Phase 07-analytics-observability P04 | 3 | 2 tasks | 6 files |
+| Phase 07-analytics-observability P05 | 12 | 1 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -124,6 +126,11 @@ From PROJECT.md Key Decisions table:
 - [Phase 07-analytics-observability]: 100dvh (not 100vh) on KidLayout with overflow:hidden — prevents mobile browser scroll; header 56px (down from 72px) for more game vertical space; game components use height:100% inheriting constrained height from KidLayout main area
 - [Phase 07-analytics-observability]: requireAuth added to /api/sessions and /api/parent/analytics registrations; sessions route additionally checks req.user.type === 'kid' for heartbeat endpoint
 - [Phase 07-analytics-observability]: buildDailyMinutes fills all N days in period with 0 before adding session durations for consistent-length arrays; session duration uses endedAt when set, falls back to lastHeartbeatAt
+- [Phase 07-analytics-observability]: analyticsRoutes router mounted at /api/teacher in addition to /api/parent/analytics — route path in analytics.js uses /classroom/:id/analytics (without teacher prefix) since mount point supplies it
+- [Phase 07-analytics-observability]: ClassroomAnalytics reads classroomId from useParams() — works both as inline tab and as standalone route without prop threading
+- [Phase 07-analytics-observability]: Struggling indicator requires both avgStars < 1.5 AND attempts >= 2 — both conditions required per spec to avoid false positives on single bad attempts
+- [Phase 07-analytics-observability]: useSessionHeartbeat placed at top of MiniGame component body — session starts when kid enters any game, all errors swallowed so analytics never breaks the game
+- [Phase 07-analytics-observability]: navigator.sendBeacon used for session end on unload — survives browser tab close unlike fetch
 
 ### Pending Todos
 
@@ -137,6 +144,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T20:06:08.767Z
-Stopped at: Completed 07-03-PLAN.md
+Last session: 2026-03-21T20:12:44.272Z
+Stopped at: Completed 07-04-PLAN.md
 Resume file: None
