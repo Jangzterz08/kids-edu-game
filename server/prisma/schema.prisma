@@ -25,6 +25,34 @@ model User {
 
   kids           KidProfile[]
   classrooms     Classroom[]
+  schoolMembership  SchoolTeacher?
+}
+
+model School {
+  id                   String    @id @default(uuid())
+  name                 String
+  contactEmail         String
+  seatCount            Int       @default(10)
+  licenseStatus        String    @default("none") // none | active | expired
+  licenseExpiry        DateTime?
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  teachers  SchoolTeacher[]
+}
+
+model SchoolTeacher {
+  id        String   @id @default(uuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("teacher") // teacher | admin
+  addedAt   DateTime @default(now())
+
+  @@unique([schoolId, userId])
 }
 
 model KidProfile {
