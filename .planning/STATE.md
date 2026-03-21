@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-03-21T12:45:18.029Z"
+stopped_at: Completed 07-02-PLAN.md
+last_updated: "2026-03-21T19:03:24.332Z"
 progress:
   total_phases: 7
   completed_phases: 6
-  total_plans: 17
-  completed_plans: 17
+  total_plans: 22
+  completed_plans: 18
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 06 — adaptive-learning
+**Current focus:** Phase 07 — analytics-observability
 
 ## Current Position
 
-Phase: 06 (adaptive-learning) — EXECUTING
-Plan: 1 of 2
+Phase: 07 (analytics-observability) — EXECUTING
+Plan: 2 of 5
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Plan: 1 of 2
 | Phase 05-school-licensing P04 | 15 | 2 tasks | 2 files |
 | Phase 06 P01 | 12 | 2 tasks | 6 files |
 | Phase 06-adaptive-learning P02 | 277 | 2 tasks | 7 files |
+| Phase 07-analytics-observability P02 | 12 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 06-adaptive-learning]: ageGroup null/undefined falls back to 5-6 thresholds (medLow=60) — preserves backward compatibility with bulk sync callers
 - [Phase 06-adaptive-learning]: txMock pattern in integration tests must include moduleDifficulty, reviewSchedule, and lessonProgress.findMany after plan 06-01
 - [Phase 06-adaptive-learning]: reviewToday lastReviewedAt stripped from response after sort — internal sort key not needed by client
+- [Phase 07-analytics-observability]: OBS-01 Sentry server test uses outcome-based assertions (app load, endpoints, process listeners) because vi.mock cannot intercept CJS require('@sentry/node') from ESM test files — mirrors Phase 01 CJS/ESM boundary pattern
+- [Phase 07-analytics-observability]: Sentry enabled only in production (MODE !== development on client, NODE_ENV === production on server); tracesSampleRate: 0.1 on both to control quota
 
 ### Pending Todos
 
@@ -129,6 +132,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:40:41.768Z
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-03-21T19:03:24.329Z
+Stopped at: Completed 07-02-PLAN.md
 Resume file: None
