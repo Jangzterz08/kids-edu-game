@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-03-21T19:21:53.530Z"
+stopped_at: Completed 07-03-PLAN.md
+last_updated: "2026-03-21T20:06:08.769Z"
 progress:
   total_phases: 7
   completed_phases: 6
   total_plans: 22
-  completed_plans: 19
+  completed_plans: 20
 ---
 
 # Project State
@@ -65,6 +65,7 @@ Plan: 2 of 5
 | Phase 06-adaptive-learning P02 | 277 | 2 tasks | 7 files |
 | Phase 07-analytics-observability P02 | 12 | 2 tasks | 7 files |
 | Phase 07-analytics-observability P01 | 7 | 3 tasks | 9 files |
+| Phase 07-analytics-observability P03 | 18 | 1 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 07-analytics-observability]: OBS-01 Sentry server test uses outcome-based assertions (app load, endpoints, process listeners) because vi.mock cannot intercept CJS require('@sentry/node') from ESM test files — mirrors Phase 01 CJS/ESM boundary pattern
 - [Phase 07-analytics-observability]: Sentry enabled only in production (MODE !== development on client, NODE_ENV === production on server); tracesSampleRate: 0.1 on both to control quota
 - [Phase 07-analytics-observability]: 100dvh (not 100vh) on KidLayout with overflow:hidden — prevents mobile browser scroll; header 56px (down from 72px) for more game vertical space; game components use height:100% inheriting constrained height from KidLayout main area
+- [Phase 07-analytics-observability]: requireAuth added to /api/sessions and /api/parent/analytics registrations; sessions route additionally checks req.user.type === 'kid' for heartbeat endpoint
+- [Phase 07-analytics-observability]: buildDailyMinutes fills all N days in period with 0 before adding session durations for consistent-length arrays; session duration uses endedAt when set, falls back to lastHeartbeatAt
 
 ### Pending Todos
 
@@ -134,6 +137,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T19:21:42.499Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-03-21T20:06:08.767Z
+Stopped at: Completed 07-03-PLAN.md
 Resume file: None
