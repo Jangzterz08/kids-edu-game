@@ -15,7 +15,7 @@ export default function TeacherLayout() {
       <header style={styles.header}>
         <div style={styles.logo}>
           <span style={styles.logoEmoji}>🎓</span>
-          <span style={styles.logoText}>KidsLearn</span>
+          <span style={styles.logoText}>Tinker Academy</span>
           <span style={styles.badge}>Teacher</span>
         </div>
         <nav style={styles.nav}>

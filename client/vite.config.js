@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['apple-touch-icon.png', 'assets/**/*'],
       manifest: {
-        name: 'KidsLearn',
-        short_name: 'KidsLearn',
+        name: 'Tinker Academy',
+        short_name: 'Tinker Academy',
         description: 'Fun educational games for kids',
         theme_color: '#6C5CE7',
         background_color: '#6C5CE7',

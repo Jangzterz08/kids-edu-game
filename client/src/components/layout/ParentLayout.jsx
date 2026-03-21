@@ -19,7 +19,7 @@ export default function ParentLayout() {
       <header className="pl-header">
         <div className="pl-logo">
           <span className="pl-logo-emoji">🎓</span>
-          <span className="pl-logo-text">KidsLearn</span>
+          <span className="pl-logo-text">Tinker Academy</span>
         </div>
         <nav className="pl-nav">
           <Link to="/" className="pl-nav-link">Kids</Link>

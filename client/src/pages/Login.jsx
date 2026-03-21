@@ -131,7 +131,7 @@ export default function Login() {
       <OceanFish />
       <div style={styles.card}>
         <div style={styles.logo}>🎓</div>
-        <h1 style={styles.title}>KidsLearn</h1>
+        <h1 style={styles.title}>Tinker Academy</h1>
         <p style={styles.sub}>Educational fun for every kid!</p>
 
         {/* Step 1: Role selector */}

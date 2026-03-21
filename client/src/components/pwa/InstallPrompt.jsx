@@ -60,7 +60,7 @@ export default function InstallPrompt() {
       <span style={styles.text}>
         {isIOS
           ? "Tap Share then 'Add to Home Screen'"
-          : 'Add KidsLearn to your home screen!'}
+          : 'Add Tinker Academy to your home screen!'}
       </span>
       {!isIOS && (
         <button onClick={handleInstall} style={styles.installBtn}>
