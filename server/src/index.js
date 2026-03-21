@@ -74,6 +74,7 @@ const sessionsRoutes = require('./routes/sessions');
 app.use('/api/sessions', requireAuth, sessionsRoutes);
 const analyticsRoutes = require('./routes/analytics');
 app.use('/api/parent/analytics', requireAuth, analyticsRoutes);
+app.use('/api/teacher',          requireAuth, analyticsRoutes);
 
 // Sentry error handler — must be before the custom error handler
 app.use(Sentry.expressErrorHandler());

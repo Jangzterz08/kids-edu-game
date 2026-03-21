@@ -121,4 +121,80 @@ function buildModuleStars(progressRecords) {
   }));
 }
 
+// GET /classroom/:id/analytics — teacher auth required (mounted at /api/teacher)
+router.get('/classroom/:id/analytics', async (req, res) => {
+  try {
+    const classroomId = req.params.id;
+
+    // Only Supabase (teacher) users can call this endpoint
+    if (!req.user || req.user.type === 'kid') {
+      return res.status(403).json({ error: 'Teacher authentication required' });
+    }
+
+    // Resolve teacher's DB id from Supabase auth ID
+    const dbUser = await prisma.user.findUnique({
+      where: { supabaseAuthId: req.user.id },
+    });
+    if (!dbUser || dbUser.role !== 'teacher') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Authorization: classroom must belong to this teacher
+    const classroom = await prisma.classroom.findFirst({
+      where: { id: classroomId, teacherId: dbUser.id },
+    });
+    if (!classroom) return res.status(403).json({ error: 'Access denied' });
+
+    // Fetch students in this classroom
+    const classroomStudents = await prisma.classroomStudent.findMany({
+      where: { classroomId },
+      include: { kid: { select: { id: true, name: true, avatarId: true } } },
+    });
+
+    const kidIds = classroomStudents.map(cs => cs.kid.id);
+
+    // Fetch all lesson progress for these kids
+    const progress = await prisma.lessonProgress.findMany({
+      where: { kidId: { in: kidIds } },
+      include: { lesson: { include: { module: { select: { slug: true, title: true } } } } },
+    });
+
+    // Build unique modules list
+    const moduleMap = new Map();
+    progress.forEach(p => {
+      const mod = p.lesson.module;
+      if (!moduleMap.has(mod.slug)) moduleMap.set(mod.slug, { slug: mod.slug, name: mod.title });
+    });
+
+    // Build matrix: group by (kidId, moduleSlug) -> avgStars, attempts
+    const buckets = {};
+    progress.forEach(p => {
+      const key = `${p.kidId}::${p.lesson.module.slug}`;
+      if (!buckets[key]) buckets[key] = { totalStars: 0, totalAttempts: 0, count: 0 };
+      buckets[key].totalStars += p.starsEarned;
+      buckets[key].totalAttempts += p.attempts;
+      buckets[key].count += 1;
+    });
+
+    const matrix = Object.entries(buckets).map(([key, val]) => {
+      const [studentId, moduleSlug] = key.split('::');
+      return {
+        studentId,
+        moduleSlug,
+        avgStars: Math.round((val.totalStars / val.count) * 10) / 10,
+        attempts: val.totalAttempts,
+      };
+    });
+
+    res.json({
+      students: classroomStudents.map(cs => ({ id: cs.kid.id, name: cs.kid.name, avatarId: cs.kid.avatarId })),
+      modules: Array.from(moduleMap.values()),
+      matrix,
+    });
+  } catch (err) {
+    console.error('[Teacher Analytics]', err);
+    res.status(500).json({ error: 'Failed to load analytics' });
+  }
+});
+
 module.exports = router;
