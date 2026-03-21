@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/db');
 const { upsertProgress } = require('../services/progressSync');
+const { FREE_MODULE_SLUGS, isParentPremium } = require('../lib/subscriptionUtils');
 
 // Multi-role kid access: kid JWT (own data), parent (own kids), teacher (enrolled students)
 async function resolveKidAccess(req, kidId) {
@@ -194,8 +195,22 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
     if (!kid) return res.status(404).json({ error: 'Kid not found' });
 
     // Resolve slug → UUID (client sends slug, DB stores UUID)
-    const lesson = await prisma.lesson.findFirst({ where: { slug: req.params.lessonSlug } });
+    const lesson = await prisma.lesson.findFirst({
+      where: { slug: req.params.lessonSlug },
+      include: { module: true },
+    });
     if (!lesson) return res.status(404).json({ error: `Lesson not found: ${req.params.lessonSlug}` });
+
+    // Module gating — reject progress for locked modules when parent is not premium
+    if (lesson.module && !FREE_MODULE_SLUGS.includes(lesson.module.slug)) {
+      const parent = await prisma.user.findUnique({
+        where: { id: kid.parentId },
+        select: { subscriptionStatus: true, trialEndsAt: true },
+      });
+      if (!isParentPremium(parent)) {
+        return res.status(403).json({ error: 'Premium subscription required for this module' });
+      }
+    }
 
     const {
       viewed,
