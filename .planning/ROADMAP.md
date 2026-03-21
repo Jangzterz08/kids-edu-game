@@ -115,7 +115,12 @@ Plans:
   1. An unhandled exception on client or server is captured in Sentry with full stack trace — no silent failure
   2. A parent can see how many minutes their kid spent in the app this week and a per-module star trend chart
   3. A teacher can identify which kids in their classroom are struggling with which modules from the teacher dashboard
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 07-01-PLAN.md — Game viewport fix (100dvh layout for all 8 game components)
+- [ ] 07-02-PLAN.md — Sentry integration (client + server + source maps + CSP) (OBS-01)
+- [ ] 07-03-PLAN.md — Sessions table + heartbeat + parent analytics dashboard with recharts (OBS-02)
+- [ ] 07-04-PLAN.md — Teacher classroom analytics matrix with struggling indicators (OBS-03)
 
 ## Progress
 
@@ -130,4 +135,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Parent Subscriptions | 4/4 | Complete   | 2026-03-21 |
 | 5. School Licensing | 4/4 | Complete   | 2026-03-21 |
 | 6. Adaptive Learning | 2/2 | Complete   | 2026-03-21 |
-| 7. Analytics & Observability | 0/TBD | Not started | - |
+| 7. Analytics & Observability | 0/4 | Not started | - |
