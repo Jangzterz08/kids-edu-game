@@ -89,10 +89,23 @@ async function webhookHandler(req, res) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const userId = session.metadata?.userId;
-        if (userId) {
+        if (session.metadata?.schoolId) {
+          // School checkout — update School record
+          const seatCount = session.metadata.seatCount ? parseInt(session.metadata.seatCount, 10) : undefined;
+          const updateData = {
+            stripeCustomerId: session.customer,
+            stripeSubscriptionId: session.subscription,
+            licenseStatus: 'active',
+          };
+          if (seatCount) updateData.seatCount = seatCount;
+          await prisma.school.update({
+            where: { id: session.metadata.schoolId },
+            data: updateData,
+          });
+        } else if (session.metadata?.userId) {
+          // Existing parent checkout handler (unchanged)
           await prisma.user.update({
-            where: { id: userId },
+            where: { id: session.metadata.userId },
             data: {
               stripeCustomerId: session.customer,
               stripeSubscriptionId: session.subscription,
@@ -105,21 +118,44 @@ async function webhookHandler(req, res) {
       }
       case 'customer.subscription.deleted': {
         const sub = event.data.object;
-        await prisma.user.updateMany({
-          where: { stripeSubscriptionId: sub.id },
-          data: {
-            subscriptionStatus: 'canceled',
-            subscriptionEnd: sub.ended_at ? new Date(sub.ended_at * 1000) : new Date(),
-          },
-        });
+        // Try school first
+        const school = await prisma.school.findFirst({ where: { stripeSubscriptionId: sub.id } });
+        if (school) {
+          await prisma.school.update({
+            where: { id: school.id },
+            data: {
+              licenseStatus: 'expired',
+              licenseExpiry: new Date(),
+            },
+          });
+        } else {
+          // Existing parent cancellation (unchanged)
+          await prisma.user.updateMany({
+            where: { stripeSubscriptionId: sub.id },
+            data: {
+              subscriptionStatus: 'canceled',
+              subscriptionEnd: sub.ended_at ? new Date(sub.ended_at * 1000) : new Date(),
+            },
+          });
+        }
         break;
       }
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
-        await prisma.user.updateMany({
-          where: { stripeCustomerId: invoice.customer },
-          data: { subscriptionStatus: 'past_due' },
-        });
+        // Try school first
+        const school = await prisma.school.findFirst({ where: { stripeCustomerId: invoice.customer } });
+        if (school) {
+          await prisma.school.update({
+            where: { id: school.id },
+            data: { licenseStatus: 'past_due' },
+          });
+        } else {
+          // Existing parent handler (unchanged)
+          await prisma.user.updateMany({
+            where: { stripeCustomerId: invoice.customer },
+            data: { subscriptionStatus: 'past_due' },
+          });
+        }
         break;
       }
     }

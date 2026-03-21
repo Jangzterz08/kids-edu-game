@@ -59,6 +59,8 @@ app.use('/api/achievements', requireAuth, require('./routes/achievements'));
 app.use('/api/classrooms',   requireAuth, require('./routes/classrooms'));
 app.use('/api/daily-challenge', requireAuth, require('./routes/dailyChallenge'));
 app.use('/api/billing', requireAuth, require('./routes/billing'));
+app.use('/api/billing', requireAuth, require('./routes/schoolBilling'));
+app.use('/api/school', requireAuth, require('./routes/school'));
 
 // Error handler
 app.use((err, req, res, next) => {
