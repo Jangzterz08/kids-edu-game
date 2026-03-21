@@ -21,6 +21,7 @@ model User {
   subscriptionStatus   String    @default("none") // none | trialing | active | canceled | past_due
   subscriptionEnd      DateTime?
   trialEndsAt          DateTime?
+  lastNudgeEmailAt     DateTime?
 
   kids           KidProfile[]
   classrooms     Classroom[]
