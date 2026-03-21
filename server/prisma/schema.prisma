@@ -16,6 +16,12 @@ model User {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  subscriptionStatus   String    @default("none") // none | trialing | active | canceled | past_due
+  subscriptionEnd      DateTime?
+  trialEndsAt          DateTime?
+
   kids           KidProfile[]
   classrooms     Classroom[]
 }

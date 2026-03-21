@@ -27,7 +27,8 @@
     "node-cron": "^4.2.1",
     "pg": "^8.20.0",
     "prisma": "^7.4.2",
-    "resend": "^6.9.3"
+    "resend": "^6.9.3",
+    "stripe": "^20.4.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",
