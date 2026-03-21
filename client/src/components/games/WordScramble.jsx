@@ -163,11 +163,11 @@ export default function WordScramble({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: '0 16px 24px', maxWidth: 560, margin: '0 auto' },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 560, margin: '0 auto', boxSizing: 'border-box' },
   progressBar: {
-    height: 6, borderRadius: 999,
+    height: 6, borderRadius: 999, flex: '0 0 auto',
     background: 'rgba(255,255,255,0.2)',
-    margin: '12px 0 20px', overflow: 'hidden',
+    margin: '4px 0 8px', overflow: 'hidden',
   },
   progressFill: {
     height: '100%', borderRadius: 999,
@@ -176,18 +176,19 @@ const styles = {
   },
   card: {
     background: 'rgba(255,255,255,0.94)',
-    borderRadius: 28, padding: '24px 20px 28px',
+    borderRadius: 28, padding: '12px 16px 16px',
     boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+    flex: '1 1 0', overflowY: 'auto', minHeight: 0,
   },
   roundLabel: { fontSize: 13, fontWeight: 700, color: '#5B9CB8', letterSpacing: 1 },
   emojiWrap: {
-    width: 96, height: 96, borderRadius: 24,
+    width: 72, height: 72, borderRadius: 24,
     background: 'linear-gradient(135deg, #f0f4ff, #e8f0fe)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
   },
-  emoji: { fontSize: 56 },
+  emoji: { fontSize: 42 },
   prompt: { fontSize: 15, fontWeight: 600, color: '#0A4A6E', textAlign: 'center' },
   answerRow: {
     display: 'flex', gap: 8, flexWrap: 'wrap',

@@ -147,8 +147,8 @@ export default function SpellingGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 500, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center' },
-  progress:  { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', fontWeight: 800, alignSelf: 'flex-start', textShadow: '0 2px 4px rgba(0,0,0,0.5)' },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 500, margin: '0 auto', gap: 12, alignItems: 'center', boxSizing: 'border-box' },
+  progress:  { fontSize: 'var(--font-base)', color: 'var(--text-secondary)', fontWeight: 800, alignSelf: 'flex-start', textShadow: '0 2px 4px rgba(0,0,0,0.5)', flex: '0 0 auto' },
   pictureCard: {
     position: 'relative',
     background: 'var(--glass-bg)', borderRadius: '36px',
@@ -156,10 +156,11 @@ const styles = {
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     boxShadow: '0 20px 50px rgba(0,0,0,0.4)', width: '100%', maxWidth: 300,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    minHeight: 240, paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 80,
+    minHeight: 120, paddingTop: 12, paddingLeft: 12, paddingRight: 12, paddingBottom: 64,
+    flex: '0 0 auto',
   },
-  img:      { width: 180, height: 180, objectFit: 'contain', filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
-  emoji:    { fontSize: 130, lineHeight: 1, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
+  img:      { maxHeight: '25vh', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
+  emoji:    { fontSize: 80, lineHeight: 1, filter: 'drop-shadow(0 12px 20px rgba(0,0,0,0.4))' },
   wordLabel: {
     position: 'absolute', bottom: 32, left: 0, right: 0, textAlign: 'center',
     fontSize: 'var(--font-xl)', fontWeight: 900, color: '#fff',
@@ -191,7 +192,8 @@ const styles = {
     color: '#fff', marginLeft: 8, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))',
   },
   tileGrid: {
-    display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'center', maxWidth: 420,
+    display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center', maxWidth: 420,
+    flex: '1 1 0', overflowY: 'auto', minHeight: 0, alignContent: 'flex-start',
   },
   tile: {
     width: 76, height: 76, borderRadius: 24, border: 'none',

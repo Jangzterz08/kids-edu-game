@@ -93,23 +93,24 @@ export default function OddOneOutGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 640, margin: '0 auto', alignItems: 'center', boxSizing: 'border-box' },
+  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flex: '0 0 auto' },
   title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
   speakerBtn: { background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.5)', borderRadius: 12, fontSize: 22, cursor: 'pointer', padding: '4px 8px', flexShrink: 0 },
 
   grid: {
-    display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24,
-    padding: '32px',
+    display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
+    padding: '16px',
     background: 'var(--glass-bg)', borderRadius: 32,
     border: '2px solid var(--glass-border)',
     boxShadow: 'var(--glass-shadow)',
     backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-    marginBottom: 40
+    marginBottom: 16, flex: '1 1 0', overflowY: 'auto', minHeight: 0,
+    alignContent: 'start', width: '100%',
   },
 
   itemCard: {
-    width: 130, height: 130, borderRadius: 28, border: 'none',
+    width: '100%', maxWidth: 130, height: 130, borderRadius: 28, border: 'none',
     background: 'var(--btn-blue-base)', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72,
     boxShadow: '0 8px 0 var(--btn-blue-shade), 0 10px 20px rgba(0,80,120,0.25)',
@@ -127,8 +128,8 @@ const styles = {
   },
 
   progress: {
-    marginTop: 20, fontSize: 16, fontWeight: 700, color: '#fff',
+    marginTop: 8, fontSize: 16, fontWeight: 700, color: '#fff',
     background: 'rgba(255,255,255,0.25)', padding: '6px 16px', borderRadius: 20,
-    border: '1px solid rgba(255,255,255,0.4)',
+    border: '1px solid rgba(255,255,255,0.4)', flex: '0 0 auto',
   }
 };

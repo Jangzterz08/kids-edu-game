@@ -105,8 +105,11 @@ export default function MatchingGame({ lessons, onComplete }) {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Match the pairs! 🃏</h2>
-      <p style={styles.sub}>Attempts: {attempts}</p>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Match the pairs! 🃏</h2>
+        <p style={styles.sub}>Attempts: {attempts}</p>
+      </div>
+      <div style={styles.gridWrap}>
       <div style={styles.grid}>
         {cards.map((card, i) => (
           <button
@@ -123,17 +126,20 @@ export default function MatchingGame({ lessons, onComplete }) {
           </button>
         ))}
       </div>
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto' },
-  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 8, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
-  sub: { textAlign: 'center', color: '#fff', marginBottom: 24, fontWeight: 700, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 640, margin: '0 auto', boxSizing: 'border-box' },
+  header: { flex: '0 0 auto' },
+  title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', marginBottom: 4, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
+  sub: { textAlign: 'center', color: '#fff', marginBottom: 8, fontWeight: 700, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
+  gridWrap: { flex: '1 1 0', overflowY: 'auto', minHeight: 0 },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 },
   card: {
-    aspect: '1', height: 120, borderRadius: 24, border: 'none',
+    aspect: '1', minHeight: 80, borderRadius: 24, border: 'none',
     background: 'var(--btn-blue-base)', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',

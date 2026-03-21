@@ -103,46 +103,49 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
 
   return (
     <div style={styles.container}>
-      <div style={styles.progress}>{qIdx + 1} / {questions.length}</div>
+      <div style={styles.prompt}>
+        <div style={styles.progress}>{qIdx + 1} / {questions.length}</div>
 
-      {/* Sparkle burst on correct */}
-      {sparkle && (
-        <div style={styles.sparkleWrap}>
-          {['🐠','🐡','🌟','🐚'].map((e, i) => (
-            <span
-              key={i}
-              style={{
-                ...styles.sparkleItem,
-                '--tx': `${Math.round(Math.cos(i * Math.PI / 2) * 50)}px`,
-                '--ty': `${Math.round(Math.sin(i * Math.PI / 2) * 50)}px`,
-                '--rot': `${i * 90}deg`,
-                animationDelay: `${i * 50}ms`,
-                fontSize: 32,
-              }}
-            >{e}</span>
-          ))}
+        {/* Sparkle burst on correct */}
+        {sparkle && (
+          <div style={styles.sparkleWrap}>
+            {['🐠','🐡','🌟','🐚'].map((e, i) => (
+              <span
+                key={i}
+                style={{
+                  ...styles.sparkleItem,
+                  '--tx': `${Math.round(Math.cos(i * Math.PI / 2) * 50)}px`,
+                  '--ty': `${Math.round(Math.sin(i * Math.PI / 2) * 50)}px`,
+                  '--rot': `${i * 90}deg`,
+                  animationDelay: `${i * 50}ms`,
+                  fontSize: 32,
+                }}
+              >{e}</span>
+            ))}
+          </div>
+        )}
+
+        {/* Combo streak toast */}
+        {comboToast && (
+          <div style={{ ...styles.comboToast, borderColor: comboToast.color, boxShadow: `0 8px 32px ${comboToast.color}55` }}>
+            <span style={{ fontSize: 32 }}>{comboToast.emoji}</span>
+            <span style={{ ...styles.comboText, color: comboToast.color }}>{comboToast.text}</span>
+          </div>
+        )}
+
+        {/* Question with tap-to-repeat speaker */}
+        <div style={styles.questionRow}>
+          <h2 style={styles.question}>Which one is <strong>{q.lesson.word}</strong>?</h2>
+          <button style={styles.speakBtn} onClick={() => speakWord(q.lesson.word)} aria-label="Hear the word">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="28" height="28" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+          </button>
         </div>
-      )}
-
-      {/* Combo streak toast */}
-      {comboToast && (
-        <div style={{ ...styles.comboToast, borderColor: comboToast.color, boxShadow: `0 8px 32px ${comboToast.color}55` }}>
-          <span style={{ fontSize: 32 }}>{comboToast.emoji}</span>
-          <span style={{ ...styles.comboText, color: comboToast.color }}>{comboToast.text}</span>
-        </div>
-      )}
-
-      {/* Question with tap-to-repeat speaker */}
-      <div style={styles.questionRow}>
-        <h2 style={styles.question}>Which one is <strong>{q.lesson.word}</strong>?</h2>
-        <button style={styles.speakBtn} onClick={() => speakWord(q.lesson.word)} aria-label="Hear the word">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="28" height="28" aria-hidden="true">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-          </svg>
-        </button>
       </div>
 
+      <div style={styles.gridWrap}>
       <div style={styles.grid}>
         {q.options.map((opt, i) => {
           const key = `${opt.word}-${qIdx}-${i}`;
@@ -175,12 +178,14 @@ export default function QuizGame({ moduleSlug, lessons, onComplete }) {
           );
         })}
       </div>
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 600, margin: '0 auto', position: 'relative' },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 600, margin: '0 auto', position: 'relative', boxSizing: 'border-box' },
+  prompt: { flex: '0 0 auto' },
   sparkleWrap: { position: 'absolute', top: 80, left: '50%', width: 0, height: 0, pointerEvents: 'none', zIndex: 10 },
   sparkleItem: { position: 'absolute', top: '50%', left: '50%', lineHeight: 1, animation: 'burst-out 0.7s ease-out forwards', filter: 'drop-shadow(0 0 8px #FFF)' },
   progress: { textAlign: 'center', fontSize: 'var(--font-base)', color: '#fff', marginBottom: 8, fontWeight: 700, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
@@ -195,7 +200,7 @@ const styles = {
     boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
   },
   comboText: { fontSize: 'var(--font-md)', fontWeight: 800, fontFamily: 'Fredoka, sans-serif' },
-  questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 28 },
+  questionRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 12 },
   question: { fontSize: 'var(--font-lg)', fontWeight: 800, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
   speakBtn: {
     background: 'none', border: 'none', cursor: 'pointer',
@@ -203,13 +208,14 @@ const styles = {
     flexShrink: 0, filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.4))',
     transition: 'transform 0.2s'
   },
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 },
+  gridWrap: { flex: '1 1 0', overflowY: 'auto', minHeight: 0 },
+  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
   option: {
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-    padding: 24, borderRadius: 28, cursor: 'pointer',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+    padding: 16, borderRadius: 28, cursor: 'pointer',
     transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-    minHeight: 180, justifyContent: 'center',
+    minHeight: 120, justifyContent: 'center',
   },
-  img: { width: 90, height: 90, objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
+  img: { maxHeight: '25vh', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
   fallbackEmoji: { fontSize: 64, filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.4))' },
 };

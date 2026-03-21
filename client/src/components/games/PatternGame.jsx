@@ -115,18 +115,18 @@ export default function PatternGame({ lessons, onComplete }) {
 }
 
 const styles = {
-  container: { padding: 'var(--space-xl)', maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 },
+  container: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: '8px 12px', maxWidth: 640, margin: '0 auto', alignItems: 'center', boxSizing: 'border-box' },
+  titleRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, flex: '0 0 auto' },
   title: { fontSize: 'var(--font-lg)', fontWeight: 900, textAlign: 'center', margin: 0, color: '#fff', textShadow: '0 2px 10px rgba(0,80,120,0.4)' },
   speakerBtn: { background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.5)', borderRadius: 12, fontSize: 22, cursor: 'pointer', padding: '4px 8px', flexShrink: 0 },
 
   patternBox: {
-    display: 'flex', gap: 16, padding: '24px 32px',
+    display: 'flex', gap: 12, padding: '16px 20px',
     background: 'var(--glass-bg)', borderRadius: 24,
     border: '2px solid var(--glass-border)',
     boxShadow: 'var(--glass-shadow)',
     backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-    marginBottom: 40,
+    marginBottom: 16, flex: '0 0 auto',
     flexWrap: 'wrap', justifyContent: 'center'
   },
   sequenceItem: {
@@ -143,8 +143,8 @@ const styles = {
     boxShadow: '0 0 20px rgba(16,185,129,0.5)'
   },
 
-  prompt: { fontSize: 'var(--font-base)', fontWeight: 700, color: '#fff', marginBottom: 16, textShadow: '0 1px 6px rgba(0,80,120,0.3)' },
-  optionsBox: { display: 'flex', gap: 20, justifyContent: 'center' },
+  prompt: { fontSize: 'var(--font-base)', fontWeight: 700, color: '#fff', marginBottom: 12, textShadow: '0 1px 6px rgba(0,80,120,0.3)', flex: '0 0 auto' },
+  optionsBox: { display: 'flex', gap: 16, justifyContent: 'center', flex: '1 1 0', overflowY: 'auto', minHeight: 0, alignItems: 'flex-start', flexWrap: 'wrap' },
   optionButton: {
     width: 100, height: 100, borderRadius: 28, border: 'none',
     background: 'var(--btn-blue-base)', cursor: 'pointer',
@@ -160,8 +160,8 @@ const styles = {
   },
 
   progress: {
-    marginTop: 40, fontSize: 16, fontWeight: 700, color: '#fff',
+    marginTop: 12, fontSize: 16, fontWeight: 700, color: '#fff',
     background: 'rgba(255,255,255,0.25)', padding: '6px 16px', borderRadius: 20,
-    border: '1px solid rgba(255,255,255,0.4)',
+    border: '1px solid rgba(255,255,255,0.4)', flex: '0 0 auto',
   }
 };
