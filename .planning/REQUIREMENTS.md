@@ -35,12 +35,12 @@
 
 ### Monetization — Parent Subscriptions
 
-- [ ] **MON-01**: Free tier limits access to first 3 modules; remaining 10 modules require active premium subscription
+- [x] **MON-01**: Free tier limits access to first 3 modules; remaining 10 modules require active premium subscription
 - [ ] **MON-02**: Stripe Checkout session created server-side for parent monthly ($4.99) and annual ($39.99) plans
 - [ ] **MON-03**: Stripe webhook handler processes `checkout.session.completed`, `customer.subscription.deleted`, and `invoice.payment_failed` events
 - [ ] **MON-04**: Parent subscription management page shows plan status, next billing date, and links to Stripe billing portal for changes/cancellation
 - [ ] **MON-05**: Paywall UI shown to kid when attempting locked module; parent receives in-app notification and email nudge
-- [ ] **MON-06**: 7-day free trial granted automatically on first parent signup; Stripe trial period configured server-side
+- [x] **MON-06**: 7-day free trial granted automatically on first parent signup; Stripe trial period configured server-side
 
 ### Monetization — School Licensing
 
@@ -112,12 +112,12 @@
 | PERF-02 | Phase 3 — Performance | Complete |
 | PERF-03 | Phase 3 — Performance | Complete |
 | PERF-04 | Phase 3 — Performance | Complete |
-| MON-01 | Phase 4 — Parent Subscriptions | Pending |
+| MON-01 | Phase 4 — Parent Subscriptions | Complete |
 | MON-02 | Phase 4 — Parent Subscriptions | Pending |
 | MON-03 | Phase 4 — Parent Subscriptions | Pending |
 | MON-04 | Phase 4 — Parent Subscriptions | Pending |
 | MON-05 | Phase 4 — Parent Subscriptions | Pending |
-| MON-06 | Phase 4 — Parent Subscriptions | Pending |
+| MON-06 | Phase 4 — Parent Subscriptions | Complete |
 | SCH-01 | Phase 5 — School Licensing | Pending |
 | SCH-02 | Phase 5 — School Licensing | Pending |
 | SCH-03 | Phase 5 — School Licensing | Pending |

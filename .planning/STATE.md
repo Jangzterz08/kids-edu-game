@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 4 context gathered
-last_updated: "2026-03-20T23:24:20.405Z"
+stopped_at: Completed 04-parent-subscriptions plan 01
+last_updated: "2026-03-21T00:29:11.662Z"
 progress:
   total_phases: 7
   completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 8
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 03 — performance
+**Current focus:** Phase 04 — parent-subscriptions
 
 ## Current Position
 
-Phase: 03 (performance) — EXECUTING
-Plan: 1 of 2
+Phase: 04 (parent-subscriptions) — EXECUTING
+Plan: 1 of 3
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: 1 of 2
 | Phase 02-polish-ux P03 | 4 | 2 tasks | 11 files |
 | Phase 03-performance P01 | 165 | 2 tasks | 5 files |
 | Phase 03-performance P02 | 4 | 2 tasks | 7 files |
+| Phase 04-parent-subscriptions P01 | 7 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 03-performance]: Two kidProfile.update calls (stars + coins) merged into one conditional update inside transaction using dataUpdate object
 - [Phase 03-performance]: Promise.allSettled for digest batch: individual send failures logged but do not abort the batch (BATCH_SIZE=10)
 - [Phase 03-performance]: sec06 test updated to spy on prisma.$transaction (not lessonProgress.upsert) since upsertProgress now wraps all DB writes in a transaction
+- [Phase 04-parent-subscriptions]: Use prisma migrate deploy (not migrate dev) for non-interactive CI/test environments — migrate dev requires a TTY
+- [Phase 04-parent-subscriptions]: In tests, set SUPABASE_URL='' before app import to force null supabase client and mock user path in auth middleware
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T23:24:20.398Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-parent-subscriptions/04-CONTEXT.md
+Last session: 2026-03-21T00:29:11.660Z
+Stopped at: Completed 04-parent-subscriptions plan 01
+Resume file: None
