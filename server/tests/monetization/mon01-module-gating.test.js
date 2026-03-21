@@ -5,6 +5,7 @@ import supertest from 'supertest';
 // Set env vars before app load — dotenv won't override pre-set vars
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb?schema=kids_edu_game';
 process.env.NODE_ENV = 'test';
+process.env.STRIPE_SECRET_KEY = 'sk_test_mon01';
 const TEST_KID_SECRET = 'mon01-test-secret';
 process.env.KID_JWT_SECRET = TEST_KID_SECRET;
 
@@ -119,5 +120,92 @@ describe('MON-01: home-summary isPremium derivation', () => {
     expect(res.body.subscription).toHaveProperty('trialEndsAt');
     expect(res.body.subscription).toHaveProperty('subscriptionEnd');
     expect(res.body.subscription.status).toBe('trialing');
+  });
+});
+
+describe('MON-01: Progress route module gating', () => {
+  const LESSON_ID = 'lesson-uuid-123';
+
+  const MOCK_KID_PROGRESS = {
+    ...MOCK_KID,
+    currentStreak: 2,
+  };
+
+  // Mock upsertProgress result (what $transaction returns)
+  const MOCK_PROGRESS_RECORD = {
+    id: 'progress-uuid-1',
+    kidId: KID_ID,
+    lessonId: LESSON_ID,
+    viewed: true,
+    starsEarned: 1,
+  };
+
+  let kidFindUnique, lessonFindFirst, userFindUnique, transactionSpy;
+
+  beforeEach(() => {
+    // resolveWriteAccess + streak lookup both use kidProfile.findUnique
+    kidFindUnique = vi.spyOn(prisma.kidProfile, 'findUnique').mockResolvedValue(MOCK_KID_PROGRESS);
+
+    // Default: animals lesson (locked module)
+    lessonFindFirst = vi.spyOn(prisma.lesson, 'findFirst').mockResolvedValue({
+      id: LESSON_ID,
+      slug: 'cat',
+      module: { slug: 'animals' },
+    });
+
+    // Default: non-premium parent (subscriptionStatus none)
+    userFindUnique = vi.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+      subscriptionStatus: 'none',
+      trialEndsAt: null,
+    });
+
+    // Mock transaction so upsertProgress doesn't hit DB
+    transactionSpy = vi.spyOn(prisma, '$transaction').mockResolvedValue(MOCK_PROGRESS_RECORD);
+  });
+
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  it('returns 403 for a locked module lesson when parent is not premium', async () => {
+    // lessonFindFirst returns locked module (animals), userFindUnique returns non-premium — defaults
+    const res = await request
+      .post(`/api/progress/${KID_ID}/lesson/cat`)
+      .set('Authorization', `Bearer ${kidToken}`)
+      .send({ viewed: true });
+
+    expect(res.status).toBe(403);
+    expect(res.body).toHaveProperty('error');
+    expect(res.body.error).toMatch(/premium/i);
+  });
+
+  it('succeeds for a free module lesson when parent is not premium', async () => {
+    // alphabet is in FREE_MODULE_SLUGS — gate should be skipped
+    lessonFindFirst.mockResolvedValue({
+      id: LESSON_ID,
+      slug: 'letter-a',
+      module: { slug: 'alphabet' },
+    });
+
+    const res = await request
+      .post(`/api/progress/${KID_ID}/lesson/letter-a`)
+      .set('Authorization', `Bearer ${kidToken}`)
+      .send({ viewed: true });
+
+    expect(res.status).not.toBe(403);
+    expect(res.status).toBe(200);
+  });
+
+  it('succeeds for a locked module lesson when parent is premium (active)', async () => {
+    // animals is locked, but parent is active
+    userFindUnique.mockResolvedValue({
+      subscriptionStatus: 'active',
+      trialEndsAt: null,
+    });
+
+    const res = await request
+      .post(`/api/progress/${KID_ID}/lesson/cat`)
+      .set('Authorization', `Bearer ${kidToken}`)
+      .send({ viewed: true });
+
+    expect(res.status).toBe(200);
   });
 });
