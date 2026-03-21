@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getModule } from '../data/index';
 import { useKid } from '../context/KidContext';
 import { useProgress } from '../hooks/useProgress';
+import useSessionHeartbeat from '../hooks/useSessionHeartbeat';
 import QuizGame from '../components/games/QuizGame';
 import MatchingGame from '../components/games/MatchingGame';
 import TracingGame from '../components/games/TracingGame';
@@ -13,6 +14,7 @@ import OddOneOutGame from '../components/games/OddOneOutGame';
 import WordScramble from '../components/games/WordScramble';
 
 export default function MiniGame() {
+  useSessionHeartbeat();
   const { moduleSlug }          = useParams();
   const { activeKid }           = useKid();
   const navigate                = useNavigate();

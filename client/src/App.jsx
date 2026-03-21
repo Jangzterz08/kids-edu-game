@@ -24,6 +24,7 @@ const ClassroomDetail  = lazy(() => import('./pages/ClassroomDetail'));
 const SchoolDashboard  = lazy(() => import('./pages/SchoolDashboard'));
 const KidLeaderboard   = lazy(() => import('./pages/KidLeaderboard'));
 const ParentClassrooms  = lazy(() => import('./pages/ParentClassrooms'));
+const ParentAnalytics   = lazy(() => import('./pages/ParentAnalytics'));
 const DailyChallenge    = lazy(() => import('./pages/DailyChallenge'));
 const NotFound          = lazy(() => import('./pages/NotFound'));
 
@@ -66,9 +67,10 @@ export default function App() {
                 {/* Parent routes */}
                 <Route element={<ProtectedRoute />}>
                   <Route element={<ParentLayout />}>
-                    <Route path="/"            element={<KidSelect />} />
-                    <Route path="/dashboard"   element={<ParentDashboard />} />
-                    <Route path="/classrooms"  element={<ParentClassrooms />} />
+                    <Route path="/"                   element={<KidSelect />} />
+                    <Route path="/dashboard"          element={<ParentDashboard />} />
+                    <Route path="/classrooms"         element={<ParentClassrooms />} />
+                    <Route path="/parent/analytics"   element={<ParentAnalytics />} />
                   </Route>
                 </Route>
 

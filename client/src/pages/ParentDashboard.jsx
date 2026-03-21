@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useKid } from '../context/KidContext';
 import { api } from '../lib/api';
@@ -8,6 +9,7 @@ import StarBadge from '../components/modules/StarBadge';
 import ProgressRing from '../components/modules/ProgressRing';
 
 export default function ParentDashboard() {
+  const navigate = useNavigate();
   const { kids, refreshKids } = useKid();
   const [selectedKid, setSelectedKid] = useState(null);
   const [progressData, setProgressData] = useState([]);
@@ -136,6 +138,12 @@ export default function ParentDashboard() {
             <span>{k.name}</span>
           </button>
         ))}
+        <button
+          style={styles.analyticsBtn}
+          onClick={() => navigate('/parent/analytics')}
+        >
+          View Analytics
+        </button>
       </div>
 
       {!selectedKid && kids.length === 0 && (
@@ -583,7 +591,7 @@ const styles = {
   container: { maxWidth: 900, margin: '0 auto', padding: 'var(--space-xl)' },
   heading: { fontSize: 'var(--font-xl)', fontWeight: 900, marginBottom: 28 },
 
-  kidTabs: { display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' },
+  kidTabs: { display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap', alignItems: 'center' },
   kidTab: {
     display: 'flex', alignItems: 'center', gap: 8,
     padding: '10px 24px', borderRadius: 24, border: '2px solid var(--text-muted)',
@@ -591,6 +599,13 @@ const styles = {
     cursor: 'pointer', color: 'var(--text-secondary)',
   },
   kidTabActive: { background: 'var(--accent-blue)', borderColor: 'var(--accent-blue)', color: '#fff' },
+  analyticsBtn: {
+    marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6,
+    padding: '10px 20px', borderRadius: 24,
+    border: '2px solid var(--primary, #6C5CE7)',
+    background: 'transparent', fontWeight: 700, fontSize: 'var(--font-base)',
+    cursor: 'pointer', color: 'var(--primary, #6C5CE7)', fontFamily: 'inherit',
+  },
   hint: { textAlign: 'center', color: 'var(--text-secondary)', fontSize: 'var(--font-md)', padding: 40 },
 
   statsRow: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 },
