@@ -29,7 +29,7 @@ const MOCK_KID = {
 };
 
 describe('PERF-01: GET /api/kids/:kidId/home-summary', () => {
-  let kidFindUnique, moduleFindMany, achievementFindMany, classroomStudentFindMany, dailyChallengeFindUnique;
+  let kidFindUnique, moduleFindMany, achievementFindMany, classroomStudentFindMany, dailyChallengeFindUnique, userFindUnique;
 
   beforeEach(() => {
     kidFindUnique = vi.spyOn(prisma.kidProfile, 'findUnique').mockResolvedValue(MOCK_KID);
@@ -47,6 +47,12 @@ describe('PERF-01: GET /api/kids/:kidId/home-summary', () => {
     ]);
     classroomStudentFindMany = vi.spyOn(prisma.classroomStudent, 'findMany').mockResolvedValue([]);
     dailyChallengeFindUnique = vi.spyOn(prisma.dailyChallenge, 'findUnique').mockResolvedValue(null);
+    // home-summary now fetches parent subscription data — mock with active status
+    userFindUnique = vi.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+      subscriptionStatus: 'active',
+      trialEndsAt: null,
+      subscriptionEnd: null,
+    });
   });
 
   afterEach(() => { vi.restoreAllMocks(); });

@@ -4,8 +4,10 @@ import supertest from 'supertest';
 // Set env vars before app load — dotenv won't override pre-set vars
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/testdb?schema=kids_edu_game';
 process.env.NODE_ENV = 'test';
-// No KID_JWT_SECRET needed — we use Supabase mock path
-// No SUPABASE_URL/KEY — middleware falls back to mock user { id: 'mock-user-id', email: 'dev@kidsedu.app' }
+// Force supabase to null so auth middleware uses mock user path
+// Empty string is falsy → supabaseUrl && supabaseKey check in auth.js returns false → supabase = null
+process.env.SUPABASE_URL = '';
+process.env.SUPABASE_SERVICE_KEY = '';
 
 // Load app — triggers CJS require chain and sets global.prisma
 const { default: app } = await import('../../src/index.js');

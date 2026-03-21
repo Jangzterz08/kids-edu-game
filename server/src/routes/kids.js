@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/db');
 const { getChallengeSlug, todayDate } = require('../lib/dailyChallengeUtils');
+const { isParentPremium } = require('../lib/subscriptionUtils');
 
 const STORE_ITEMS = {
   frog:      { price: 30  },
@@ -106,7 +107,7 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
 
     const today = todayDate();
 
-    const [modules, achievements, enrollments, dailyChallenge] = await Promise.all([
+    const [modules, achievements, enrollments, dailyChallenge, parentUser] = await Promise.all([
       prisma.module.findMany({
         orderBy: { sortOrder: 'asc' },
         include: {
@@ -127,6 +128,10 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
       prisma.dailyChallenge.findUnique({
         where: { kidId_date: { kidId: kid.id, date: today } },
       }),
+      prisma.user.findUnique({
+        where: { id: kid.parentId },
+        select: { subscriptionStatus: true, trialEndsAt: true, subscriptionEnd: true },
+      }),
     ]);
 
     const progress = modules.map(mod => ({
@@ -138,6 +143,8 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
       starsEarned: mod.lessons.reduce((sum, l) => sum + (l.progress[0]?.starsEarned ?? 0), 0),
       maxStars: mod.lessons.length * 3,
     }));
+
+    const isPremium = isParentPremium(parentUser);
 
     res.json({
       kid: {
@@ -156,6 +163,12 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
         completedAt: dailyChallenge?.completedAt || null,
         coinsEarned: dailyChallenge?.coinsEarned || 0,
       },
+      isPremium,
+      subscription: parentUser ? {
+        status: parentUser.subscriptionStatus,
+        trialEndsAt: parentUser.trialEndsAt,
+        subscriptionEnd: parentUser.subscriptionEnd,
+      } : null,
     });
   } catch (err) {
     next(err);

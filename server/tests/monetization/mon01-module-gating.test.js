@@ -72,7 +72,7 @@ describe('MON-01: home-summary isPremium derivation', () => {
 
   it('returns isPremium=true when subscriptionStatus is "trialing" and trialEndsAt is in the future', async () => {
     const futureDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days ahead
-    userFindUnique.mockResolvedValue(buildParentUser('trialing', futureDate.toISOString()));
+    userFindUnique.mockResolvedValue(buildParentUser('trialing', futureDate));
 
     const res = await request
       .get(`/api/kids/${KID_ID}/home-summary`)
@@ -84,7 +84,7 @@ describe('MON-01: home-summary isPremium derivation', () => {
 
   it('returns isPremium=false when subscriptionStatus is "trialing" and trialEndsAt is in the past (expired)', async () => {
     const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // 1 day ago
-    userFindUnique.mockResolvedValue(buildParentUser('trialing', pastDate.toISOString()));
+    userFindUnique.mockResolvedValue(buildParentUser('trialing', pastDate));
 
     const res = await request
       .get(`/api/kids/${KID_ID}/home-summary`)
@@ -107,7 +107,7 @@ describe('MON-01: home-summary isPremium derivation', () => {
 
   it('response includes subscription object with status, trialEndsAt, subscriptionEnd fields', async () => {
     const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    userFindUnique.mockResolvedValue(buildParentUser('trialing', futureDate.toISOString(), null));
+    userFindUnique.mockResolvedValue(buildParentUser('trialing', futureDate, null));
 
     const res = await request
       .get(`/api/kids/${KID_ID}/home-summary`)
