@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-school-licensing plan 02
-last_updated: "2026-03-21T06:49:58.868Z"
+stopped_at: Completed 05-school-licensing plan 03
+last_updated: "2026-03-21T07:05:07.775Z"
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -59,6 +59,7 @@ Plan: 1 of 4
 | Phase 04-parent-subscriptions P04 | 3 | 2 tasks | 5 files |
 | Phase 05-school-licensing P01 | 5 | 2 tasks | 6 files |
 | Phase 05-school-licensing P02 | 366 | 2 tasks | 9 files |
+| Phase 05-school-licensing P03 | 4 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,9 @@ From PROJECT.md Key Decisions table:
 - [Phase 05-school-licensing]: schoolBilling.js exports module.exports.stripe for CJS spy access in tests (mirrors billing.js pattern)
 - [Phase 05-school-licensing]: Seat cap check and schoolTeacher.create wrapped in prisma.$transaction to prevent race conditions under concurrent requests
 - [Phase 05-school-licensing]: Webhook routes school events by checking schoolId metadata first (checkout) or findFirst by subscriptionId/customerId (deletion/payment_failed) before falling through to parent handler
+- [Phase 05-school-licensing]: School license check placed inside !isParentPremium branch — premium parents never incur the extra DB query
+- [Phase 05-school-licensing]: sendUpgradeNudge fires only when BOTH parent non-premium AND no school license — avoids spamming school-enrolled parents
+- [Phase 05-school-licensing]: mon01 tests needed classroomStudent.findFirst mock (null) in both beforeEach blocks — getKidSchoolLicense uses findFirst not findMany
 
 ### Pending Todos
 
@@ -117,6 +121,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T06:49:58.866Z
-Stopped at: Completed 05-school-licensing plan 02
+Last session: 2026-03-21T07:05:07.772Z
+Stopped at: Completed 05-school-licensing plan 03
 Resume file: None
