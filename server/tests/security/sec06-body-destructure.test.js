@@ -27,7 +27,7 @@ const MOCK_KID = {
   coins: 0,
 };
 
-const MOCK_LESSON = { id: 'lesson-uuid-1', slug: 'a' };
+const MOCK_LESSON = { id: 'lesson-uuid-1', slug: 'a', module: { slug: 'alphabet' } };
 
 const MOCK_PROGRESS = {
   kidId: KID_ID,
@@ -65,10 +65,13 @@ describe('SEC-06: req.body destructured to known fields', () => {
             capturedTxUpsertArgs = args;
             return { ...MOCK_PROGRESS, starsEarned: 2, coinsDelta: 10 };
           }),
+          findMany: vi.fn().mockResolvedValue([]),
         },
         kidProfile: {
           update: vi.fn().mockResolvedValue(MOCK_KID),
         },
+        moduleDifficulty: { upsert: vi.fn() },
+        reviewSchedule: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn(), update: vi.fn() },
       };
       return cb(txMock);
     });

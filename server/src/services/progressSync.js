@@ -1,4 +1,5 @@
 const prisma = require('../lib/db');
+const { classifyAccuracy, getHardThreshold, applySM2 } = require('../lib/sm2');
 
 const SCORE_FIELDS = ['matchScore', 'traceScore', 'quizScore', 'spellingScore', 'phonicsScore', 'patternScore', 'oddOneOutScore', 'scrambleScore'];
 
@@ -12,7 +13,7 @@ function computeStars(entry) {
   return 1;
 }
 
-async function upsertProgress(kidId, entry) {
+async function upsertProgress(kidId, entry, ageGroup) {
   const { lessonId, viewed, attempts, completedAt } = entry;
   const starsEarned = entry.starsEarned ?? computeStars(entry);
 
@@ -63,6 +64,69 @@ async function upsertProgress(kidId, entry) {
         where: { id: kidId },
         data: dataUpdate,
       });
+    }
+
+    // --- Step 3a: Compute module accuracy and upsert ModuleDifficulty ---
+    // Guard: only proceed if entry.moduleSlug is present (bulk sync entries may omit it)
+    if (entry.moduleSlug) {
+      const moduleProgress = await tx.lessonProgress.findMany({
+        where: { kidId, lesson: { module: { slug: entry.moduleSlug } } },
+        select: {
+          matchScore: true, traceScore: true, quizScore: true, spellingScore: true,
+          phonicsScore: true, patternScore: true, oddOneOutScore: true, scrambleScore: true,
+        },
+      });
+
+      // Best score per lesson row (max across game types with at least one non-null score)
+      const lessonBests = moduleProgress
+        .map(row => {
+          const scores = SCORE_FIELDS.map(f => row[f]).filter(s => s !== null && s !== undefined);
+          return scores.length > 0 ? Math.max(...scores) : null;
+        })
+        .filter(s => s !== null);
+
+      if (lessonBests.length > 0) {
+        const accuracyPct = lessonBests.reduce((a, b) => a + b, 0) / lessonBests.length;
+        const level = classifyAccuracy(accuracyPct, ageGroup ?? null);
+        // accuracy stored as 0-100 (raw percentage matching score field values)
+        await tx.moduleDifficulty.upsert({
+          where: { kidId_moduleSlug: { kidId, moduleSlug: entry.moduleSlug } },
+          create: { kidId, moduleSlug: entry.moduleSlug, level, accuracy: accuracyPct },
+          update: { level, accuracy: accuracyPct },
+        });
+      }
+    }
+
+    // --- Step 3b: Create or update ReviewSchedule via SM-2 ---
+    const lessonScores = SCORE_FIELDS.map(f => record[f]).filter(s => s !== null && s !== undefined);
+    if (lessonScores.length > 0) {
+      const lessonBestScore = Math.max(...lessonScores);
+      const hardThreshold = getHardThreshold(ageGroup ?? null);
+      const existingReview = await tx.reviewSchedule.findUnique({
+        where: { kidId_lessonId: { kidId, lessonId: entry.lessonId } },
+      });
+
+      if (!existingReview && lessonBestScore < hardThreshold) {
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 1);
+        await tx.reviewSchedule.create({
+          data: {
+            kidId,
+            lessonId: entry.lessonId,
+            dueDate,
+            interval: 1,
+            easeFactor: 2.5,
+            reviewCount: 0,
+            lastReviewedAt: null,
+          },
+        });
+      } else if (existingReview) {
+        const sm2Result = applySM2(existingReview, lessonBestScore);
+        await tx.reviewSchedule.update({
+          where: { kidId_lessonId: { kidId, lessonId: entry.lessonId } },
+          data: sm2Result,
+        });
+      }
     }
 
     return { ...record, coinsDelta };

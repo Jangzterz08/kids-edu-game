@@ -22,14 +22,14 @@ describe('PERF-02: upsertProgress uses $transaction', () => {
     lessonFindFirst = vi.spyOn(prisma.lesson, 'findFirst');
     transactionSpy = vi.spyOn(prisma, '$transaction');
 
-    // resolveWriteAccess needs kid profile
+    // resolveWriteAccess needs kid profile (include ageGroup for upsertProgress third arg)
     kidFindUnique.mockResolvedValue({
       id: KID_ID, name: 'Test', coins: 50, totalStars: 10, currentStreak: 1,
-      lastActivityDate: new Date(), parentId: 'p1',
+      lastActivityDate: new Date(), parentId: 'p1', ageGroup: '5-6',
     });
 
-    // Lesson slug resolution
-    lessonFindFirst.mockResolvedValue({ id: 'lesson-uuid-1', slug: 'a' });
+    // Lesson slug resolution — use free module slug to bypass premium gating
+    lessonFindFirst.mockResolvedValue({ id: 'lesson-uuid-1', slug: 'a', module: { slug: 'alphabet' } });
   });
 
   afterEach(() => { vi.restoreAllMocks(); });
@@ -42,11 +42,16 @@ describe('PERF-02: upsertProgress uses $transaction', () => {
           upsert: vi.fn().mockResolvedValue({
             id: 'lp-1', kidId: KID_ID, lessonId: 'lesson-uuid-1',
             starsEarned: 2, viewed: true,
+            matchScore: null, traceScore: null, quizScore: null, spellingScore: null,
+            phonicsScore: null, patternScore: null, oddOneOutScore: null, scrambleScore: null,
           }),
+          findMany: vi.fn().mockResolvedValue([]),
         },
         kidProfile: {
           update: vi.fn().mockResolvedValue({ id: KID_ID, coins: 60, totalStars: 12 }),
         },
+        moduleDifficulty: { upsert: vi.fn() },
+        reviewSchedule: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn(), update: vi.fn() },
       };
       return cb(txMock);
     });
@@ -70,11 +75,16 @@ describe('PERF-02: upsertProgress uses $transaction', () => {
           upsert: vi.fn().mockResolvedValue({
             id: 'lp-2', kidId: KID_ID, lessonId: 'lesson-uuid-1',
             starsEarned: 1, viewed: true,
+            matchScore: null, traceScore: null, quizScore: null, spellingScore: null,
+            phonicsScore: null, patternScore: null, oddOneOutScore: null, scrambleScore: null,
           }),
+          findMany: vi.fn().mockResolvedValue([]),
         },
         kidProfile: {
           update: vi.fn().mockResolvedValue({ id: KID_ID }),
         },
+        moduleDifficulty: { upsert: vi.fn() },
+        reviewSchedule: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn(), update: vi.fn() },
       };
       return cb(txMock);
     });

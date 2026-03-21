@@ -232,7 +232,8 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
       viewed,
       matchScore, traceScore, quizScore, spellingScore,
       phonicsScore, patternScore, oddOneOutScore, scrambleScore,
-    });
+      moduleSlug: lesson.module.slug,
+    }, kid.ageGroup);
 
     // Read updated streak from kid profile (upsertProgress already updated it)
     const updatedKid = await prisma.kidProfile.findUnique({
@@ -259,7 +260,7 @@ router.post('/:kidId/sync', async (req, res, next) => {
     const errors = [];
     for (const entry of entries) {
       try {
-        await upsertProgress(kid.id, entry);
+        await upsertProgress(kid.id, entry, kid.ageGroup);
         synced++;
       } catch (e) {
         errors.push({ lessonId: entry.lessonId, error: e.message });
