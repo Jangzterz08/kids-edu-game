@@ -73,6 +73,8 @@ describe('MON-03: Webhook handler', () => {
     constructEventSpy = vi.spyOn(stripe.webhooks, 'constructEvent');
     userUpdate = vi.spyOn(prisma.user, 'update').mockResolvedValue({});
     userUpdateMany = vi.spyOn(prisma.user, 'updateMany').mockResolvedValue({ count: 1 });
+    // Webhook now checks school first — return null so parent flow runs in parent tests
+    vi.spyOn(prisma.school, 'findFirst').mockResolvedValue(null);
   });
 
   afterEach(() => {
