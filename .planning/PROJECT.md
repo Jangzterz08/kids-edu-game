@@ -62,9 +62,24 @@ Kids learn and parents pay — every decision should make the learning loop more
 - ✓ **OBS-02**: Parent dashboard shows time-on-app, lessons completed per day, star trends — v1.0
 - ✓ **OBS-03**: Teacher dashboard shows class-level performance metrics per module — v1.0
 
+## Current Milestone: v1.1 Logic & Reasoning
+
+**Goal:** Add a Logic & Reasoning content module with 3 new game types (sort, true/false, memory match), age-adaptive difficulty for ages 4–8.
+
+**Target features:**
+- Logic & Reasoning module (new content domain, free-tier + premium)
+- `sort` game type — drag/tap to order items by size, count, or sequence
+- `trueFalse` game type — tap correct/incorrect for age-appropriate statements
+- `memoryMatch` game type — flip card pairs, find matching items
+
 ### Active
 
-*(Next milestone requirements defined via `/gsd:new-milestone`)*
+- [ ] Logic & Reasoning module with age-adaptive lessons (ages 4–6 and 6–8 variants)
+- [ ] `sort` game type: visual ordering by attribute (size, count, sequence)
+- [ ] `trueFalse` game type: tap True/False for simple statements, no reading for 4–6
+- [ ] `memoryMatch` game type: card flip pairs with match animation
+- [ ] New game types integrated into existing scoring, coins, streak, and spaced-repetition systems
+- [ ] New module accessible via freemium gate (first 3 modules free rule maintained)
 
 ### Out of Scope
 
@@ -111,4 +126,4 @@ Kids learn and parents pay — every decision should make the learning loop more
 | useSessionHeartbeat with sendBeacon on unload | Reliable session end even on tab close | ✓ Good |
 
 ---
-*Last updated: 2026-03-21 after v1.0 milestone*
+*Last updated: 2026-03-22 after v1.1 milestone start*
