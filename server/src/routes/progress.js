@@ -3,6 +3,7 @@ const router = express.Router();
 const prisma = require('../lib/db');
 const { upsertProgress } = require('../services/progressSync');
 const { FREE_MODULE_SLUGS, isParentPremium } = require('../lib/subscriptionUtils');
+const { sendUpgradeNudge } = require('../services/upgradeNudge');
 
 // Multi-role kid access: kid JWT (own data), parent (own kids), teacher (enrolled students)
 async function resolveKidAccess(req, kidId) {
@@ -208,6 +209,8 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
         select: { subscriptionStatus: true, trialEndsAt: true },
       });
       if (!isParentPremium(parent)) {
+        // Fire-and-forget email nudge — do not await, do not block 403 response
+        sendUpgradeNudge(kid.parentId).catch(err => console.error('[nudge] Error:', err.message));
         return res.status(403).json({ error: 'Premium subscription required for this module' });
       }
     }
