@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-parent-subscriptions plan 01
+stopped_at: Completed 04-parent-subscriptions plan 02
 last_updated: "2026-03-21T00:29:11.662Z"
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 04 (parent-subscriptions) — EXECUTING
-Plan: 1 of 3
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Plan: 1 of 3
 | Phase 03-performance P01 | 165 | 2 tasks | 5 files |
 | Phase 03-performance P02 | 4 | 2 tasks | 7 files |
 | Phase 04-parent-subscriptions P01 | 7 | 2 tasks | 9 files |
+| Phase 04-parent-subscriptions P02 | 9 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,9 @@ From PROJECT.md Key Decisions table:
 - [Phase 03-performance]: sec06 test updated to spy on prisma.$transaction (not lessonProgress.upsert) since upsertProgress now wraps all DB writes in a transaction
 - [Phase 04-parent-subscriptions]: Use prisma migrate deploy (not migrate dev) for non-interactive CI/test environments — migrate dev requires a TTY
 - [Phase 04-parent-subscriptions]: In tests, set SUPABASE_URL='' before app import to force null supabase client and mock user path in auth middleware
+- [Phase 04-parent-subscriptions P02]: Expose module.exports.stripe from billing.js; use createRequire(import.meta.url) in tests — ESM dynamic import of CJS creates separate instance, spy on it never intercepts route calls
+- [Phase 04-parent-subscriptions P02]: Stripe fallback key 'sk_test_placeholder' prevents startup failure when non-billing test files load index.js without STRIPE_SECRET_KEY set
+- [Phase 04-parent-subscriptions P02]: Webhook mounted before express.json() using express.raw({ type: 'application/json' }) — required for Stripe signature verification on raw body
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T00:29:11.660Z
-Stopped at: Completed 04-parent-subscriptions plan 01
+Last session: 2026-03-21T01:40:00.000Z
+Stopped at: Completed 04-parent-subscriptions plan 02
 Resume file: None

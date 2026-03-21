@@ -70,7 +70,7 @@ Plans:
   3. A parent can complete Stripe Checkout and immediately unlock all modules for their kids
   4. When a subscription is cancelled or payment fails, modules re-lock on the next session without manual intervention
   5. A parent can view their plan status and reach the Stripe billing portal to cancel or change plan from within the app
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 Plans:
 - [ ] 04-01-PLAN.md — Prisma migration + subscription utils + trial init + home-summary subscription data (MON-01, MON-06)
 - [ ] 04-02-PLAN.md — Stripe billing routes (checkout, webhook, portal) + module gate in progress route (MON-02, MON-03, MON-04)
@@ -118,7 +118,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Security Hardening | 2/2 | Complete   | 2026-03-19 |
 | 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
 | 3. Performance | 1/2 | In Progress|  |
-| 4. Parent Subscriptions | 1/3 | In Progress|  |
+| 4. Parent Subscriptions | 2/3 | In Progress|  |
 | 5. School Licensing | 0/TBD | Not started | - |
 | 6. Adaptive Learning | 0/TBD | Not started | - |
 | 7. Analytics & Observability | 0/TBD | Not started | - |
