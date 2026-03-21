@@ -9,7 +9,7 @@ KidsLearn is a deployed educational game for kids aged 3–8. The product works 
 - [x] **Phase 1: Security Hardening** - Fix auth and data vulnerabilities before any payment flows ship (completed 2026-03-19)
 - [x] **Phase 2: Polish & UX** - Complete the pending production finish work for a professional feel (completed 2026-03-20)
 - [ ] **Phase 3: Performance** - Reduce API round-trips and eliminate serial bottlenecks before monetization scale
-- [x] **Phase 4: Parent Subscriptions** - Freemium gate + Stripe Checkout for individual family revenue (completed 2026-03-21)
+- [ ] **Phase 4: Parent Subscriptions** - Freemium gate + Stripe Checkout for individual family revenue (gap closure in progress)
 - [ ] **Phase 5: School Licensing** - B2B Stripe seat licensing and school admin tooling
 - [ ] **Phase 6: Adaptive Learning** - Wire existing DB tables into live difficulty tracking and recommendations
 - [ ] **Phase 7: Analytics & Observability** - Sentry error tracking and enriched parent/teacher dashboards
@@ -70,11 +70,12 @@ Plans:
   3. A parent can complete Stripe Checkout and immediately unlock all modules for their kids
   4. When a subscription is cancelled or payment fails, modules re-lock on the next session without manual intervention
   5. A parent can view their plan status and reach the Stripe billing portal to cancel or change plan from within the app
-**Plans:** 3/3 plans complete
+**Plans:** 4 plans (3 complete, 1 gap closure)
 Plans:
-- [ ] 04-01-PLAN.md — Prisma migration + subscription utils + trial init + home-summary subscription data (MON-01, MON-06)
-- [ ] 04-02-PLAN.md — Stripe billing routes (checkout, webhook, portal) + module gate in progress route (MON-02, MON-03, MON-04)
-- [ ] 04-03-PLAN.md — ParentDashboard subscription UI + KidHome locked ModuleCards (MON-05)
+- [x] 04-01-PLAN.md — Prisma migration + subscription utils + trial init + home-summary subscription data (MON-01, MON-06)
+- [x] 04-02-PLAN.md — Stripe billing routes (checkout, webhook, portal) + module gate in progress route (MON-02, MON-03, MON-04)
+- [x] 04-03-PLAN.md — ParentDashboard subscription UI + KidHome locked ModuleCards (MON-05)
+- [ ] 04-04-PLAN.md — Gap closure: email nudge when kid hits locked module gate (MON-05)
 
 ### Phase 5: School Licensing
 **Goal**: Schools can purchase a seat license, provision teachers and classrooms, and have all content unlocked for enrolled kids
@@ -118,7 +119,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Security Hardening | 2/2 | Complete   | 2026-03-19 |
 | 2. Polish & UX | 3/3 | Complete   | 2026-03-20 |
 | 3. Performance | 1/2 | In Progress|  |
-| 4. Parent Subscriptions | 3/3 | Complete   | 2026-03-21 |
+| 4. Parent Subscriptions | 3/4 | Gap Closure | - |
 | 5. School Licensing | 0/TBD | Not started | - |
 | 6. Adaptive Learning | 0/TBD | Not started | - |
 | 7. Analytics & Observability | 0/TBD | Not started | - |
