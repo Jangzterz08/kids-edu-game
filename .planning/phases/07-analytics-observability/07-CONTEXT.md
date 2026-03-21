@@ -27,7 +27,7 @@ Additionally, this phase addresses a long-standing UX issue: **the game view mus
 - **Approach:** Use CSS `height: 100dvh` on the game wrapper with `overflow: hidden`. Inner content uses `flex` layout with proportional sizing — no fixed pixel heights on game cards or question blocks.
 - **Scrollable areas within game:** Only the answer-choice list may scroll internally (using `overflow-y: auto` on its container) if choices overflow — the game frame itself never scrolls.
 - **Affected components:** All 8 game types in `client/src/components/games/` — `MatchingGame.jsx`, `OddOneOutGame.jsx`, `PatternGame.jsx`, `PhonicsGame.jsx`, `QuizGame.jsx`, `SpellingGame.jsx`, `TracingGame.jsx`, `WordScramble.jsx`.
-- **Test breakpoints:** Must fit at 375×667 (iPhone SE), 390×844 (iPhone 14), 768×1024 (iPad), 1280×800 (laptop).
+- **Test breakpoints:** Must fit at 375x667 (iPhone SE), 390x844 (iPhone 14), 768x1024 (iPad), 1280x800 (laptop).
 - **Header/progress bar:** Fixed height allocation — max `56px` for game header + progress bar combined, so game content has `calc(100dvh - 56px)` available.
 
 ### Sentry Error Tracking (OBS-01)
@@ -37,8 +37,8 @@ Locked decisions:
 - **Client:** `@sentry/react` — init in `client/src/main.jsx` before React mounts. DSN from `VITE_SENTRY_DSN` env var.
 - **Server:** `@sentry/node` — init in `server/index.js` as the very first import, before express and routes. DSN from `SENTRY_DSN` env var.
 - **Environment tagging:** `environment: import.meta.env.MODE` (client) / `process.env.NODE_ENV` (server). Only capture in production + staging; suppress in development by checking env.
-- **Error boundary integration:** Wrap the existing `<ErrorBoundary>` (from Phase 2) with `Sentry.ErrorBoundary` — do not replace Phase 2's fallback UI, add Sentry capture on top.
-- **Unhandled promise rejections:** Server must register `process.on('unhandledRejection', ...)` → forward to Sentry.
+- **Error boundary integration:** Add Sentry capture via `onError` prop callback on the existing `<ErrorBoundary>` from Phase 2 — do not use `<Sentry.ErrorBoundary>` wrapper. The `onError` callback calls `Sentry.captureException(error)` alongside the existing `console.error`. This avoids double boundary nesting while achieving identical error capture.
+- **Unhandled promise rejections:** Server must register `process.on('unhandledRejection', ...)` -> forward to Sentry.
 - **Source maps:** Upload to Sentry during Vite build via `@sentry/vite-plugin`. Store `SENTRY_AUTH_TOKEN` in env.
 
 ### Parent Analytics Dashboard (OBS-02)
@@ -59,8 +59,8 @@ Locked decisions:
 Locked decisions:
 
 - **Route:** `/teacher/classroom/:classroomId/analytics` — accessible from teacher's classroom detail page.
-- **View:** Table — rows = students, columns = modules. Each cell shows average stars (0–3) with color coding: `≥2.5` = green, `1–2.4` = yellow, `<1` = red.
-- **"Struggling" threshold:** A student is flagged as struggling on a module when `avgStars < 1.5` AND `attempts ≥ 2`. Teacher sees this as a red cell with a ⚠ indicator.
+- **View:** Table — rows = students, columns = modules. Each cell shows average stars (0-3) with color coding: `>=2.5` = green, `1-2.4` = yellow, `<1` = red.
+- **"Struggling" threshold:** A student is flagged as struggling on a module when `avgStars < 1.5` AND `attempts >= 2`. Teacher sees this as a red cell with a warning indicator.
 - **Data source:** New backend endpoint `GET /api/teacher/classroom/:id/analytics` — returns `{ students: [{id, name}], modules: [{slug, name}], matrix: [{studentId, moduleSlug, avgStars, attempts}] }`.
 - **Only teacher's own classrooms** accessible — enforced by classroom membership check on server.
 
