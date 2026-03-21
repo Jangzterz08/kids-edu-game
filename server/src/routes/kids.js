@@ -3,6 +3,7 @@ const router = express.Router();
 const prisma = require('../lib/db');
 const { getChallengeSlug, todayDate } = require('../lib/dailyChallengeUtils');
 const { isParentPremium } = require('../lib/subscriptionUtils');
+const { getKidSchoolLicense } = require('../lib/schoolUtils');
 
 const STORE_ITEMS = {
   frog:      { price: 30  },
@@ -144,7 +145,11 @@ router.get('/:kidId/home-summary', async (req, res, next) => {
       maxStars: mod.lessons.length * 3,
     }));
 
-    const isPremium = isParentPremium(parentUser);
+    let isPremium = isParentPremium(parentUser);
+    if (!isPremium) {
+      const schoolLicense = await getKidSchoolLicense(kid.id);
+      if (schoolLicense) isPremium = true;
+    }
 
     res.json({
       kid: {
