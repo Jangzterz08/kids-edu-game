@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-parent-subscriptions plan 02
-last_updated: "2026-03-21T00:29:11.662Z"
+stopped_at: Completed 04-parent-subscriptions plan 03
+last_updated: "2026-03-21T05:06:02.065Z"
 progress:
   total_phases: 7
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -55,6 +55,7 @@ Plan: 2 of 3
 | Phase 03-performance P02 | 4 | 2 tasks | 7 files |
 | Phase 04-parent-subscriptions P01 | 7 | 2 tasks | 9 files |
 | Phase 04-parent-subscriptions P02 | 9 | 2 tasks | 7 files |
+| Phase 04-parent-subscriptions P03 | 45 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,8 @@ From PROJECT.md Key Decisions table:
 - [Phase 04-parent-subscriptions P02]: Expose module.exports.stripe from billing.js; use createRequire(import.meta.url) in tests — ESM dynamic import of CJS creates separate instance, spy on it never intercepts route calls
 - [Phase 04-parent-subscriptions P02]: Stripe fallback key 'sk_test_placeholder' prevents startup failure when non-billing test files load index.js without STRIPE_SECRET_KEY set
 - [Phase 04-parent-subscriptions P02]: Webhook mounted before express.json() using express.raw({ type: 'application/json' }) — required for Stripe signature verification on raw body
+- [Phase 04-parent-subscriptions]: Billing checkout accepts plan name (monthly/annual) not raw Stripe price ID; server maps to env vars internally
+- [Phase 04-parent-subscriptions]: isPremium defaults to true in KidHome to prevent flash of locked modules during initial API load
 
 ### Pending Todos
 
@@ -105,6 +108,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T01:40:00.000Z
-Stopped at: Completed 04-parent-subscriptions plan 02
+Last session: 2026-03-21T05:06:02.063Z
+Stopped at: Completed 04-parent-subscriptions plan 03
 Resume file: None

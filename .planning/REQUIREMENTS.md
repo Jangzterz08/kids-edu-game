@@ -39,7 +39,7 @@
 - [x] **MON-02**: Stripe Checkout session created server-side for parent monthly ($4.99) and annual ($39.99) plans
 - [x] **MON-03**: Stripe webhook handler processes `checkout.session.completed`, `customer.subscription.deleted`, and `invoice.payment_failed` events
 - [x] **MON-04**: Parent subscription management page shows plan status, next billing date, and links to Stripe billing portal for changes/cancellation
-- [ ] **MON-05**: Paywall UI shown to kid when attempting locked module; parent receives in-app notification and email nudge
+- [x] **MON-05**: Paywall UI shown to kid when attempting locked module; parent receives in-app notification and email nudge
 - [x] **MON-06**: 7-day free trial granted automatically on first parent signup; Stripe trial period configured server-side
 
 ### Monetization — School Licensing
@@ -116,7 +116,7 @@
 | MON-02 | Phase 4 — Parent Subscriptions | Complete |
 | MON-03 | Phase 4 — Parent Subscriptions | Complete |
 | MON-04 | Phase 4 — Parent Subscriptions | Complete |
-| MON-05 | Phase 4 — Parent Subscriptions | Pending |
+| MON-05 | Phase 4 — Parent Subscriptions | Complete |
 | MON-06 | Phase 4 — Parent Subscriptions | Complete |
 | SCH-01 | Phase 5 — School Licensing | Pending |
 | SCH-02 | Phase 5 — School Licensing | Pending |
