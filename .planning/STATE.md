@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "07-01 checkpoint:human-verify (Task 3)"
-last_updated: "2026-03-21T19:04:10.227Z"
+stopped_at: Completed 07-01-PLAN.md
+last_updated: "2026-03-21T19:21:53.530Z"
 progress:
   total_phases: 7
   completed_phases: 6
@@ -64,6 +64,7 @@ Plan: 2 of 5
 | Phase 06 P01 | 12 | 2 tasks | 6 files |
 | Phase 06-adaptive-learning P02 | 277 | 2 tasks | 7 files |
 | Phase 07-analytics-observability P02 | 12 | 2 tasks | 7 files |
+| Phase 07-analytics-observability P01 | 7 | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -119,6 +120,7 @@ From PROJECT.md Key Decisions table:
 - [Phase 06-adaptive-learning]: reviewToday lastReviewedAt stripped from response after sort — internal sort key not needed by client
 - [Phase 07-analytics-observability]: OBS-01 Sentry server test uses outcome-based assertions (app load, endpoints, process listeners) because vi.mock cannot intercept CJS require('@sentry/node') from ESM test files — mirrors Phase 01 CJS/ESM boundary pattern
 - [Phase 07-analytics-observability]: Sentry enabled only in production (MODE !== development on client, NODE_ENV === production on server); tracesSampleRate: 0.1 on both to control quota
+- [Phase 07-analytics-observability]: 100dvh (not 100vh) on KidLayout with overflow:hidden — prevents mobile browser scroll; header 56px (down from 72px) for more game vertical space; game components use height:100% inheriting constrained height from KidLayout main area
 
 ### Pending Todos
 
@@ -132,6 +134,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T19:04:10.223Z
-Stopped at: 07-01 checkpoint:human-verify (Task 3)
+Last session: 2026-03-21T19:21:42.499Z
+Stopped at: Completed 07-01-PLAN.md
 Resume file: None

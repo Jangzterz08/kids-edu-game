@@ -59,7 +59,7 @@
 
 ### Analytics & Observability
 
-- [ ] **OBS-01**: Sentry SDK integrated on client (`@sentry/react`) and server (`@sentry/node`) with DSN configured via env vars
+- [x] **OBS-01**: Sentry SDK integrated on client (`@sentry/react`) and server (`@sentry/node`) with DSN configured via env vars
 - [ ] **OBS-02**: Parent dashboard enhanced with time-on-app chart, lessons-per-day histogram, and per-module star trends
 - [ ] **OBS-03**: Teacher dashboard enhanced with class-level performance metrics: average stars per module, completion rates, struggling kids flagged
 
@@ -127,7 +127,7 @@
 | ADL-01 | Phase 6 — Adaptive Learning | Complete |
 | ADL-02 | Phase 6 — Adaptive Learning | Complete |
 | ADL-03 | Phase 6 — Adaptive Learning | Complete |
-| OBS-01 | Phase 7 — Analytics & Observability | Pending |
+| OBS-01 | Phase 7 — Analytics & Observability | Complete |
 | OBS-02 | Phase 7 — Analytics & Observability | Pending |
 | OBS-03 | Phase 7 — Analytics & Observability | Pending |
 
