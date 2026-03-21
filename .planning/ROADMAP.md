@@ -102,7 +102,7 @@ Plans:
   1. Completing a lesson writes a difficulty record — the ModuleDifficulty and ReviewSchedule tables are no longer empty for active kids
   2. A kid's KidHome shows a "Recommended" section surfacing modules where they scored 60–80% (not mastered, not too hard)
   3. A kid who scored below 60% on a lesson sees that lesson appear in a "Review Today" section on KidHome
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 06-01-PLAN.md — SM-2 utility + difficulty/review writes in progressSync transaction (ADL-01)
 - [ ] 06-02-PLAN.md — home-summary recommendations + reviewToday + KidHome UI sections (ADL-02, ADL-03)
@@ -129,5 +129,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Performance | 1/2 | In Progress|  |
 | 4. Parent Subscriptions | 4/4 | Complete   | 2026-03-21 |
 | 5. School Licensing | 4/4 | Complete   | 2026-03-21 |
-| 6. Adaptive Learning | 0/2 | Not started | - |
+| 6. Adaptive Learning | 1/2 | In Progress|  |
 | 7. Analytics & Observability | 0/TBD | Not started | - |

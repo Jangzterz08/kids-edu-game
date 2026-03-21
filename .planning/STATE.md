@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 6 context gathered
-last_updated: "2026-03-21T11:58:05.167Z"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-03-21T12:33:50.850Z"
 progress:
   total_phases: 7
   completed_phases: 5
-  total_plans: 15
-  completed_plans: 15
+  total_plans: 17
+  completed_plans: 16
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 05 — school-licensing
+**Current focus:** Phase 06 — adaptive-learning
 
 ## Current Position
 
-Phase: 05 (school-licensing) — EXECUTING
-Plan: 1 of 4
+Phase: 06 (adaptive-learning) — EXECUTING
+Plan: 1 of 2
 
 ## Performance Metrics
 
@@ -61,6 +61,7 @@ Plan: 1 of 4
 | Phase 05-school-licensing P02 | 366 | 2 tasks | 9 files |
 | Phase 05-school-licensing P03 | 4 | 2 tasks | 4 files |
 | Phase 05-school-licensing P04 | 15 | 2 tasks | 2 files |
+| Phase 06 P01 | 12 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -110,6 +111,9 @@ From PROJECT.md Key Decisions table:
 - [Phase 05-school-licensing]: sendUpgradeNudge fires only when BOTH parent non-premium AND no school license — avoids spamming school-enrolled parents
 - [Phase 05-school-licensing]: mon01 tests needed classroomStudent.findFirst mock (null) in both beforeEach blocks — getKidSchoolLicense uses findFirst not findMany
 - [Phase 05-school-licensing]: SchoolDashboard placed inside teacher ProtectedRoute — non-admin teachers hit 403 from API and see error message rather than a separate route guard
+- [Phase 06-adaptive-learning]: SM-2 implemented as pure CJS function in server/src/lib/sm2.js — easiest to test and import with no external deps
+- [Phase 06-adaptive-learning]: ageGroup null/undefined falls back to 5-6 thresholds (medLow=60) — preserves backward compatibility with bulk sync callers
+- [Phase 06-adaptive-learning]: txMock pattern in integration tests must include moduleDifficulty, reviewSchedule, and lessonProgress.findMany after plan 06-01
 
 ### Pending Todos
 
@@ -123,6 +127,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T11:58:05.158Z
-Stopped at: Phase 6 context gathered
-Resume file: .planning/phases/06-adaptive-learning/06-CONTEXT.md
+Last session: 2026-03-21T12:33:50.848Z
+Stopped at: Completed 06-01-PLAN.md
+Resume file: None
