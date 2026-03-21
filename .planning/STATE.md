@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-school-licensing plan 01
-last_updated: "2026-03-21T06:38:42.849Z"
+stopped_at: Completed 05-school-licensing plan 02
+last_updated: "2026-03-21T06:49:58.868Z"
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 15
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State
@@ -58,6 +58,7 @@ Plan: 1 of 4
 | Phase 04-parent-subscriptions P03 | 45 | 3 tasks | 3 files |
 | Phase 04-parent-subscriptions P04 | 3 | 2 tasks | 5 files |
 | Phase 05-school-licensing P01 | 5 | 2 tasks | 6 files |
+| Phase 05-school-licensing P02 | 366 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ From PROJECT.md Key Decisions table:
 - [Phase 04-parent-subscriptions]: Outcome-based testing for CJS/ESM mock boundary: verify prisma.user.update instead of Resend constructor mock when vi.mock cannot intercept require()
 - [Phase 05-school-licensing]: vi.spyOn in beforeEach (not module top-level) for Prisma spies in school tests — vi.restoreAllMocks() in afterEach destroys top-level spy references
 - [Phase 05-school-licensing]: getKidSchoolLicense uses single prisma.classroomStudent.findFirst with deep nested include to avoid N+1 queries on the kid->classroom->teacher->school chain
+- [Phase 05-school-licensing]: schoolBilling.js exports module.exports.stripe for CJS spy access in tests (mirrors billing.js pattern)
+- [Phase 05-school-licensing]: Seat cap check and schoolTeacher.create wrapped in prisma.$transaction to prevent race conditions under concurrent requests
+- [Phase 05-school-licensing]: Webhook routes school events by checking schoolId metadata first (checkout) or findFirst by subscriptionId/customerId (deletion/payment_failed) before falling through to parent handler
 
 ### Pending Todos
 
@@ -113,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T06:38:42.847Z
-Stopped at: Completed 05-school-licensing plan 01
+Last session: 2026-03-21T06:49:58.866Z
+Stopped at: Completed 05-school-licensing plan 02
 Resume file: None

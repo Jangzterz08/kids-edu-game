@@ -45,11 +45,11 @@
 ### Monetization — School Licensing
 
 - [x] **SCH-01**: School entity added to DB with name, seat count, license expiry date, and Stripe customer ID
-- [ ] **SCH-02**: School admin role can purchase a seat license via Stripe Checkout (annual pricing per seat or flat-rate tiers)
-- [ ] **SCH-03**: Teachers provisioned under a school; classrooms created by school teachers count against school seat allocation
+- [x] **SCH-02**: School admin role can purchase a seat license via Stripe Checkout (annual pricing per seat or flat-rate tiers)
+- [x] **SCH-03**: Teachers provisioned under a school; classrooms created by school teachers count against school seat allocation
 - [ ] **SCH-04**: Kids in school-licensed classrooms have all modules unlocked regardless of parent subscription status
 - [ ] **SCH-05**: School admin dashboard shows seats used, renewal date, and downloadable invoice history
-- [ ] **SCH-06**: Stripe webhook handler for school license events (purchase, renewal, expiry)
+- [x] **SCH-06**: Stripe webhook handler for school license events (purchase, renewal, expiry)
 
 ### Adaptive Learning
 
@@ -119,11 +119,11 @@
 | MON-05 | Phase 4 — Parent Subscriptions | Complete |
 | MON-06 | Phase 4 — Parent Subscriptions | Complete |
 | SCH-01 | Phase 5 — School Licensing | Complete |
-| SCH-02 | Phase 5 — School Licensing | Pending |
-| SCH-03 | Phase 5 — School Licensing | Pending |
+| SCH-02 | Phase 5 — School Licensing | Complete |
+| SCH-03 | Phase 5 — School Licensing | Complete |
 | SCH-04 | Phase 5 — School Licensing | Pending |
 | SCH-05 | Phase 5 — School Licensing | Pending |
-| SCH-06 | Phase 5 — School Licensing | Pending |
+| SCH-06 | Phase 5 — School Licensing | Complete |
 | ADL-01 | Phase 6 — Adaptive Learning | Pending |
 | ADL-02 | Phase 6 — Adaptive Learning | Pending |
 | ADL-03 | Phase 6 — Adaptive Learning | Pending |
