@@ -68,6 +68,27 @@ export function spyOnPrisma() {
       findUnique: vi.spyOn(prisma.user, 'findUnique'),
       findMany: vi.spyOn(prisma.user, 'findMany'),
       upsert: vi.spyOn(prisma.user, 'upsert'),
+      update: vi.spyOn(prisma.user, 'update'),
+      updateMany: vi.spyOn(prisma.user, 'updateMany'),
+    },
+    school: {
+      findUnique: vi.spyOn(prisma.school, 'findUnique'),
+      findFirst: vi.spyOn(prisma.school, 'findFirst'),
+      findMany: vi.spyOn(prisma.school, 'findMany'),
+      create: vi.spyOn(prisma.school, 'create'),
+      update: vi.spyOn(prisma.school, 'update'),
+    },
+    schoolTeacher: {
+      findUnique: vi.spyOn(prisma.schoolTeacher, 'findUnique'),
+      findFirst: vi.spyOn(prisma.schoolTeacher, 'findFirst'),
+      findMany: vi.spyOn(prisma.schoolTeacher, 'findMany'),
+      create: vi.spyOn(prisma.schoolTeacher, 'create'),
+      count: vi.spyOn(prisma.schoolTeacher, 'count'),
+      delete: vi.spyOn(prisma.schoolTeacher, 'delete'),
+    },
+    classroomStudent: {
+      findFirst: vi.spyOn(prisma.classroomStudent, 'findFirst'),
+      findMany: vi.spyOn(prisma.classroomStudent, 'findMany'),
     },
   };
 }
