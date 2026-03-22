@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Logic & Reasoning
 status: unknown
 stopped_at: "Completed 08-infrastructure 08-01-PLAN.md"
-last_updated: "2026-03-22T06:04:06Z"
+last_updated: "2026-03-22T16:41:35.392Z"
 progress:
   total_phases: 2
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -46,6 +46,7 @@ Plan: 2 of 2 (08-01 COMPLETE)
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 08-infrastructure P02 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,7 @@ From PROJECT.md Key Decisions table (relevant to v1.1):
 From 08-01 execution (2026-03-22):
 
 - computeStars added to module.exports in progressSync.js so unit tests can import it without full integration setup
+- [Phase 08-infrastructure]: scrambleScore was a pre-existing gap in stats endpoint — added to select/gameAccuracy alongside 3 new fields in 08-02
 
 ### Pending Todos
 
