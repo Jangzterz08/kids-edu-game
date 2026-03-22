@@ -40,7 +40,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
   2. Stars and SM-2 scheduling compute correctly for lessons using the 3 new score fields (SCORE_FIELDS array includes all 3)
   3. The `/api/progress/:kidId/stats` endpoint returns `sortScore`, `trueFalseScore`, and `memoryMatchScore` keys in `gameAccuracy`
   4. `MiniGame.jsx` dispatches to all 3 new gameType strings without falling through to the default 1-star branch
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — Prisma migration + SCORE_FIELDS wiring (INFRA-01, INFRA-02)
@@ -77,5 +77,5 @@ Plans:
 | 5. School Licensing | v1.0 | 4/4 | Complete | 2026-03-21 |
 | 6. Adaptive Learning | v1.0 | 2/2 | Complete | 2026-03-21 |
 | 7. Analytics & Observability | v1.0 | 5/5 | Complete | 2026-03-21 |
-| 8. Infrastructure | v1.1 | 0/2 | Not started | - |
+| 8. Infrastructure | 1/2 | In Progress|  | - |
 | 9. Game Components & Content | v1.1 | 0/4 | Not started | - |

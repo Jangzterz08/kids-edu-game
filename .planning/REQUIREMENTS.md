@@ -9,8 +9,8 @@ Requirements for milestone v1.1 — Logic & Reasoning module with 3 new game typ
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Prisma migration adds `sortScore Int?`, `trueFalseScore Int?`, `memoryMatchScore Int?` to `LessonProgress`
-- [ ] **INFRA-02**: `SCORE_FIELDS` in `progressSync.js` includes all 3 new score field names so star computation, coins, and SM-2 scheduling work for new game types
+- [x] **INFRA-01**: Prisma migration adds `sortScore Int?`, `trueFalseScore Int?`, `memoryMatchScore Int?` to `LessonProgress`
+- [x] **INFRA-02**: `SCORE_FIELDS` in `progressSync.js` includes all 3 new score field names so star computation, coins, and SM-2 scheduling work for new game types
 - [ ] **INFRA-03**: `MiniGame.jsx` routing block handles `sort`, `trueFalse`, and `memoryMatch` gameType strings — missing entries silently award 1 star regardless of performance
 - [ ] **INFRA-04**: `gameAccuracy` object in `GET /api/progress/:kidId/stats` includes `sortScore`, `trueFalseScore`, `memoryMatchScore` keys so parent analytics dashboard shows new game performance
 
@@ -62,8 +62,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 8 | Pending |
-| INFRA-02 | Phase 8 | Pending |
+| INFRA-01 | Phase 8 | Complete |
+| INFRA-02 | Phase 8 | Complete |
 | INFRA-03 | Phase 8 | Pending |
 | INFRA-04 | Phase 8 | Pending |
 | CONT-01 | Phase 9 | Pending |
