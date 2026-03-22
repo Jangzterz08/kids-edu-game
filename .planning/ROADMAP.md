@@ -40,11 +40,11 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
   2. Stars and SM-2 scheduling compute correctly for lessons using the 3 new score fields (SCORE_FIELDS array includes all 3)
   3. The `/api/progress/:kidId/stats` endpoint returns `sortScore`, `trueFalseScore`, and `memoryMatchScore` keys in `gameAccuracy`
   4. `MiniGame.jsx` dispatches to all 3 new gameType strings without falling through to the default 1-star branch
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 08-01: Prisma migration + SCORE_FIELDS wiring (INFRA-01, INFRA-02)
-- [ ] 08-02: MiniGame routing + stats endpoint (INFRA-03, INFRA-04)
+- [ ] 08-01-PLAN.md — Prisma migration + SCORE_FIELDS wiring (INFRA-01, INFRA-02)
+- [ ] 08-02-PLAN.md — MiniGame routing + stats endpoint (INFRA-03, INFRA-04)
 
 ### Phase 9: Game Components & Content
 **Goal**: Kids can play Logic & Reasoning lessons using all 3 new game types, with age-appropriate content shown automatically and scores flowing through coins, streak, and SM-2 without changes to those systems
