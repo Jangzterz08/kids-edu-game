@@ -1,38 +1,39 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-stopped_at: Completed 07-04-PLAN.md
-last_updated: "2026-03-21T20:29:36.050Z"
+milestone: v1.1
+milestone_name: Logic & Reasoning
+status: ready_to_plan
+stopped_at: Roadmap created for v1.1 (Phases 8–9)
+last_updated: "2026-03-22"
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 22
-  completed_plans: 22
+  total_phases: 2
+  completed_phases: 0
+  total_plans: 6
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-18)
+See: .planning/PROJECT.md (updated 2026-03-22)
 
 **Core value:** Kids learn and parents pay — every decision should make the learning loop more engaging and the payment friction lower.
-**Current focus:** Phase 07 — analytics-observability
+**Current focus:** Phase 8 — Infrastructure (DB + server wiring for 3 new game types)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-22 — Milestone v1.1 started
+Phase: 8 of 9 (Infrastructure)
+Plan: 0 of 2 in current phase
+Status: Ready to plan
+Last activity: 2026-03-22 — v1.1 roadmap created; Phases 8–9 defined
+
+Progress: [░░░░░░░░░░] 0% (v1.1 milestone)
 
 ## Performance Metrics
 
 **Velocity:**
-
-- Total plans completed: 0
+- Total plans completed: 0 (v1.1)
 - Average duration: -
 - Total execution time: 0 hours
 
@@ -43,96 +44,22 @@ Last activity: 2026-03-22 — Milestone v1.1 started
 | - | - | - | - |
 
 **Recent Trend:**
-
 - Last 5 plans: none yet
 - Trend: -
 
 *Updated after each plan completion*
-| Phase 01-security-hardening P01 | 12 | 2 tasks | 9 files |
-| Phase 01-security-hardening P02 | 7 | 2 tasks | 9 files |
-| Phase 02-polish-ux P01 | 3 | 2 tasks | 5 files |
-| Phase 02-polish-ux P02 | 3 | 2 tasks | 6 files |
-| Phase 02-polish-ux P03 | 4 | 2 tasks | 11 files |
-| Phase 03-performance P01 | 165 | 2 tasks | 5 files |
-| Phase 03-performance P02 | 4 | 2 tasks | 7 files |
-| Phase 04-parent-subscriptions P01 | 7 | 2 tasks | 9 files |
-| Phase 04-parent-subscriptions P02 | 9 | 2 tasks | 7 files |
-| Phase 04-parent-subscriptions P03 | 45 | 3 tasks | 3 files |
-| Phase 04-parent-subscriptions P04 | 3 | 2 tasks | 5 files |
-| Phase 05-school-licensing P01 | 5 | 2 tasks | 6 files |
-| Phase 05-school-licensing P02 | 366 | 2 tasks | 9 files |
-| Phase 05-school-licensing P03 | 4 | 2 tasks | 4 files |
-| Phase 05-school-licensing P04 | 15 | 2 tasks | 2 files |
-| Phase 06 P01 | 12 | 2 tasks | 6 files |
-| Phase 06-adaptive-learning P02 | 277 | 2 tasks | 7 files |
-| Phase 07-analytics-observability P02 | 12 | 2 tasks | 7 files |
-| Phase 07-analytics-observability P01 | 7 | 3 tasks | 9 files |
-| Phase 07-analytics-observability P03 | 18 | 1 tasks | 7 files |
-| Phase 07-analytics-observability P04 | 3 | 2 tasks | 6 files |
-| Phase 07-analytics-observability P05 | 12 | 1 tasks | 7 files |
 
 ## Accumulated Context
 
 ### Decisions
 
-From PROJECT.md Key Decisions table:
+From PROJECT.md Key Decisions table (relevant to v1.1):
 
-- Security before monetization: Can't charge money with a broken auth model
-- Freemium: first 3 modules free — low barrier, parents see value before paying
-- School license unlocks all content: Schools won't adopt per-kid billing complexity
-- 7-day free trial: Reduce friction for first conversion
-- Stripe for both B2C and B2B: Single provider simplifies reconciliation
-- [Phase 01-security-hardening]: Use vi.spyOn(global.prisma) not vi.mock() for CJS server tests: Vitest mocks ESM imports but cannot intercept CJS require() at runtime
-- [Phase 01-security-hardening]: STORE_ITEMS canonical price map in kids.js (not DB table): static config, no migration needed
-- [Phase 01-security-hardening]: express-rate-limit 8.3.1 with trust proxy:1 on kid auth endpoints (10 req/min) for Railway reverse proxy compatibility
-- [Phase 01-security-hardening P02]: he.escape() via esc() helper in weeklyDigest.js for HTML entity encoding of all user-supplied strings
-- [Phase 01-security-hardening P02]: Startup guard throws at module load time (not runtime) when SUPABASE_URL or SUPABASE_SERVICE_KEY missing in production
-- [Phase 01-security-hardening P02]: Prisma interactive transaction ($transaction async callback) wraps coin purchase for race-safe read-modify-write
-- [Phase 01-security-hardening P02]: req.body allowlist destructuring in progress route instead of ...req.body spread
-- [Phase 02-polish-ux]: sonner@2.0.7 + react-error-boundary@6.1.1 installed; toast calls in useProgress.js hook (not MiniGame.jsx); streakCount added to POST /lesson response
-- [Phase 02-polish-ux]: Duplicate streak update in progress route removed — upsertProgress in progressSync.js is single owner of streak logic
-- [Phase 02-polish-ux]: OfflineBanner and InstallPrompt mounted in App.jsx using React Fragment — avoids Router/Provider dependency while keeping always-rendered, conditionally-visible pattern
-- [Phase 02-polish-ux]: CSP connect-src in vercel.json scoped to Supabase wildcard + Railway URL — must update when new third-party APIs are added
-- [Phase 02-polish-ux]: Single AVATAR_EMOJIS constant in lib/avatars.js (16 entries, dino: 🦖) — all 7 consumers import from it
-- [Phase 02-polish-ux]: computeStars removed from MiniGame.jsx — server progressSync.js is sole authority on starsEarned
-- [Phase 02-polish-ux]: /today endpoint added before /:kidId in dailyChallenge.js to avoid Express route shadowing; ModuleComplete.jsx fetches slug from API
-- [Phase 03-performance]: Shared dailyChallengeUtils.js CJS module avoids duplicating DAILY_SLUGS array and pure functions across route files
-- [Phase 03-performance]: home-summary endpoint uses Promise.all for parallel DB queries; refreshKids removed from KidHome — kid stats served directly by aggregated endpoint
-- [Phase 03-performance]: Streak update remains outside prisma.$transaction as non-critical best-effort — streak failure must not roll back the lesson save
-- [Phase 03-performance]: Two kidProfile.update calls (stars + coins) merged into one conditional update inside transaction using dataUpdate object
-- [Phase 03-performance]: Promise.allSettled for digest batch: individual send failures logged but do not abort the batch (BATCH_SIZE=10)
-- [Phase 03-performance]: sec06 test updated to spy on prisma.$transaction (not lessonProgress.upsert) since upsertProgress now wraps all DB writes in a transaction
-- [Phase 04-parent-subscriptions]: Use prisma migrate deploy (not migrate dev) for non-interactive CI/test environments — migrate dev requires a TTY
-- [Phase 04-parent-subscriptions]: In tests, set SUPABASE_URL='' before app import to force null supabase client and mock user path in auth middleware
-- [Phase 04-parent-subscriptions P02]: Expose module.exports.stripe from billing.js; use createRequire(import.meta.url) in tests — ESM dynamic import of CJS creates separate instance, spy on it never intercepts route calls
-- [Phase 04-parent-subscriptions P02]: Stripe fallback key 'sk_test_placeholder' prevents startup failure when non-billing test files load index.js without STRIPE_SECRET_KEY set
-- [Phase 04-parent-subscriptions P02]: Webhook mounted before express.json() using express.raw({ type: 'application/json' }) — required for Stripe signature verification on raw body
-- [Phase 04-parent-subscriptions]: Billing checkout accepts plan name (monthly/annual) not raw Stripe price ID; server maps to env vars internally
-- [Phase 04-parent-subscriptions]: isPremium defaults to true in KidHome to prevent flash of locked modules during initial API load
-- [Phase 04-parent-subscriptions]: Outcome-based testing for CJS/ESM mock boundary: verify prisma.user.update instead of Resend constructor mock when vi.mock cannot intercept require()
-- [Phase 05-school-licensing]: vi.spyOn in beforeEach (not module top-level) for Prisma spies in school tests — vi.restoreAllMocks() in afterEach destroys top-level spy references
-- [Phase 05-school-licensing]: getKidSchoolLicense uses single prisma.classroomStudent.findFirst with deep nested include to avoid N+1 queries on the kid->classroom->teacher->school chain
-- [Phase 05-school-licensing]: schoolBilling.js exports module.exports.stripe for CJS spy access in tests (mirrors billing.js pattern)
-- [Phase 05-school-licensing]: Seat cap check and schoolTeacher.create wrapped in prisma.$transaction to prevent race conditions under concurrent requests
-- [Phase 05-school-licensing]: Webhook routes school events by checking schoolId metadata first (checkout) or findFirst by subscriptionId/customerId (deletion/payment_failed) before falling through to parent handler
-- [Phase 05-school-licensing]: School license check placed inside !isParentPremium branch — premium parents never incur the extra DB query
-- [Phase 05-school-licensing]: sendUpgradeNudge fires only when BOTH parent non-premium AND no school license — avoids spamming school-enrolled parents
-- [Phase 05-school-licensing]: mon01 tests needed classroomStudent.findFirst mock (null) in both beforeEach blocks — getKidSchoolLicense uses findFirst not findMany
-- [Phase 05-school-licensing]: SchoolDashboard placed inside teacher ProtectedRoute — non-admin teachers hit 403 from API and see error message rather than a separate route guard
-- [Phase 06-adaptive-learning]: SM-2 implemented as pure CJS function in server/src/lib/sm2.js — easiest to test and import with no external deps
-- [Phase 06-adaptive-learning]: ageGroup null/undefined falls back to 5-6 thresholds (medLow=60) — preserves backward compatibility with bulk sync callers
-- [Phase 06-adaptive-learning]: txMock pattern in integration tests must include moduleDifficulty, reviewSchedule, and lessonProgress.findMany after plan 06-01
-- [Phase 06-adaptive-learning]: reviewToday lastReviewedAt stripped from response after sort — internal sort key not needed by client
-- [Phase 07-analytics-observability]: OBS-01 Sentry server test uses outcome-based assertions (app load, endpoints, process listeners) because vi.mock cannot intercept CJS require('@sentry/node') from ESM test files — mirrors Phase 01 CJS/ESM boundary pattern
-- [Phase 07-analytics-observability]: Sentry enabled only in production (MODE !== development on client, NODE_ENV === production on server); tracesSampleRate: 0.1 on both to control quota
-- [Phase 07-analytics-observability]: 100dvh (not 100vh) on KidLayout with overflow:hidden — prevents mobile browser scroll; header 56px (down from 72px) for more game vertical space; game components use height:100% inheriting constrained height from KidLayout main area
-- [Phase 07-analytics-observability]: requireAuth added to /api/sessions and /api/parent/analytics registrations; sessions route additionally checks req.user.type === 'kid' for heartbeat endpoint
-- [Phase 07-analytics-observability]: buildDailyMinutes fills all N days in period with 0 before adding session durations for consistent-length arrays; session duration uses endedAt when set, falls back to lastHeartbeatAt
-- [Phase 07-analytics-observability]: analyticsRoutes router mounted at /api/teacher in addition to /api/parent/analytics — route path in analytics.js uses /classroom/:id/analytics (without teacher prefix) since mount point supplies it
-- [Phase 07-analytics-observability]: ClassroomAnalytics reads classroomId from useParams() — works both as inline tab and as standalone route without prop threading
-- [Phase 07-analytics-observability]: Struggling indicator requires both avgStars < 1.5 AND attempts >= 2 — both conditions required per spec to avoid false positives on single bad attempts
-- [Phase 07-analytics-observability]: useSessionHeartbeat placed at top of MiniGame component body — session starts when kid enters any game, all errors swallowed so analytics never breaks the game
-- [Phase 07-analytics-observability]: navigator.sendBeacon used for session end on unload — survives browser tab close unlike fetch
+- Freemium: first 3 modules free (alphabet, numbers, shapes) — Logic module must not appear in FREE_MODULE_SLUGS
+- SCORE_FIELDS in progressSync.js is the single authoritative registry — adding a field there cascades to computeStars, SM-2, and ModuleDifficulty automatically
+- Tap-to-place interaction for SortGame (not HTML5 DnD) — HTML5 drag API has zero iOS touch support; pointer events required
+- Build order within Phase 9: TrueFalseGame first (validates end-to-end pipeline), MemoryMatchGame second (CSS only), SortGame third (touch handling requires care)
+- Audit MatchingGame.jsx before writing MemoryMatchGame — extend with pairType prop vs new component decision must be made before writing any code
 
 ### Pending Todos
 
@@ -140,12 +67,12 @@ None yet.
 
 ### Blockers/Concerns
 
-- Zero test coverage exists — any refactor in security phase carries regression risk with no safety net
-- `unlockedItems` stored as TEXT/JSON (not a join table) — SEC-05 transaction fix is a workaround; full migration to join table is v2 tech debt
-- Railway cold starts on free tier — acceptable now, monitor after monetization traffic increases
+- [Phase 8]: Three wiring points (DB columns, SCORE_FIELDS, MiniGame routing) must land together or scores silently write null — test after migration before moving to Phase 9
+- [Phase 9 — SortGame]: Must test on a real iOS/Android device before merge; pointer events not HTML5 DnD
+- [Phase 9 — MemoryMatchGame]: Architecture decision (extend MatchingGame vs new component) must be locked in plan before writing code
 
 ## Session Continuity
 
-Last session: 2026-03-21T20:12:44.272Z
-Stopped at: Completed 07-04-PLAN.md
+Last session: 2026-03-22
+Stopped at: Roadmap created — Phase 8 and Phase 9 defined, REQUIREMENTS.md traceability updated
 Resume file: None
