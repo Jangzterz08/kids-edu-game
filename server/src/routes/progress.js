@@ -99,6 +99,7 @@ router.get('/:kidId/stats', async (req, res, next) => {
         select: {
           matchScore: true, traceScore: true, quizScore: true,
           spellingScore: true, phonicsScore: true, patternScore: true, oddOneOutScore: true,
+          scrambleScore: true, sortScore: true, trueFalseScore: true, memoryMatchScore: true,
           starsEarned: true, updatedAt: true,
         },
       }),
@@ -117,7 +118,11 @@ router.get('/:kidId/stats', async (req, res, next) => {
     const spellingScores = allProgress.filter(p => p.spellingScore != null).map(p => p.spellingScore);
     const phonicsScores  = allProgress.filter(p => p.phonicsScore != null).map(p => p.phonicsScore);
     const patternScores  = allProgress.filter(p => p.patternScore != null).map(p => p.patternScore);
-    const oddOneOutScores = allProgress.filter(p => p.oddOneOutScore != null).map(p => p.oddOneOutScore);
+    const oddOneOutScores  = allProgress.filter(p => p.oddOneOutScore  != null).map(p => p.oddOneOutScore);
+    const scrambleScores   = allProgress.filter(p => p.scrambleScore   != null).map(p => p.scrambleScore);
+    const sortScores       = allProgress.filter(p => p.sortScore       != null).map(p => p.sortScore);
+    const trueFalseScores  = allProgress.filter(p => p.trueFalseScore  != null).map(p => p.trueFalseScore);
+    const memoryMatchScores = allProgress.filter(p => p.memoryMatchScore != null).map(p => p.memoryMatchScore);
 
     // Weekly activity — past 7 days by updatedAt
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -155,6 +160,9 @@ router.get('/:kidId/stats', async (req, res, next) => {
         match: avg(matchScores), trace: avg(traceScores), quiz: avg(quizScores),
         spelling: avg(spellingScores), phonics: avg(phonicsScores),
         pattern: avg(patternScores), oddOneOut: avg(oddOneOutScores),
+        scramble: avg(scrambleScores),
+        sortScore: avg(sortScores), trueFalseScore: avg(trueFalseScores),
+        memoryMatchScore: avg(memoryMatchScores),
       },
       weeklyActivity,
       recommended,

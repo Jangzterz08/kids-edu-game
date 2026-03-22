@@ -46,6 +46,9 @@ export default function MiniGame() {
     if (gameType === 'pattern')   update.patternScore    = score;
     if (gameType === 'oddOneOut') update.oddOneOutScore  = score;
     if (gameType === 'scramble')  update.scrambleScore   = score;
+    if (gameType === 'sort')        update.sortScore        = score;
+    if (gameType === 'trueFalse')   update.trueFalseScore   = score;
+    if (gameType === 'memoryMatch') update.memoryMatchScore = score;
     await Promise.all(mod.lessons.map(lesson => recordLesson(lesson.slug, update).catch(() => {})));
 
     if (gameIdx < games.length - 1) {
@@ -70,6 +73,9 @@ export default function MiniGame() {
            game === 'pattern' ? '🔁 Pattern' : 
            game === 'oddOneOut' ? '❓ Odd One Out' :
            game === 'scramble' ? '🔀 Scramble' :
+           game === 'sort' ? '🔢 Sort' :
+           game === 'trueFalse' ? '✅ True or False' :
+           game === 'memoryMatch' ? '🧠 Memory Match' :
            '❓ Quiz'}
         </span>
         <span style={styles.gameCounter}>{gameIdx + 1}/{games.length}</span>
