@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { createRequire } from 'module';
 
+// Set env before any require() calls so db.js does not throw on invalid URL
+process.env.DATABASE_URL =
+  process.env.DATABASE_URL || 'postgresql://test:test@localhost:5432/testdb?schema=kids_edu_game';
+process.env.NODE_ENV = 'test';
+process.env.KID_JWT_SECRET = 'infra01-test-secret';
+
 const require = createRequire(import.meta.url);
 const { computeStars, SCORE_FIELDS } = require('../../src/services/progressSync');
 

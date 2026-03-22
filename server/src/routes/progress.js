@@ -225,6 +225,7 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
       viewed,
       matchScore, traceScore, quizScore, spellingScore,
       phonicsScore, patternScore, oddOneOutScore, scrambleScore,
+      sortScore, trueFalseScore, memoryMatchScore,
     } = req.body;
 
     const record = await upsertProgress(kid.id, {
@@ -232,6 +233,7 @@ router.post('/:kidId/lesson/:lessonSlug', async (req, res, next) => {
       viewed,
       matchScore, traceScore, quizScore, spellingScore,
       phonicsScore, patternScore, oddOneOutScore, scrambleScore,
+      sortScore, trueFalseScore, memoryMatchScore,
       moduleSlug: lesson.module.slug,
     }, kid.ageGroup);
 

@@ -1,7 +1,7 @@
 const prisma = require('../lib/db');
 const { classifyAccuracy, getHardThreshold, applySM2 } = require('../lib/sm2');
 
-const SCORE_FIELDS = ['matchScore', 'traceScore', 'quizScore', 'spellingScore', 'phonicsScore', 'patternScore', 'oddOneOutScore', 'scrambleScore'];
+const SCORE_FIELDS = ['matchScore', 'traceScore', 'quizScore', 'spellingScore', 'phonicsScore', 'patternScore', 'oddOneOutScore', 'scrambleScore', 'sortScore', 'trueFalseScore', 'memoryMatchScore'];
 
 function computeStars(entry) {
   if (!entry.viewed) return 0;
@@ -74,6 +74,7 @@ async function upsertProgress(kidId, entry, ageGroup) {
         select: {
           matchScore: true, traceScore: true, quizScore: true, spellingScore: true,
           phonicsScore: true, patternScore: true, oddOneOutScore: true, scrambleScore: true,
+          sortScore: true, trueFalseScore: true, memoryMatchScore: true,
         },
       });
 
@@ -168,4 +169,4 @@ function maxScore(a, b) {
   return Math.max(a, b);
 }
 
-module.exports = { upsertProgress, SCORE_FIELDS };
+module.exports = { upsertProgress, SCORE_FIELDS, computeStars };
