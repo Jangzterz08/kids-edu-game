@@ -39,7 +39,7 @@ Declared values (all multiples of 4, sourced from `--space-*` tokens in `index.c
 | sm | 8px (`--space-sm`) | Compact element spacing, inner card padding |
 | md | 16px (`--space-md`) | Default element spacing, gap between game items |
 | lg | 24px (`--space-lg`) | Section padding, container insets |
-| xl | 40px (`--space-xl`) | Layout gaps, button horizontal padding |
+| xl | 40px (`--space-xl`) | Layout gaps, button horizontal padding — pre-existing `--space-xl` token from `client/src/index.css`, not introduced by Phase 9 |
 | 2xl | 64px (`--space-2xl`) | Major section breaks, page-level spacing |
 
 Exceptions:
@@ -64,13 +64,15 @@ All type uses Fredoka. Four sizes declared from the existing `--font-*` token sc
 
 **Source:** `index.css` lines 86–93, 109
 
+**Weights:** exactly 2 — 400 (regular) and 600 (semibold). No other weights are used in Phase 9.
+
 Rules for this phase:
 - TrueFalse claim text (ages 6–8): 22px / 600 (Heading role)
 - TrueFalse emoji display (ages 4–6): rendered as text emoji, 48px effective size via `fontSize: '48px'`; no weight declaration needed
 - Sort prompt text: 22px / 600 (Heading role) — "Smallest to biggest!"
 - Sort item emoji: sized by `renderSize` lesson data field, not font-size token
 - MemoryMatch: no text labels — emoji only on card faces
-- True/False button labels: 22px / 700 (Fredoka Bold) via `.kid-btn` class, which sets `font-weight: 700`
+- True/False button labels: 22px / 600 (semibold) — use 600 everywhere including `.kid-btn`; do NOT override with `font-weight: 700`
 
 ---
 
@@ -123,7 +125,7 @@ Correct/wrong feedback colors are NOT the accent color — they are semantic sta
 
 **Card dimensions:** 72px × 72px. `border-radius: var(--card-radius)` (24px).
 
-**Card back design:** "?" character at `fontSize: '28px'`, `fontWeight: 700`, `color: '#FFFFFF'` on `--btn-blue-base` background. (Recommended over 🧠 brain — matches MatchingGame's question-mark back convention.)
+**Card back design:** "?" character at `fontSize: '28px'`, `fontWeight: 600`, `color: '#FFFFFF'` on `--btn-blue-base` background. (Recommended over 🧠 brain — matches MatchingGame's question-mark back convention.)
 
 **Card flip:** CSS 3D transform. Container has `perspective: 600px`. Inner element uses `transformStyle: 'preserve-3d'`, `transition: 'transform 0.4s ease'`. Both `backfaceVisibility: 'hidden'` and `WebkitBackfaceVisibility: 'hidden'` on front and back faces. Flipped state: `transform: 'rotateY(180deg)'` on inner element.
 
@@ -168,7 +170,7 @@ Correct/wrong feedback colors are NOT the accent color — they are semantic sta
 | TrueFalse wrong feedback | *(visual only — red + ✖, correct answer highlighted)* |
 | Empty state (no lessons for age group) | "No activities yet for your age group. More coming soon! 🌊" |
 | Error state (game fails to load) | "Oops! Something went wrong. Try again." — shown as a centered card with a "Try Again" `.kid-btn` button |
-| Replay audio button label | "🔊" (icon only, no text label needed) |
+| Replay audio button label | "🔊" (icon-only button) — MUST include `aria-label="Replay"` on the `<button>` element |
 | Destructive confirmation | None — no destructive actions in Phase 9 |
 
 **Voice/tone rules (from Phase 2 precedent):**
