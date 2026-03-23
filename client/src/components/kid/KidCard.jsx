@@ -43,9 +43,9 @@ export default function KidCard({ kid, onClick, active, onDelete, onSetPin, onSe
 
 const styles = {
   card: {
-    background: 'rgba(255,255,255,0.45)',
-    backdropFilter: 'blur(16px)',
-    WebkitBackdropFilter: 'blur(16px)',
+    background: 'rgba(255,255,255,0.85)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
     borderRadius: 28, padding: 24,
     textAlign: 'center', cursor: 'pointer', position: 'relative',
     border: '2px solid rgba(255,255,255,0.7)',

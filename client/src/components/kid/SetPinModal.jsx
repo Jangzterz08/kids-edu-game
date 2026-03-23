@@ -47,7 +47,8 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
             <input
               style={styles.input} type="password" inputMode="numeric"
               placeholder="Enter 4-digit PIN" maxLength={4}
-              value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, ''))}
+              pattern="\d{4}" value={pin}
+              onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
               autoFocus
             />
             {error && <p style={styles.error}>{error}</p>}
@@ -61,7 +62,8 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
             <input
               style={styles.input} type="password" inputMode="numeric"
               placeholder="Confirm PIN" maxLength={4}
-              value={confirm} onChange={e => setConfirm(e.target.value.replace(/\D/g, ''))}
+              pattern="\d{4}" value={confirm}
+              onChange={e => setConfirm(e.target.value.replace(/\D/g, '').slice(0, 4))}
               autoFocus
             />
             {error && <p style={styles.error}>{error}</p>}
@@ -80,12 +82,14 @@ export default function SetPinModal({ kid, onClose, onSaved }) {
 
 const styles = {
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
   },
   modal: {
     background: 'var(--bg-surface)', borderRadius: 24, padding: 32,
     width: '90%', maxWidth: 360, textAlign: 'center',
+    position: 'relative', zIndex: 10000,
+    boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
   },
   title: { fontSize: 'var(--font-lg)', fontWeight: 900, marginBottom: 8 },
   hint: { fontSize: 'var(--font-sm)', color: 'var(--text-secondary)', marginBottom: 20 },
