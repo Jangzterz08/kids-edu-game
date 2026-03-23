@@ -12,6 +12,9 @@ import PhonicsGame from '../components/games/PhonicsGame';
 import PatternGame from '../components/games/PatternGame';
 import OddOneOutGame from '../components/games/OddOneOutGame';
 import WordScramble from '../components/games/WordScramble';
+import TrueFalseGame from '../components/games/TrueFalseGame';
+import MemoryMatchGame from '../components/games/MemoryMatchGame';
+import SortGame from '../components/games/SortGame';
 
 export default function MiniGame() {
   useSessionHeartbeat();
@@ -24,6 +27,11 @@ export default function MiniGame() {
   const [scores, setScores]     = useState({});
 
   if (!mod) return <div className="page-center">Module not found</div>;
+
+  // Filter lessons by kid's age group for age-filtered modules
+  const lessons = (mod?.ageFiltered && activeKid?.ageGroup)
+    ? lessons.filter(l => !l.ageGroup || l.ageGroup === activeKid.ageGroup)
+    : mod?.lessons || [];
 
   const games = mod.games; // e.g. ['matching','tracing','quiz']
 
@@ -49,7 +57,7 @@ export default function MiniGame() {
     if (gameType === 'sort')        update.sortScore        = score;
     if (gameType === 'trueFalse')   update.trueFalseScore   = score;
     if (gameType === 'memoryMatch') update.memoryMatchScore = score;
-    await Promise.all(mod.lessons.map(lesson => recordLesson(lesson.slug, update).catch(() => {})));
+    await Promise.all(lessons.map(lesson => recordLesson(lesson.slug, update).catch(() => {})));
 
     if (gameIdx < games.length - 1) {
       setGameIdx(i => i + 1);
@@ -82,28 +90,37 @@ export default function MiniGame() {
       </div>
 
       {game === 'quiz' && (
-        <QuizGame moduleSlug={moduleSlug} lessons={mod.lessons} onComplete={handleGameComplete} />
+        <QuizGame moduleSlug={moduleSlug} lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'matching' && (
-        <MatchingGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <MatchingGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'tracing' && (
-        <TracingGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <TracingGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'spelling' && (
-        <SpellingGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <SpellingGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'phonics' && (
-        <PhonicsGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <PhonicsGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'pattern' && (
-        <PatternGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <PatternGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'oddOneOut' && (
-        <OddOneOutGame lessons={mod.lessons} onComplete={handleGameComplete} />
+        <OddOneOutGame lessons={lessons} onComplete={handleGameComplete} />
       )}
       {game === 'scramble' && (
-        <WordScramble lessons={mod.lessons} onComplete={handleGameComplete} />
+        <WordScramble lessons={lessons} onComplete={handleGameComplete} />
+      )}
+      {game === 'sort' && (
+        <SortGame lessons={lessons.filter(l => l.gameType === 'sort')} onComplete={handleGameComplete} />
+      )}
+      {game === 'trueFalse' && (
+        <TrueFalseGame lessons={lessons.filter(l => l.gameType === 'trueFalse')} onComplete={handleGameComplete} />
+      )}
+      {game === 'memoryMatch' && (
+        <MemoryMatchGame lessons={lessons.filter(l => l.gameType === 'memoryMatch')} onComplete={handleGameComplete} />
       )}
     </div>
   );

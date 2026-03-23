@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Logic & Reasoning
-status: unknown
-stopped_at: Completed 09-03-PLAN.md (SortGame component)
-last_updated: "2026-03-23T06:51:05.548Z"
+status: complete
+stopped_at: Completed 09-04-PLAN.md (Logic module content + wiring) — v1.1 milestone done
+last_updated: "2026-03-23"
 progress:
   total_phases: 2
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -70,6 +70,7 @@ From 08-01 execution (2026-03-22):
 - [Phase 09-game-components-content]: TrueFalseGame multi-lesson: averaged score across all lessons; single-lesson common case covered by same logic
 - [Phase 09-game-components-content]: Both buttons set pointerEvents: none after first tap via disabled state — prevents double-tap race
 - [Phase 09-game-components-content]: SortGame uses tap-to-select then tap-to-swap state machine (no HTML5 drag) with touchAction none for iOS scroll prevention
+- [Phase 09-02]: MemoryMatchGame is a new component (not extending MatchingGame) — lesson.pairs emoji-only data shape is fundamentally different from image/word matchingPairs; pairId is numeric index, not slug
 
 ### Pending Todos
 

@@ -5,7 +5,7 @@ import { api } from '../../lib/api';
 export default function AddKidModal({ onClose, onAdded }) {
   const [name, setName]       = useState('');
   const [avatarId, setAvatar] = useState('bear');
-  const [ageGroup, setAge]    = useState('5-6');
+  const [ageGroup, setAge]    = useState('4-6');
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
 
@@ -41,9 +41,8 @@ export default function AddKidModal({ onClose, onAdded }) {
           <div style={styles.field}>
             <label style={styles.label}>Age Group</label>
             <select style={styles.input} value={ageGroup} onChange={e => setAge(e.target.value)}>
-              <option value="3-4">3–4 years</option>
-              <option value="5-6">5–6 years</option>
-              <option value="7-8">7–8 years</option>
+              <option value="4-6">Ages 4-6</option>
+              <option value="6-8">Ages 6-8</option>
             </select>
           </div>
           <div style={styles.field}>

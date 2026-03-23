@@ -21,6 +21,12 @@ export default function ModuleIntro() {
             if (g === 'tracing') label = '✏️ Trace';
             if (g === 'spelling') label = '🔤 Spell';
             if (g === 'phonics') label = '🔊 Phonics';
+            if (g === 'pattern') label = '🔁 Pattern';
+            if (g === 'oddOneOut') label = '❓ Odd One Out';
+            if (g === 'scramble') label = '🔀 Scramble';
+            if (g === 'sort') label = '🔢 Sort';
+            if (g === 'trueFalse') label = '✅ True or False';
+            if (g === 'memoryMatch') label = '🧠 Memory Match';
             return <span key={g} style={styles.pill}>{label}</span>;
           })}
         </div>
