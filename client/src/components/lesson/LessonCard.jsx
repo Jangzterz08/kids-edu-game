@@ -55,7 +55,6 @@ const styles = {
     fontSize: 120, fontWeight: 900, lineHeight: 1, color: 'var(--accent-cyan)',
     textShadow: '0 0 24px rgba(0, 229, 255, 0.6)', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))'
   },
-  symbolEmoji: { fontSize: 100, filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' },
   imageWrap: {
     width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center',
     background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)',

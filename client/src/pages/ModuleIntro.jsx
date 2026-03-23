@@ -13,7 +13,7 @@ export default function ModuleIntro() {
       <div className="glass-panel" style={styles.card}>
         <div style={styles.emoji}>{mod.iconEmoji}</div>
         <h1 style={styles.title}>{mod.title}</h1>
-        <p style={styles.sub}>{mod.lessons.length} fun lessons to explore!</p>
+        <p style={styles.sub}>{mod.lessons.filter(l => !l.gameType).length} fun lessons to explore!</p>
         <div style={styles.pills}>
           {mod.games.map(g => {
             let label = '❓ Quiz';

@@ -17,7 +17,8 @@ export default function LessonPlayer() {
   const [current, setCurrent] = useState(0);
   const [dir, setDir]         = useState(null); // 'left' | 'right' | null
   const touchStart = useRef(null);
-  const lessons = mod?.lessons || [];
+  // Only show flashcard lessons — game-specific lessons (pattern, oddOneOut, etc.) are played in their dedicated game components
+  const lessons = (mod?.lessons || []).filter(l => !l.gameType);
 
   if (!mod) return <div className="page-center">Module not found</div>;
 
