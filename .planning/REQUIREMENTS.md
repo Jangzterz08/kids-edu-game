@@ -23,7 +23,7 @@ Requirements for milestone v1.1 — Logic & Reasoning module with 3 new game typ
 ### Games
 
 - [x] **GAME-01**: `TrueFalseGame` React component — displays emoji claim auto-spoken via `speakWord()` on mount with replay button; kid taps True or False; correct answer revealed with visual feedback; calls `onComplete(score)` where score is 100 (correct) or 0 (incorrect)
-- [ ] **GAME-02**: `SortGame` React component — tap-to-select then tap-to-place ordering game; items have explicit `renderSize` pixel values for visual size distinction; uses pointer events not HTML5 drag API (iOS touch requirement); calls `onComplete(score)` based on correct order percentage
+- [x] **GAME-02**: `SortGame` React component — tap-to-select then tap-to-place ordering game; items have explicit `renderSize` pixel values for visual size distinction; uses pointer events not HTML5 drag API (iOS touch requirement); calls `onComplete(score)` based on correct order percentage
 - [ ] **GAME-03**: `MemoryMatchGame` React component — emoji-to-emoji card flip pairs; no text labels (pre-reader safe); card flip uses CSS 3D transform (`rotateY(180deg)`, `backface-visibility: hidden`); match/mismatch feedback; calls `onComplete(score)` based on attempts efficiency
 
 ### Integration
@@ -70,7 +70,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-02 | Phase 9 | Pending |
 | CONT-03 | Phase 9 | Pending |
 | GAME-01 | Phase 9 | Complete |
-| GAME-02 | Phase 9 | Pending |
+| GAME-02 | Phase 9 | Complete |
 | GAME-03 | Phase 9 | Pending |
 | INTG-01 | Phase 9 | Complete |
 

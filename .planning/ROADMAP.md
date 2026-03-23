@@ -56,7 +56,7 @@ Plans:
   3. A kid completes a MemoryMatch lesson: card pairs flip with CSS 3D animation, matched pairs lock, mismatched pairs flip back after 900ms, and a completion score reaches the progress API
   4. A kid completes a Sort lesson on a mobile device (iOS/Android): items can be selected and placed using tap interaction (no drag required), and the correct-order percentage score persists
   5. The Logic & Reasoning module appears in the module list gated behind premium (not in the free 3 modules), and the freemium paywall shows correctly for unpaid families
-**Plans:** 1/4 plans executed
+**Plans:** 3/4 plans executed
 
 Plans:
 - [ ] 09-01-PLAN.md — TrueFalseGame component (GAME-01, INTG-01)
@@ -78,4 +78,4 @@ Plans:
 | 6. Adaptive Learning | v1.0 | 2/2 | Complete | 2026-03-21 |
 | 7. Analytics & Observability | v1.0 | 5/5 | Complete | 2026-03-21 |
 | 8. Infrastructure | 1/2 | In Progress|  | - |
-| 9. Game Components & Content | 1/4 | In Progress|  | - |
+| 9. Game Components & Content | 3/4 | In Progress|  | - |
