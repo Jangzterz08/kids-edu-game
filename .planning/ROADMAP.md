@@ -56,13 +56,13 @@ Plans:
   3. A kid completes a MemoryMatch lesson: card pairs flip with CSS 3D animation, matched pairs lock, mismatched pairs flip back after 900ms, and a completion score reaches the progress API
   4. A kid completes a Sort lesson on a mobile device (iOS/Android): items can be selected and placed using tap interaction (no drag required), and the correct-order percentage score persists
   5. The Logic & Reasoning module appears in the module list gated behind premium (not in the free 3 modules), and the freemium paywall shows correctly for unpaid families
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 09-01: TrueFalseGame component (GAME-01, INTG-01)
-- [ ] 09-02: MemoryMatchGame component (GAME-03, INTG-01)
-- [ ] 09-03: SortGame component (GAME-02, INTG-01)
-- [ ] 09-04: Logic module content + registry + age filtering (CONT-01, CONT-02, CONT-03)
+- [ ] 09-01-PLAN.md — TrueFalseGame component (GAME-01, INTG-01)
+- [ ] 09-02-PLAN.md — MemoryMatchGame component (GAME-03, INTG-01)
+- [ ] 09-03-PLAN.md — SortGame component (GAME-02, INTG-01)
+- [ ] 09-04-PLAN.md — Logic module content + registry + age filtering + wiring (CONT-01, CONT-02, CONT-03)
 
 ## Progress
 
