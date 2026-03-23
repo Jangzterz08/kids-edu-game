@@ -13,9 +13,7 @@ export default function LessonCard({ lesson }) {
       {!imageFile && dotCount === undefined && (letter || numeral) && (
         <div style={styles.symbol}>{letter || numeral}</div>
       )}
-      {!imageFile && dotCount === undefined && emoji && !letter && !numeral && (
-        <div style={styles.symbolEmoji}>{emoji}</div>
-      )}
+      {/* emoji-only symbol removed — imageWrap fallback already shows it */}
 
       {/* Image, DotGrid, or emoji fallback */}
       <div style={styles.imageWrap}>
