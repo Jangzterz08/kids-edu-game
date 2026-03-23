@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@napi-rs/canvas": "^0.1.96",
+    "@sentry/react": "^10.45.0",
     "msedge-tts": "^2.0.4",
     "sharp": "^0.34.5"
   }
